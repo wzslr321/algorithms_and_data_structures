@@ -6,7 +6,7 @@ double getHeight();
 void calculateAndPrintCurrentHeight(double height, double seconds);
 
 int main() {
-    double height{getHeight()};
+    const double height{getHeight()};
 
     calculateAndPrintCurrentHeight(height, 0);
     calculateAndPrintCurrentHeight(height, 1);
