@@ -27,6 +27,12 @@ double getHeight() {
     return height;
 }
 
+// I know about SRP principle, but I think it is redundant here. 
+// Splitting this function into two functions will require to pass 
+// two the same arguments into two separate functions.
+// distance varaible returned wouldn't be enough, since the
+// message requires seconds variable too. This function is to trival too 
+// use SRP, instead of it YAGNI and KISS is probably better option.
 void calculateAndPrintCurrentHeight(double height, double seconds) {
     constexpr double gravity = 9.8;
     double result{};
@@ -42,3 +48,5 @@ void calculateAndPrintCurrentHeight(double height, double seconds) {
         std::cout << "At " << seconds << ", the ball is on the ground \n";
     }
 }
+
+
