@@ -3,23 +3,22 @@
 
 enum class MonsterType { ogre, dragon, orc, giant_spider, slime };
 
-struct monster {
+struct Monster {
     std::string name;
     MonsterType type;
     int health;
 };
 
-void printMonsterDescription(MonsterType monster_t)
-{
-    std::string monster_type_s {};
+void printMonsterDescription(Monster monster) {
+    std::string monster_type_s{};
 
-    switch(monster_t) {
+    switch (monster.type) {
         case MonsterType::ogre:
             monster_type_s = "Ogre";
-            break; 
+            break;
         case MonsterType::dragon:
             monster_type_s = "Dragon";
-            break;  
+            break;
         case MonsterType::orc:
             monster_type_s = "Orc";
             break;
@@ -31,12 +30,16 @@ void printMonsterDescription(MonsterType monster_t)
             break;
     }
 
-    std::cout << "This " << monster_type_s << " is named ";
+    std::cout << "This " << monster_type_s << " is named " << monster.name
+              << " and has " << monster.health << " health\n";
 }
 
 int main() {
-    MonsterType slime_t = MonsterType::slime;
-    printMonsterDescription(slime_t);
+    Monster monster_1 = Monster{"Torg", MonsterType::ogre, 145};
+    Monster monster_2 = Monster{"Blurp", MonsterType::slime, 24};
+
+    printMonsterDescription(monster_1);
+    printMonsterDescription(monster_2);
 
     return EXIT_SUCCESS;
 }
