@@ -11,21 +11,33 @@ std::string getUserNameInput() {
     return input;
 }
 
-bool checkIfNameExists(std::string input, const std::string_view (&names)[8]) {
-    for (auto name : names) {
-        if (name == input) {
-            return true;
-        }
+bool checkIfFirstLetterIsGood(const char inputStChar, const char nameStChar) {
+    if (inputStChar == nameStChar) {
+        return true;
     }
 
     return false;
 }
 
-bool checkIfFirstLetterIsGood(std::string input,
-                              const std::string_view (&names)[8]) {
-    for (auto character : *names) {
-        if (character == input[0]) {
-            return checkIfNameExists(input, names);
+bool checkSize(const std::string& input, const std::string_view& name) {
+    if (name.length() == input.length()) {
+        return true;
+    }
+    return false;
+}
+
+bool checkIfNameExists(const std::string& input,
+                       const std::string_view (&names)[8]) {
+    for (const auto& name : names) {
+        const auto isLengthOk{checkSize(input, name)};
+        if (isLengthOk) {
+            const auto isStLetterGood{
+                checkIfFirstLetterIsGood(input[0], name[0])};
+            if (isStLetterGood) {
+                if (name == input) {
+                    return true;
+                }
+            }
         }
     }
 
@@ -33,12 +45,12 @@ bool checkIfFirstLetterIsGood(std::string input,
 }
 
 int main() {
-    const std::string_view names[]{"Alex",  "Betty", "Caroline", "Dave",
-                                   "Emily", "Fred",  "Greg",     "Holly"};
+    constexpr std::string_view names[]{"Alex",  "Betty", "Caroline", "Dave",
+                                       "Emily", "Fred",  "Greg",     "Holly"};
 
     auto name{getUserNameInput()};
 
-    bool doesNameExists{checkIfNameExists(name, names)};
+    auto doesNameExists{checkIfNameExists(name, names)};
 
     if (doesNameExists) {
         std::cout << name << " was found \n";
