@@ -3,6 +3,18 @@
 #include <iostream>
 #include <string_view>
 
+/*
+ * I know that those functions are totally useless
+ * and string comparison shouldn't be done this way.
+ * It is most-likely   a bad thing to overengineer a bad attitude
+ * but I left it here, so I won't forget about it.
+ * I wanted to split the tasks, assuming abstracly that string comparison
+ * is not lazy and result is returned after check of every character
+ * Just to train the thinking about the problem itself.
+ * It is hopefully last time of this kind of this attitude,
+ * since I should focus on real problems.
+ */
+
 std::string getUserNameInput() {
     std::string input{};
     std::cout << "Enter a name\n";
@@ -12,18 +24,11 @@ std::string getUserNameInput() {
 }
 
 bool checkIfFirstLetterIsGood(const char inputStChar, const char nameStChar) {
-    if (inputStChar == nameStChar) {
-        return true;
-    }
-
-    return false;
+    return inputStChar == nameStChar;
 }
 
 bool checkSize(const std::string& input, const std::string_view& name) {
-    if (name.length() == input.length()) {
-        return true;
-    }
-    return false;
+    return name.length() == input.length();
 }
 
 bool checkIfNameExists(const std::string& input,
