@@ -23,21 +23,12 @@ std::string getUserNameInput() {
     return input;
 }
 
-bool checkIfFirstLetterIsGood(const char inputStChar, const char nameStChar) {
-    return inputStChar == nameStChar;
-}
-
-bool checkSize(const std::string& input, const std::string_view& name) {
-    return name.length() == input.length();
-}
-
 bool checkIfNameExists(const std::string& input,
                        const std::string_view (&names)[8]) {
     for (const auto& name : names) {
-        const auto isLengthOk{checkSize(input, name)};
+        const auto isLengthOk{name.length() == input.length()};
         if (isLengthOk) {
-            const auto isStLetterGood{
-                checkIfFirstLetterIsGood(input[0], name[0])};
+            const auto isStLetterGood{input[0] == name[0]};
             if (isStLetterGood) {
                 if (name == input) {
                     return true;
