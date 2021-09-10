@@ -1,6 +1,10 @@
+
 /*
- * Of course I know that this solution is incredibly awful and it doesn't even
- * pass every test cases, but it is my first CP problem I've ever solved
+ *
+ * https://leetcode.com/problems/two-sum/
+ *
+ * Of course I know that this solution is incredibly awful,
+ * but it is my first CP problem I've ever solved
  * so I keep it just to have an insight on how do I progress!
  */
 #include <iostream>
@@ -53,3 +57,4 @@ int main() {
 
     return 0;
 }
+
