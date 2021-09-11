@@ -12,7 +12,7 @@ bool isPalindrome(int x) {
         return true;
     }
 
-    int rv{};
+    long long rv{};
     int xdef{x};
 
     while (x > 0) {
