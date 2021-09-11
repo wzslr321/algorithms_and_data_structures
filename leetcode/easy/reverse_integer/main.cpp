@@ -5,13 +5,15 @@
 
 using namespace std;
 
+// https://leetcode.com/problems/reverse-integer/
+
 int reverse(int x) {
     int low_int{(1 << 31)};
     int max_int{(low_int + 1) * (-1)};
 
     if (x <= low_int || x >= max_int) return 0;
 
-    int rv_int{0};
+    long long rv_int{0};
     int l{10};
     int lp{0};
     if (x > 0) {
@@ -22,9 +24,7 @@ int reverse(int x) {
                 lp++;
 
             } else {
-                auto rvm{rv_int * l};
-
-                if (rvm < ) {
+                if ((rv_int * l) > max_int ) {
                     return 0;
                 }
                 rv_int *= l;
@@ -41,8 +41,7 @@ int reverse(int x) {
                 x /= 10;
                 lp++;
             } else {
-                auto rvm{rv_int * l};
-                if (rvm > 0) {
+                if ((rv_int * l) < low_int) {
                     return 0;
                 }
                 rv_int *= l;
@@ -56,7 +55,6 @@ int reverse(int x) {
 }
 
 int main() {
-    // -1563847412
-    cout << reverse(-1563847412) << '\n';
+    cout << reverse(-1563847412);
     return 0;
 }
