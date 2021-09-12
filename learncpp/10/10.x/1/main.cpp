@@ -1,15 +1,22 @@
+#include <array>
 #include <iostream>
 
-enum items { health_potion, torch, arrow };
+enum Items { health_potion, torch, arrow};
 
-uint_fast8_t countTotalItems() {
-    uint_fast8_t itemsAmount{};
+std::array<int, 3> startingItems{2, 5, 10};
+
+int countTotalItems() {
+    int itemsAmount{};
+    itemsAmount += startingItems[Items::health_potion];
+    itemsAmount += startingItems[Items::torch];
+    itemsAmount += startingItems[Items::arrow];
+
     return itemsAmount;
 }
 
 int main() {
-    auto itemsAmount{countTotalItems()};
+    int itemsAmount{countTotalItems()};
 
-    std::cout << itemsAmount;
+    std::cout << itemsAmount << '\n' << startingItems[Items::torch] << '\n';
     return 0;
 }
