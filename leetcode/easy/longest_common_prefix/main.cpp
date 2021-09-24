@@ -74,12 +74,14 @@ string longestCommonPrefix(vector<string>& strs) {
 
     for (int i{}; i < strs.size(); i++) {
         if (strs[i] == "") {
+            cout << '\n';
             return "";
         }
         for (int j{}; j < strs[i].size(); j++) {
             // lazy comparison, we first check if it is first character
             // so we can possibly boost a performance a little bit.
             if ((j == 0) && strs[i][j] != prefix[j]) {
+                cout << '\n';
                 return "";
             }
 
@@ -93,6 +95,8 @@ string longestCommonPrefix(vector<string>& strs) {
             }
         }
     }
+
+    cout << prefix << '\n';
 
     return prefix;
 };
