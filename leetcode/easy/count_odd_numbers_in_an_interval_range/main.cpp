@@ -13,3 +13,7 @@ int countOdds(int low, int high) {
     return (high - low) / 2 + 1;
 }
 
+int main() {
+    cout << countOdds(8,23) << '\n';
+}
+
