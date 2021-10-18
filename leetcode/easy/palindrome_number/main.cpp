@@ -21,11 +21,7 @@ bool isPalindrome(int x) {
         x /= 10;
     }
 
-    if (rv == xdef) {
-        return true;
-    }
-
-    return false;
+    return rv == xdef;
 }
 
 int main() {
