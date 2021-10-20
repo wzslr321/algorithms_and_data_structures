@@ -2,12 +2,14 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
 // https://leetcode.com/problems/reverse-integer/
 
 int reverse(int x) {
+    int y{x};
     int low_int{(1 << 31)};
     int max_int{(low_int + 1) * (-1)};
 
@@ -16,7 +18,7 @@ int reverse(int x) {
     long long rv_int{0};
     int l{10};
     int lp{0};
-    if (x > 0) {
+    if (fabs(x) > 0) {
         while (x > 0) {
             if (lp == 0) {
                 rv_int += (x % 10);
@@ -24,7 +26,7 @@ int reverse(int x) {
                 lp++;
 
             } else {
-                if ((rv_int * l) > max_int ) {
+                if ((rv_int * l) > max_int) {
                     return 0;
                 }
                 rv_int *= l;
@@ -34,27 +36,10 @@ int reverse(int x) {
         }
     }
 
-    if (x < 0) {
-        while (x < 0) {
-            if (lp == 0) {
-                rv_int += (x % 10);
-                x /= 10;
-                lp++;
-            } else {
-                if ((rv_int * l) < low_int) {
-                    return 0;
-                }
-                rv_int *= l;
-                rv_int += (x % 10);
-                x /= 10;
-            }
-        }
-    }
-
-    return rv_int;
+    return rv_int == y;
 }
 
 int main() {
-    cout << reverse(-1563847412);
+    cout << reverse(121);
     return 0;
 }

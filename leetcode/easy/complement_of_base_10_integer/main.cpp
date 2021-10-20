@@ -13,8 +13,7 @@ int bitwiseComplement(int n) {
 
     for (auto i{32 - 1}, j{0}; i > (32 - (32 - zeros_l)); --i, ++j) {
         if (b[i] == '1') {
-            int result = (1 << j);
-            sum += result;
+            sum += (1 << j);
         }
     }
 
