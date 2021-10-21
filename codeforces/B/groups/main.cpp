@@ -36,6 +36,7 @@ using VS = vector<string>;
 using VVS = vector<VS>;
 using PI = pair<int, int>;
 using TI = tuple<int, int, int>;
+using USI = unordered_set<int>;
 
 int main() {
     // freopen("input.txt", "r", stdin);
@@ -43,56 +44,65 @@ int main() {
 
     int t{};
     cin >> t;
+    vector<char> answers{};
 
     LPI(i, 0, t, 1) {
         VS st{};
         int n{};
         cin >> n;
 
-        int dv { n / 2 }
-        if (dv % 2 != 0) {
-            cout << "NO";
-            return 0;
-        }
-
-        dv = 1;
-        int tmp{--n};
-        bool psb{};
-        while (dv != tmp) {
-            if (!(dv & 1) && !(tmp & 1)) {
-                psb = true;
-                break;
+        LPI(j, 0, n, 1) {
+            string ds{};
+            LPI(k, 0, 5, 1) {
+                char d{};
+                cin >> d;
+                ds.PB(d);
             }
-            ++a;
-            --w;
+            st.PB(ds);
         }
 
-        if (!psb) {
-            cout << "NO";
+        if (n % 2 != 0) {
+            answers.PB('0');
             continue;
         }
 
-        LPI(j, 0, n, 1) {
-            string ds;
-            LPI(k, 0, 5, 1) {
-                char d;
-                cin >> d;
-                ds.push_back(d);
+        auto found{false};
+        do {
+            VI in{};
+            LPI(j, 0, 5, 1) {
+                bool ok{true};
+                LPI(y, 0, n / 2, 1) {
+                    if (st[y][j] == '0') {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok) {
+                    in.PB(j);
+                }
             }
-            st.push_back(ds);
-        }
+            LPI(j, 0, 5, 1) {
+                bool ok{true};
+                LPI(y, n / 2, n, 1) {
+                    if (st[y][j] == '0') {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok) {
+                    for (const auto el : in) {
+                        if (el != j) {
+                            found = true;
+                        }
+                    }
+                }
+            }
+        } while (next_permutation(st.begin(), st.end()));
 
-        // let's say 14 groups
-        // divide into 2 different
-        // we need permutations of ranges which sum is equal 7
-        // e.g. 1-7 and 7-14, 2-8 and 1-2 + 9-14
-        // how tf am i suposed to do it
-        // if i will manage to than compare ith days of group 1st
-        // find on which index(es) i, & operand returns true, and save this index in VI
-        // scan 2nd group, when proper index found, check if it doesn't collide with indexes from 1st group
-        // if found index that doesn't collide - cout YES and return
-        // if scan ended and no return happened - cout NO 
+        found ? answers.PB('1') : answers.PB('0');
     }
+
+    LPI(i, 0, t, 1) { answers[i] == '1' ? cout << "YES\n" : cout << "NO\n"; }
 
     return 0;
 }
