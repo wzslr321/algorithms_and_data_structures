@@ -44,33 +44,32 @@ int main() {
         string r1{};
         string r2{};
         cin >> r1 >> r2;
-        int v {};
+        int v{};
         LPI(i, 0, s, 1) {
             if (r1[i] ^ r2[i]) {
                 v += 2;
                 continue;
             }
 
-            if (r1[i] & r2[i]) {
-                if (r1[i] == '1') {
-                    if (i + 1 < s) {
-                        if (r1[i + 1] == '0' && r2[i + 1] == '0') {
-                            v += 2;
-                            ++i;
-                            continue;
-                        }
-                    }
-                } else {
-                    if (i + 1 < s) {
-                        if (r1[i + 1] == '1' && r2[i + 1] == '1') {
-                            v += 2;
-                            ++i;
-                            continue;
-                        }
-                    }
-                    v += 1;
-                }
+            if (i + 1 > s) {
+                r1[i] == '0' ? ++val : out.PB(v);
+                break;
             }
+
+            if (r1[i] == '1') {
+                if (r1[i + 1] == '0' && r2[i + 1] == '0') {
+                    v += 2;
+                    ++i;
+                    continue;
+                }
+                continue;
+            }
+            if (r1[i + 1] == '1' && r2[i + 1] == '1') {
+                v += 2;
+                ++i;
+                continue;
+            }
+            v += 1;
         }
         out.PB(v);
     }
