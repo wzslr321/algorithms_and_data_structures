@@ -36,73 +36,56 @@ using VS = vector<string>;
 using VVS = vector<VS>;
 using PI = pair<int, int>;
 using TI = tuple<int, int, int>;
-using USI = unordered_set<int>;
 
 int main() {
-    // freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
-
-    int t{};
+    auto t{0};
     cin >> t;
-    vector<char> answers{};
+    vector<char> ans{};
 
     LPI(i, 0, t, 1) {
-        VS st{};
-        int n{};
+        auto n{0};
+        VVI st{};
         cin >> n;
-
         LPI(j, 0, n, 1) {
-            string ds{};
+            VI ds{};
             LPI(k, 0, 5, 1) {
-                char d{};
+                auto d{0};
                 cin >> d;
                 ds.PB(d);
             }
             st.PB(ds);
         }
 
-        if (n % 2 != 0) {
-            answers.PB('0');
-            continue;
+        cout << "=============\n";
+        LPI(j, 0, n, 1) {
+            LPI(y, 0, 5, 1) { cout << st[j][y]; }
+            cout << '\n';
         }
+        cout << "=============\n";
 
         auto found{false};
-        do {
-            VI in{};
-            LPI(j, 0, 5, 1) {
-                bool ok{true};
-                LPI(y, 0, n / 2, 1) {
-                    if (st[y][j] == '0') {
-                        ok = false;
-                        break;
+        LPI(j, 0, 5, 1) {
+            LPI(k, 0, 5, 1) {
+                if (k != j) {
+                    auto l{0}, r{0};
+                    auto no{false};
+                    LPI(y, 0, n, 1) {
+                        if (st[y][j] == 1) ++l;
+                        if (st[y][k] == 1) ++r;
+                        if (st[y][j] == 0 && st[y][k] == 0) no = true;
                     }
-                }
-                if (ok) {
-                    in.PB(j);
-                }
-            }
-            LPI(j, 0, 5, 1) {
-                bool ok{true};
-                LPI(y, n / 2, n, 1) {
-                    if (st[y][j] == '0') {
-                        ok = false;
-                        break;
-                    }
-                }
-                if (ok) {
-                    for (const auto el : in) {
-                        if (el != j) {
-                            found = true;
-                        }
+                    cout << "L: " << l << '\t' << "R: " << r << '\n';
+                    if (l >= n / 2 && r >= n / 2 && !no) {
+                        found = true;
                     }
                 }
             }
-        } while (next_permutation(st.begin(), st.end()));
+        }
 
-        found ? answers.PB('1') : answers.PB('0');
+        found ? ans.PB('1') : ans.PB('0');
     }
 
-    LPI(i, 0, t, 1) { answers[i] == '1' ? cout << "YES\n" : cout << "NO\n"; }
+    LPI(i, 0, t, 1) { ans[i] == '1' ? cout << "YES\n" : cout << "NO\n"; }
 
     return 0;
 }
