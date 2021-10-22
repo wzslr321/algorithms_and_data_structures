@@ -40,7 +40,6 @@ using TI = tuple<int, int, int>;
 int main() {
     auto t{0};
     cin >> t;
-    vector<char> ans{};
 
     LPI(i, 0, t, 1) {
         auto n{0};
@@ -56,13 +55,6 @@ int main() {
             st.PB(ds);
         }
 
-        cout << "=============\n";
-        LPI(j, 0, n, 1) {
-            LPI(y, 0, 5, 1) { cout << st[j][y]; }
-            cout << '\n';
-        }
-        cout << "=============\n";
-
         auto found{false};
         LPI(j, 0, 5, 1) {
             LPI(k, 0, 5, 1) {
@@ -74,7 +66,6 @@ int main() {
                         if (st[y][k] == 1) ++r;
                         if (st[y][j] == 0 && st[y][k] == 0) no = true;
                     }
-                    cout << "L: " << l << '\t' << "R: " << r << '\n';
                     if (l >= n / 2 && r >= n / 2 && !no) {
                         found = true;
                     }
@@ -82,10 +73,8 @@ int main() {
             }
         }
 
-        found ? ans.PB('1') : ans.PB('0');
+        found ? cout << "YES\n" : cout << "NO\n";
     }
-
-    LPI(i, 0, t, 1) { ans[i] == '1' ? cout << "YES\n" : cout << "NO\n"; }
 
     return 0;
 }
