@@ -37,9 +37,67 @@ using VVS = vector<VS>;
 using PI = pair<int, int>;
 using TI = tuple<int, int, int>;
 
+vector<vector<bitset<4>>> bts{};
+
+VI ews{};
+VI sws{};
+
+int go_right(int i, int j) {
+    auto cnt{0};
+    while (bts[i][j].test(2) == 0) {
+        ++cnt;
+        ++j;
+    }
+    return cnt;
+}
+
+int go_down(int i, int j) {
+    auto cnt{0};
+    while (bts[i][j].test(1) == 0) {
+        ++cnt;
+        ++i;
+    }
+
+    return cnt;
+}
+
+int count_room(int i, int j) {
+    auto sz{0};
+    // This is current data from ews and sws
+    /* 
+        1 0 1 0 0
+        0 0 1 0 0
+        0 1 0 1 0
+        2 1 0 1 0
+        ============
+        3 0 0 1 1
+        2 0 0 0 0
+        1 1 0 1 0
+        0 0 0 0 0
+    */
+}
+
 int main() {
-    // freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    auto n{0}, m{0};
+
+    cin >> n >> m;
+
+    LPI(i, 0, n, 1) {
+        vector<bitset<4>> tmp{};
+        LPI(j, 0, m, 1) {
+            auto num{0};
+            cin >> num;
+            tmp.PB(num);
+        }
+        bts.PB(tmp);
+    }
+
+    LPI(i, 0, n, 1) {
+        LPI(j, 0, m, 1) {
+            ews.PB(go_right(i, j));
+            sws.PB(go_down(i, j));
+        }
+    }
 
     return 0;
 }
