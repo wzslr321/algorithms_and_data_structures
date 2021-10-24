@@ -1,8 +1,17 @@
 #include <bits/stdc++.h>
 
-using namespace std;
+#include <ext/pb_ds/assoc_container.hpp>
 
-#define ar array
+using namespace std;
+using namespace __gnu_pbds;
+
+typedef tree<int, null_type, less<int>, rb_tree_tag,
+             tree_order_statistics_node_update>
+    indexed_set;
+
+#define ZEROS_B(x) __builtin_clz(x)
+#define ZEROS_E(x) __builtin_ctz(x)
+
 #define ll long long
 #define ld long double
 
@@ -21,9 +30,6 @@ using namespace std;
 #define LL_MIN -9223372036854775808
 #define LL_MAX 9223372036854775807
 
-#define ZEROS_B(x) __builtin_clz(x)
-#define ZEROS_E(x) __builtin_ctz(x)
-
 using VI = vector<int>;
 using VVI = vector<VI>;
 using VS = vector<string>;
@@ -34,11 +40,6 @@ using TI = tuple<int, int, int>;
 int main() {
     // freopen("input.txt", "r", stdin);
     // freopen("output.txt", "w", stdout);
-
-    int t{};
-    cin >> t;
-
-    LPI(
 
     return 0;
 }
