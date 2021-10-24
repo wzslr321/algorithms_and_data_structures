@@ -53,7 +53,7 @@ class linked_list {
             current = current->next;
             if (current == NULL) {
                 push_back(val);
-                break;
+                return;
             };
         }
         tmp->data = val;
@@ -78,12 +78,38 @@ class linked_list {
     void pop_back() {
         node* previous = new node;
         node* current = new node;
+        node* tmp = new node;
+        current = head;
         while (current->next != NULL) {
             previous = current;
             current = current->next;
         }
+        tmp = previous->next;
         previous->next = NULL;
         tail = previous;
+        delete tmp;
+    }
+
+    void delete_at(int position) {
+        if (position < 2) {
+            pop_front();
+            return;
+        }
+        node* previous = new node;
+        node* current = new node;
+        node* tmp = new node;
+        current = head;
+        for (auto i{1}; i < position; ++i) {
+            previous = current;
+            current = current->next;
+            if (current->next == NULL) {
+                pop_back();
+                return;
+            }
+        }
+        tmp = current;
+        previous->next = current->next;
+        delete current;
     }
 
     void display() {
@@ -108,6 +134,7 @@ int main() {
     list.push_back(7);
     list.push_back(5);
     list.pop_back();
+    list.delete_at(43);
     list.display();
     return 0;
 }
