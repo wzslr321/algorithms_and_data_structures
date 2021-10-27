@@ -1,7 +1,3 @@
-#pragma GCC optimize("0fast,unroll-loops")
-#pragma GCC target("avx2,popcnt,lzcnt,tune=native") // gotta also learn about ctz,blsi and pdep and consider abm,bmi,bmi2 targets
-
-
 #include <bits/stdc++.h>
 
 #include <ext/pb_ds/assoc_container.hpp>
@@ -41,13 +37,37 @@ using VVS = vector<VS>;
 using PI = pair<int, int>;
 using TI = tuple<int, int, int>;
 
-auto main() -> int {
+int main() {
     // freopen("input.txt", "r", stdin);
     // freopen("output.txt", "w", stdout);
 
     ios::sync_with_stdio(false);
     cin.tie(0);
-    cout.tie(0);
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     return 0;
 }
