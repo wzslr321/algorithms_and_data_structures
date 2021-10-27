@@ -8,23 +8,43 @@ using namespace std;
 #define LL_MAX 9223372036854775807
 
 using VI = vector<int>;
+using VVI = vector<VI>;
 
-void scan(VI nums, int k, int an) {
-    LPI(i, 0, k, 1) {
-        unordered_map<int, int> v{};
-        LPI(j, 0, nums.size(), 1) {
-            if (v[nums[j]] == 0) {
-                v[nums[j]] = 1;
-            } else {
-                v[nums[j]] += 1;
+void scan(VI nums, int k, int an, VVI& qs) {
+    if (k > qs.size()) {
+        k -= qs.size() - 1;
+        LPI(i, 0, k, 1) {
+            unordered_map<int, int> v{};
+            LPI(j, 0, nums.size(), 1) {
+                if (v[nums[j]] == 0) {
+                    v[nums[j]] = 1;
+                } else {
+                    v[nums[j]] += 1;
+                }
             }
+            LPI(j, 0, nums.size(), 1) { nums[j] = v[nums[j]]; }
         }
-        LPI(j, 0, nums.size(), 1) {
-            v[nums[j]];
-            nums[j] = v[nums[j]];
+        qs.PB(nums);
+        cout << nums[an - 1] << '\n';
+    } else {
+        if (k == qs.size()) {
+            LPI(i, 0, k, 1) {
+                unordered_map<int, int> v{};
+                LPI(j, 0, nums.size(), 1) {
+                    if (v[nums[j]] == 0) {
+                        v[nums[j]] = 1;
+                    } else {
+                        v[nums[j]] += 1;
+                    }
+                }
+                LPI(j, 0, nums.size(), 1) { nums[j] = v[nums[j]]; }
+            }
+            qs.PB(nums);
+            cout << nums[an - 1] << '\n';
+        } else {
+            cout << qs[k][an - 1] << '\n';
         }
     }
-    cout << nums[an - 1] << '\n';
 }
 auto main() -> int {
     ios::sync_with_stdio(false);
@@ -35,12 +55,14 @@ auto main() -> int {
     while (t > 0) {
         int n, q;
         VI nums;
+        VVI qs;
         cin >> n;
         LPI(i, 0, n, 1) {
             int an;
             cin >> an;
             nums.PB(an);
         }
+        qs.PB(nums);
         cin >> q;
         while (q > 0) {
             int x, k;
@@ -53,7 +75,7 @@ auto main() -> int {
                     k = n;
                 }
             }
-            scan(nums, k, x);
+            scan(nums, k, x, qs);
             --q;
         }
 
