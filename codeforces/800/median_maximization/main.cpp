@@ -39,26 +39,10 @@ using VVS = vector<VS>;
 using PI = pair<int, int>;
 using TI = tuple<int, int, int>;
 
-void scan(VI nums, int k, int an, VVI& qs) {
-    if (k >= qs.size()) {
-        if (k > qs.size()) k -= qs.size() - 1;
-        LPI(i, 0, k, 1) {
-            unordered_map<int, int> v{};
-            LPI(j, 0, nums.size(), 1) {
-                if (v[nums[j]] == 0)
-                    v[nums[j]] = 1;
-                else
-                    v[nums[j]] += 1;
-            }
-            LPI(j, 0, nums.size(), 1) { nums[j] = v[nums[j]]; }
-        }
-        qs.PB(nums);
-        cout << nums[an - 1] << '\n';
-    } else {
-        cout << qs[k][an - 1] << '\n';
-    }
-}
-auto main() -> int {
+int main() {
+    // freopen("input.txt", "r", stdin);
+    // freopen("output.txt", "w", stdout);
+
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
@@ -66,23 +50,10 @@ auto main() -> int {
     int t;
     cin >> t;
     while (t--) {
-        int n, q;
-        VI nums;
-        VVI qs;
-        cin >> n;
-        LPI(i, 0, n, 1) {
-            int an;
-            cin >> an;
-            nums.PB(an);
-        }
-        qs.PB(nums);
-        cin >> q;
-        while (q--) {
-            int x, k;
-            cin >> x >> k;
-            scan(nums, min(k, n), x, qs);
-        }
+        int n, s;
+        cin >> n >> s;
+        int m = n / 2 + 1;
+        cout << s / m << '\n';
     }
-
     return 0;
 }

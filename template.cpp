@@ -1,6 +1,4 @@
-#pragma GCC optimize("0fast,unroll-loops")
-#pragma GCC target("avx2,popcnt,lzcnt,tune=native") // gotta also learn about ctz,blsi and pdep and consider abm,bmi,bmi2 targets
-
+#pragma GCC optimize("Ofast,unroll-loops")
 
 #include <bits/stdc++.h>
 
