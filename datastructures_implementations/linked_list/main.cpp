@@ -1,14 +1,16 @@
 #include <bits/stdc++.h>
 
+template <typename T>
 struct node {
-    int data;
+    T data;
     struct node* next;
 };
 
+template <typename T>
 class linked_list {
    private:
-    node* head;
-    node* tail;
+    node<T>* head;
+    node<T>* tail;
 
    public:
     linked_list() {
@@ -16,8 +18,8 @@ class linked_list {
         tail = NULL;
     }
 
-    void push_back(int val) {
-        node* tmp = new node;
+    void push_back(T val) {
+        auto tmp{new node<T>};
         tmp->data = val;
         tmp->next = NULL;
         if (head == NULL) {
@@ -29,8 +31,8 @@ class linked_list {
         }
     }
 
-    void insert(int val) {
-        node* tmp = new node;
+    void insert(T val) {
+        auto tmp{new node<T>};
         tmp->data = val;
         tmp->next = head;
         head = tmp;
@@ -39,14 +41,14 @@ class linked_list {
         }
     }
 
-    void insert_at(int position, int val) {
+    void insert_at(int position, T val) {
         if (position < 2) {
             insert(val);
             return;
         }
-        node* previous = new node;
-        node* current = new node;
-        node* tmp = new node;
+        auto previous{new node<T>};
+        auto current{new node<T>};
+        auto tmp{new node<T>};
         current = head;
         for (auto i{1}; i < position; ++i) {
             previous = current;
@@ -69,16 +71,16 @@ class linked_list {
          * in order to delete it after updating the head.
          */
 
-        node* tmp = new node;
+        auto tmp{new node<T>};
         tmp = head;
         head = head->next;
         delete tmp;
     }
 
     void pop_back() {
-        node* previous = new node;
-        node* current = new node;
-        node* tmp = new node;
+        auto previous{new node<T>};
+        auto current{new node<T>};
+        auto tmp{new node<T>};
         current = head;
         while (current->next != NULL) {
             previous = current;
@@ -95,9 +97,9 @@ class linked_list {
             pop_front();
             return;
         }
-        node* previous = new node;
-        node* current = new node;
-        node* tmp = new node;
+        auto previous{new node<T>};
+        auto current{new node<T>};
+        auto tmp{new node<T>};
         current = head;
         for (auto i{1}; i < position; ++i) {
             previous = current;
@@ -113,18 +115,18 @@ class linked_list {
     }
 
     void display() {
-        node* temp = new node;
-        temp = head;
-        while (temp != NULL) {
-            printf("%d ", temp->data);
-            temp = temp->next;
+        auto tmp{new node<T>};
+        tmp = head;
+        while (tmp != NULL) {
+            printf("%d ", tmp->data);
+            tmp = tmp->next;
         }
         printf("\n");
     }
 };
 
 int main() {
-    linked_list list;
+    linked_list<int> list;
     list.insert(3);
     list.push_back(5);
     list.insert_at(-3, 2);
