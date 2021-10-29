@@ -38,11 +38,12 @@ using TI = tuple<int, int, int>;
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define ABS(a) ((a) < (0) ? ((0 - a)) : (a))
 
 #define ZEROS_B(x) __builtin_clz(x)
 #define ZEROS_E(x) __builtin_ctz(x)
 
-int GCD(int a, int b) {
+int GCD(int __restict__ a, int __restrict__ b) {
     if (a == 0) return b;
     if (b == 0) return a;
     int az = ZEROS_E(a);
@@ -54,7 +55,7 @@ int GCD(int a, int b) {
         int diff = b - a;
         az = ZEROS_E(diff);
         b = MIN(a, b);
-        a = std::abs(diff);
+        a = ABS(diff);
     }
 
     return b << shift;
