@@ -80,7 +80,42 @@ class binary_tree {
         }
     }
 
-    void display() { cout << root->right->right; }
+    int search(T value) {
+        auto tmp = root;
+        while (true) {
+            if (tmp->data == value) return 0;
+            if (value > tmp->data) {
+                if (tmp->right == NULL)
+                    return -1;
+                else
+                    tmp = tmp->right;
+            } else {
+                if (tmp->left == NULL)
+                    return -1;
+                else
+                    tmp = tmp->left;
+            }
+        }
+    }
+
+    vector<T> depth_first() {
+        vector<T> values{};
+        auto node = root;
+        stack<Node<T>*> value_stack;
+        value_stack.push(node);
+        while (value_stack.size() > 0) {
+            auto current{value_stack.top()};
+            value_stack.pop();
+            if (current->right != NULL) {
+                value_stack.push(current->right);
+            }
+            if (current->left != NULL) {
+                value_stack.push(current->left);
+            }
+            values.push_back(current->data);
+        }
+        return values;
+    }
 };
 
 auto main() -> int {
@@ -89,8 +124,12 @@ auto main() -> int {
     tree.insert(4);
     tree.insert(8);
     tree.insert(9);
-    tree.remove(9);
-    tree.display();
+    tree.insert(3);
+    auto values{tree.depth_first()};
+    for(auto i{0}; i < values.size(); ++i) {
+        cout << values[i] << " ";
+    }
+    cout << '\n';
 
     return 0;
 }
