@@ -23,6 +23,9 @@ typedef tree<int, null_type, less<int>, rb_tree_tag,
 #define LPI(i, a, b, d) for (int i{a}; i < b; i += d)
 #define LPD(i, a, b, d) for (int i{a}; i < b; i -= d)
 
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
 #ifndef INT_MAX
 #define INT_MAX 2147483647
 #endif
