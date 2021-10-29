@@ -42,16 +42,17 @@ using TI = tuple<int, int, int>;
 #define ZEROS_B(x) __builtin_clz(x)
 #define ZEROS_E(x) __builtin_ctz(x)
 
-int GCD(int a, int b) {
+template <typename T>
+T GCD(T a, T b) {
     if (a == 0) return b;
     if (b == 0) return a;
-    int az = ZEROS_E(a);
-    int bz = ZEROS_E(b);
-    int shift = MIN(az, bz);
+    T az = ZEROS_E(a);
+    T bz = ZEROS_E(b);
+    T shift = MIN(az, bz);
     b >>= bz;
     while (a != 0) {
         a >>= az;
-        int diff = b - a;
+        T diff = b - a;
         az = ZEROS_E(diff);
         b = MIN(a, b);
         a = std::abs(diff);
@@ -67,9 +68,6 @@ auto main() -> int {
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
-
-    cout << GCD(21, 7) << '\n';
-    cout << ABS(-3) << '\n';
 
     return 0;
 }
