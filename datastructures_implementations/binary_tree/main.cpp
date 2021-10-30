@@ -80,22 +80,31 @@ class binary_tree {
         }
     }
 
-    int search(T value) {
+    bool search(T value) {
         auto tmp = root;
         while (true) {
-            if (tmp->data == value) return 0;
+            if (tmp->data == value) return true;
             if (value > tmp->data) {
                 if (tmp->right == NULL)
-                    return -1;
+                    return false;
                 else
                     tmp = tmp->right;
             } else {
                 if (tmp->left == NULL)
-                    return -1;
+                    return false;
                 else
                     tmp = tmp->left;
             }
         }
+    }
+
+    bool search_recursively(Node<T>* current_root, T value) {
+        if (current_root == NULL) return false;
+        if (current_root->data == value) return true;
+        auto left = search_recursively(current_root->left, value);
+        auto right = search_recursively(current_root->right, value);
+        // it can be one liner, it looks ugly though so I did it this way here
+        return left || right;
     }
 
     void dfs() {
@@ -123,6 +132,8 @@ class binary_tree {
             cout << current->data << ' ';
         }
     }
+
+    Node<T>* get_root() { return root; }
 };
 
 auto main() -> int {
@@ -136,6 +147,8 @@ auto main() -> int {
     cout << '\n';
     tree.bfs();
     cout << '\n';
+    cout << tree.search(3) << '\t';
+    cout << tree.search_recursively(tree.get_root(), 3) << '\n';
 
     return 0;
 }
