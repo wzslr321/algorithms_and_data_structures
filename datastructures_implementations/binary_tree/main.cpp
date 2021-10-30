@@ -98,23 +98,30 @@ class binary_tree {
         }
     }
 
-    vector<T> depth_first() {
-        vector<T> values{};
-        auto node = root;
-        stack<Node<T>*> value_stack;
-        value_stack.push(node);
-        while (value_stack.size() > 0) {
-            auto current{value_stack.top()};
-            value_stack.pop();
-            if (current->right != NULL) {
-                value_stack.push(current->right);
-            }
-            if (current->left != NULL) {
-                value_stack.push(current->left);
-            }
-            values.push_back(current->data);
+    void dfs() {
+        auto node{root};
+        stack<Node<T>*> st;
+        st.push(node);
+        while (st.size() > 0) {
+            auto current{st.top()};
+            st.pop();
+            if (current->right != NULL) st.push(current->right);
+            if (current->left != NULL) st.push(current->left);
+            cout << current->data << ' ';
         }
-        return values;
+    }
+
+    void bfs() {
+        auto node{root};
+        queue<Node<T>*> qq;
+        qq.push(node);
+        while (qq.size() > 0) {
+            auto current{qq.front()};
+            qq.pop();
+            if (current->left != NULL) qq.push(current->left);
+            if (current->right != NULL) qq.push(current->right);
+            cout << current->data << ' ';
+        }
     }
 };
 
@@ -125,10 +132,9 @@ auto main() -> int {
     tree.insert(8);
     tree.insert(9);
     tree.insert(3);
-    auto values{tree.depth_first()};
-    for(auto i{0}; i < values.size(); ++i) {
-        cout << values[i] << " ";
-    }
+    tree.dfs();
+    cout << '\n';
+    tree.bfs();
     cout << '\n';
 
     return 0;
