@@ -72,5 +72,11 @@ auto main() -> int {
     cin.tie(0);
     cout.tie(0);
 
+    int n;
+    cin >> n;
+    LPI(i,0,n,1) {
+        
+    }
+
     return 0;
 }

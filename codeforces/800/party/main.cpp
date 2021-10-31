@@ -43,7 +43,7 @@ using TI = tuple<int, int, int>;
 constexpr double pi = acos(-1);
 constexpr int mod = 998244353;
 constexpr double eps = 1e-10;
-constexpr int N =1e2+10;/
+constexpr int N = 1e2 + 10;
 
 template <typename T>
 T GCD(T a, T b) {
@@ -71,6 +71,20 @@ auto main() -> int {
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        auto sum{0};
+        LPI(i, 1, n + 1, 1) {
+            int ai;
+            cin >> ai;
+            sum = max(sum, ai - i);
+        }
+        cout << sum << '\n';
+    }
 
     return 0;
 }

@@ -13,7 +13,6 @@ typedef tree<int, null_type, less<int>, rb_tree_tag,
 
 #define ll long long
 #define ld long double
-#define u unsigned
 
 #define PB push_back
 #define MP make_pair
@@ -37,32 +36,32 @@ using VVS = vector<VS>;
 using PI = pair<int, int>;
 using TI = tuple<int, int, int>;
 
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
 #define ZEROS_B(x) __builtin_clz(x)
 #define ZEROS_E(x) __builtin_ctz(x)
 
-constexpr double pi = acos(-1);
-constexpr int mod = 998244353;
-constexpr double eps = 1e-10;
-constexpr int N =1e2+10;/
-
+/*
 template <typename T>
 T GCD(T a, T b) {
     if (a == 0) return b;
     if (b == 0) return a;
     T az = ZEROS_E(a);
     T bz = ZEROS_E(b);
-    T shift = min(az, bz);
+    T shift = MIN(az, bz);
     b >>= bz;
     while (a != 0) {
         a >>= az;
         T diff = b - a;
         az = ZEROS_E(diff);
-        b = min(a, b);
+        b = MIN(a, b);
         a = std::abs(diff);
     }
 
     return b << shift;
 }
+*/
 
 auto main() -> int {
     // freopen("input.txt", "r", stdin);
@@ -71,6 +70,25 @@ auto main() -> int {
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
+
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+        VII matrix{};
+        int max_bl_r{0};
+        int max_r_r{0};
+        LPI(i, 0, n, 1) {
+            VI row{};
+            LPI(j, 0, m, 1) {
+                int num;
+                cin >> num;
+                row.PB(num);
+            }
+            matrix.PB(row);
+        }
+    }
 
     return 0;
 }
