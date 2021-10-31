@@ -133,6 +133,26 @@ class binary_tree {
         }
     }
 
+    T sum_recursively(Node<T>* current_root) {
+        if (current_root == NULL) return 0;
+        auto left_subtree = sum_recursively(current_root->left);
+        auto right_subtree = sum_recursively(current_root->right);
+        return current_root->data + left_subtree + right_subtree;
+    }
+
+    T max_root_to_leaf_sum(Node<T>* current_root) {
+        if (current_root == NULL) return INT_MIN;
+        if (current_root->left == NULL && current_root->right == NULL)
+            return current_root->data;
+
+        auto max_left = INT_MIN;
+        auto max_right = INT_MIN;
+        max_left = max_root_to_leaf_sum(current_root->left);
+        max_right = max_root_to_leaf_sum(current_root->right);
+        auto max_subtree = max(max_left, max_right);
+        return current_root->data + max_subtree;
+    }
+
     Node<T>* get_root() { return root; }
 };
 
@@ -149,6 +169,8 @@ auto main() -> int {
     cout << '\n';
     cout << tree.search(3) << '\t';
     cout << tree.search_recursively(tree.get_root(), 3) << '\n';
+    cout << tree.sum_recursively(tree.get_root()) << '\n';
+    cout << tree.max_root_to_leaf_sum(tree.get_root()) << '\n';
 
     return 0;
 }
