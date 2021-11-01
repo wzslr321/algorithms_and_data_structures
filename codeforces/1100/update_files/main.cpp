@@ -81,7 +81,13 @@ auto main() -> int {
         auto sum{2LL};
         while (sum < n) {
             sum += min({sum, n, k});
-            ++i;
+            if (sum > k) {
+                ++i;
+                i += (n - sum + k - 1) / k;
+                break;
+            } else {
+                ++i;
+            }
         }
         n == 1 ? cout << "0\n" : n == 2 ? cout << "1\n" : cout << i << '\n';
     }
