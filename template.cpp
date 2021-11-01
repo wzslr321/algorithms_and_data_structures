@@ -43,7 +43,7 @@ using TI = tuple<int, int, int>;
 constexpr double pi = acos(-1);
 constexpr int mod = 998244353;
 constexpr double eps = 1e-10;
-constexpr int N =1e2+10;/
+constexpr int N = 1e2 + 10;
 
 template <typename T>
 T GCD(T a, T b) {
@@ -71,6 +71,11 @@ auto main() -> int {
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
+
+    int t;
+    cin >> t;
+    while (t--) {
+    }
 
     return 0;
 }
