@@ -65,18 +65,11 @@ T GCD(T a, T b) {
 }
 
 static bool was_left;
-static bool was_right;
+static bool was_right = true;
 static bool changed_l;
 static bool changed_r;
 
 auto find(const string& s, const char c, int token) -> int {
-    if (token > 0) {
-        if (s[token - 1] == c && !changed_r) {
-            was_left = true;
-            if (was_right) changed_l = true;
-            return token - 1;
-        }
-    }
     if (token < s.size() - 1) {
         if (s[token + 1] == c && !changed_l) {
             was_right = true;
@@ -84,8 +77,15 @@ auto find(const string& s, const char c, int token) -> int {
             return token + 1;
         }
     }
+    if (token > 0) {
+        if (s[token - 1] == c && !changed_r) {
+            was_left = true;
+            if (was_right) changed_l = true;
+            return token - 1;
+        }
+    }
 
-    return -1;
+    return -2;
 }
 
 auto main() -> int {
@@ -106,14 +106,13 @@ auto main() -> int {
             if (s1[i] == s2[0]) {
                 int valid = i;
                 int in{1};
-                while (valid != -1 && in != s2.size()) {
+                while (valid != -2 && in != s2.size()) {
                     valid = find(s1, s2[in], valid);
-                    if (valid != -1) {
+                    if (valid != -2) {
                         ++in;
                     }
                 }
                 was_left = false;
-                was_right = false;
                 changed_r = false;
                 changed_l = false;
                 if (in == s2.size()) {
