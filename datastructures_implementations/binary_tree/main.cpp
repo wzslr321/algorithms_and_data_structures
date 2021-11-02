@@ -7,6 +7,7 @@ struct Node {
     T data;
     Node* left;
     Node* right;
+    Node* parent;
 };
 
 template <typename T>
@@ -22,6 +23,7 @@ class binary_tree {
         node->data = value;
         node->left = NULL;
         node->right = NULL;
+        node->parent = NULL;
         if (root == NULL) {
             root = node;
         } else {
@@ -29,15 +31,19 @@ class binary_tree {
             while (tmp->right != node && tmp->left != node) {
                 if (node->data == tmp->data) break;
                 if (node->data > tmp->data) {
-                    if (tmp->right == NULL)
+                    if (tmp->right == NULL) {
                         tmp->right = node;
-                    else
+                        node->parent = tmp;
+                    } else {
                         tmp = tmp->right;
+                    }
                 } else {
-                    if (tmp->left == NULL)
+                    if (tmp->left == NULL) {
                         tmp->left = node;
-                    else
+                        node->parent = tmp;
+                    } else {
                         tmp = tmp->left;
+                    }
                 }
             }
         }
@@ -154,6 +160,16 @@ class binary_tree {
     }
 
     Node<T>* get_root() { return root; }
+
+    T get_height(Node<T>* current_root) {
+        if (current_root == NULL) return 0;
+        if (current_root->left == NULL && current_root->right == NULL) return 1;
+        auto max_left = INT_MIN;
+        auto max_right = INT_MIN;
+        max_left = get_height(current_root->left);
+        max_right = get_height(current_root->right);
+        return 1 + max(max_left, max_right);
+    }
 };
 
 auto main() -> int {
@@ -163,6 +179,8 @@ auto main() -> int {
     tree.insert(8);
     tree.insert(9);
     tree.insert(3);
+    tree.insert(12);
+    tree.insert(11);
     tree.dfs();
     cout << '\n';
     tree.bfs();
@@ -171,6 +189,7 @@ auto main() -> int {
     cout << tree.search_recursively(tree.get_root(), 3) << '\n';
     cout << tree.sum_recursively(tree.get_root()) << '\n';
     cout << tree.max_root_to_leaf_sum(tree.get_root()) << '\n';
+    cout << tree.get_height(tree.get_root()) << '\n';
 
     return 0;
 }
