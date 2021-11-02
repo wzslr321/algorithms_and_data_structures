@@ -14,6 +14,7 @@ template <typename T>
 class binary_tree {
    private:
     Node<T>* root;
+    T height;
 
    public:
     binary_tree() { root = NULL; }
@@ -26,6 +27,7 @@ class binary_tree {
         node->parent = NULL;
         if (root == NULL) {
             root = node;
+            height = 0;
         } else {
             auto tmp = root;
             while (tmp->right != node && tmp->left != node) {
@@ -34,6 +36,7 @@ class binary_tree {
                     if (tmp->right == NULL) {
                         tmp->right = node;
                         node->parent = tmp;
+                        if (node->parent->left == NULL) ++height;
                     } else {
                         tmp = tmp->right;
                     }
@@ -41,6 +44,7 @@ class binary_tree {
                     if (tmp->left == NULL) {
                         tmp->left = node;
                         node->parent = tmp;
+                        if (node->parent->right == NULL) ++height;
                     } else {
                         tmp = tmp->left;
                     }
@@ -58,18 +62,21 @@ class binary_tree {
                     if (previous->right->data == value) {
                         previous->right = NULL;
                         delete tmp;
+                        if (previous->left == NULL) --height;
                     }
                 }
                 if (previous->left != NULL) {
                     if (previous->left->data == value) {
                         previous->left = NULL;
                         delete tmp;
+                        if (previous->right == NULL) --height;
                     }
                 }
                 if (root->data == value) {
                     root = tmp->right;
                     root->left = tmp->left;
                     delete tmp;
+                    --height;
                 }
                 break;
             }
@@ -161,6 +168,7 @@ class binary_tree {
 
     Node<T>* get_root() { return root; }
 
+    /*
     T get_height(Node<T>* current_root) {
         if (current_root == NULL) return 0;
         if (current_root->left == NULL && current_root->right == NULL) return 1;
@@ -169,6 +177,11 @@ class binary_tree {
         max_left = get_height(current_root->left);
         max_right = get_height(current_root->right);
         return 1 + max(max_left, max_right);
+    }
+    */
+
+    T get_height() {
+        return height;
     }
 };
 
@@ -181,6 +194,8 @@ auto main() -> int {
     tree.insert(3);
     tree.insert(12);
     tree.insert(11);
+    tree.insert(20);
+    tree.insert(18);
     tree.dfs();
     cout << '\n';
     tree.bfs();
@@ -189,7 +204,8 @@ auto main() -> int {
     cout << tree.search_recursively(tree.get_root(), 3) << '\n';
     cout << tree.sum_recursively(tree.get_root()) << '\n';
     cout << tree.max_root_to_leaf_sum(tree.get_root()) << '\n';
-    cout << tree.get_height(tree.get_root()) << '\n';
+    // cout << tree.get_height(tree.get_root()) << '\n';
+    cout << tree.get_height() << '\n';
 
     return 0;
 }
