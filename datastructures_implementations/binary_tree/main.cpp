@@ -187,20 +187,17 @@ class binary_tree {
 
 auto main() -> int {
     binary_tree<int> tree;
-    tree.insert(5);
-    tree.insert(4);
-    tree.insert(8);
-    tree.insert(9);
-    tree.insert(3);
-    tree.insert(12);
-    tree.insert(11);
     tree.insert(20);
+    tree.insert(15);
+    tree.insert(30);
+    tree.insert(10);
     tree.insert(18);
+    tree.insert(7);
     tree.dfs();
     cout << '\n';
     tree.bfs();
     cout << '\n';
-    cout << tree.search(3) << '\t';
+    cout << tree.search(7) << '\t';
     cout << tree.search_recursively(tree.get_root(), 3) << '\n';
     cout << tree.sum_recursively(tree.get_root()) << '\n';
     cout << tree.max_root_to_leaf_sum(tree.get_root()) << '\n';

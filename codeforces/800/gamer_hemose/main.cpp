@@ -83,16 +83,17 @@ auto main() -> int {
         LPI(i, 0, n, 1) {
             u ll wp;
             cin >> wp;
-            max2 = min(max1, wp);
-            max1 = max(max1, wp);
+            max1 = max(max1,wp);
+            if(wp < max1) {
+                max2 = max(max2,wp);
+            }
         }
-        u ll i{0LL};
-        u ll sum{0LL};
-        while (sum < h) {
-            sum += max1 + max2;
-            i += 2;
-        }
-        sum - max2 >= h ? cout << i -1 << '\n': cout << i << '\n';
+        if (h % (max1 + max2) == 0)
+            cout << 2 * (h / (max1 + max2)) << '\n';
+        else if (h % (max1 + max2) <= max1)
+            cout << 2 * (h / (max1 + max2)) + 1 << '\n';
+        else
+            cout << 2 * (h / (max1 + max2)) + 2 << '\n';
     }
 
     return 0;

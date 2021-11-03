@@ -77,13 +77,14 @@ auto main() -> int {
     while (t--) {
         ll x, n;
         cin >> x >> n;
-        if (n % 2 == 1) {
-            auto res = x - n - 1LL + n;
-            cout << res << '\n';
+        auto last = x + n - 2;
+        auto sum = (x + last) / 2;
+        if (n & 1) {
+            sum -= n;
         } else {
-            auto res = x + n - 1LL + n;
-            cout << res << '\n';
+            sum += n;
         }
+        cout << sum << '\n';
     }
 
     return 0;

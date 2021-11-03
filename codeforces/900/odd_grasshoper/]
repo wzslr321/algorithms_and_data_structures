@@ -77,6 +77,17 @@ auto main() -> int {
     int t;
     cin >> t;
     while (t--) {
+        ll x, n;
+        cin >> x >> n;
+        ll co = n / 4 * 4;
+        while (co < n) {
+            if (x & 1)
+                x += co + 1;
+            else
+                x -= co + 1;
+            ++co;
+        }
+        cout << x << '\n';
     }
 #ifndef ONLINE_JUDGE
     clock_t end = clock();
