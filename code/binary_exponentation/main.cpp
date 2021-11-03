@@ -33,6 +33,17 @@ auto normal_pow(ll a, ll b) -> ll {
     return res;
 }
 
+auto modulo(ll a, ll b, ll m) -> ll {
+    a %= m;
+    ll res = 1;
+    while (b > 0) {
+        if (b & 1) res *= a % m;
+        a *= a % m;
+        b >>= 1;
+    }
+    return res;
+}
+
 #define LL_MAX 9223372036854775807
 
 auto main() -> int {
@@ -49,14 +60,16 @@ auto main() -> int {
     end = clock();
     cout << "\nExecuted in: " << double(end - begin) / CLOCKS_PER_SEC * 1000
          << " ms\n\n";
-    
+
     cout << "--------------------\n";
 
     begin = clock();
-    // ints here, 'cause probably noone have enough time to test it on so large input
+    // ints here, 'cause probably noone have enough time to test it on so large
+    // input
     cout << normal_pow(INT_MAX, INT_MAX) << '\n';
     end = clock();
     cout << "\nExecuted in: " << double(end - begin) / CLOCKS_PER_SEC * 1000
          << " ms\n";
+
     return 0;
 }

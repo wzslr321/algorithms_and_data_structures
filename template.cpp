@@ -64,6 +64,11 @@ T GCD(T a, T b) {
     return b << shift;
 }
 
+template <typename T>
+T LCM(T a, T b) {
+    return a / GCD(a, b) * b;
+}
+
 auto main() -> int {
     // freopen("input.txt", "r", stdin);
     // freopen("output.txt", "w", stdout);
