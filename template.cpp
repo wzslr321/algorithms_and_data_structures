@@ -46,22 +46,16 @@ constexpr double eps = 1e-10;
 constexpr int N = 1e2 + 10;
 
 template <typename T>
-T GCD(T a, T b) {
-    if (a == 0) return b;
-    if (b == 0) return a;
-    T az = ZEROS_E(a);
-    T bz = ZEROS_E(b);
-    T shift = min(az, bz);
-    b >>= bz;
-    while (a != 0) {
-        a >>= az;
-        T diff = b - a;
-        az = ZEROS_E(diff);
-        b = min(a, b);
-        a = std::abs(diff);
-    }
-
-    return b << shift;
+T gcd(T a, T b) {
+    if (!a || !b) return a | b;
+    unsigned shift = __builtin_ctz(a | b);
+    a >>= __builtin_ctz(a);
+    do {
+        b >>= __builtin_ctz(b);
+        if (a > b) swap(a, b);
+        b -= a;
+    } while (b);
+    return a << shift;
 }
 
 template <typename T>
