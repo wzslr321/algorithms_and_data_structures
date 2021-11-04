@@ -78,55 +78,11 @@ auto main() -> int {
     while (t--) {
         ll a, b;
         cin >> a >> b;
-        auto mx = fabs(a - b);
-        auto gdf = GCD<ll>(a, b);
-        if (mx == 0) {
+        if (a == b) {
             cout << "0 0\n";
-            continue;
-        }
-        if (mx == gdf) {
-            cout << gdf << " 0\n";
-            continue;
-        }
-        auto ac = a;
-        auto bc = b;
-        auto gcd = GCD<ll>(++a, ++b);
-        auto mvu(1);
-        if (gcd == mx) {
-            cout << gcd << ' ' << mvu << '\n';
-            continue;
-        }
-        auto mxe(gdf);
-        while (gcd != gdf && gcd != mx) {
-            ++a;
-            ++b;
-            gcd = GCD<ll>(a, b);
-            ++mvu;
-            mxe = max(mxe, gcd);
-        }
-        if (mxe == mx) {
-            cout << mxe << ' ' << mvu << '\n';
-            continue;
-        }
-
-        gcd = GCD<ll>(--ac, --bc);
-        auto mvu2(1);
-        if (gcd == mx) {
-            cout << gcd << ' ' << mvu2 << '\n';
-            continue;
-        }
-        auto mxe2(gdf);
-        while (gcd != gdf && gcd != mx) {
-            --a;
-            --b;
-            gcd = GCD<ll>(a, b);
-            ++mvu2;
-            mxe2 = max(mxe2, gcd);
-        }
-        if (mxe2 == mx || mxe2 > mxe) {
-            cout << mxe2 << ' ' << mvu2 << '\n';
         } else {
-            cout << mxe << ' ' << mvu << '\n';
+            ll mx = abs(a - b);
+            cout << mx << ' ' << min(a % mx, mx - a % mx) << '\n';
         }
     }
 #ifndef ONLINE_JUDGE
