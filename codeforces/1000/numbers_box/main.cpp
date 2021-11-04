@@ -81,30 +81,18 @@ auto main() -> int {
         int n, m;
         cin >> n >> m;
         int mtr[n][m];
-        LPI(i, 0, n, 1) {
-            LPI(j, 0, m, 1) { cin >> mtr[i][j]; }
-        }
+        auto mn(INT_MAX);
         auto sum(0);
+        auto blw(0);
         LPI(i, 0, n, 1) {
             LPI(j, 0, m, 1) {
-                if (mtr[i][j] < 0) {
-                    if (j < m - 1 && mtr[i][j + 1] < 0) {
-                        mtr[i][j] *= -1;
-                        mtr[i][j + 1] *= -1;
-                    } else {
-                        if (j > 0 && mtr[i][j - 1] < 0) {
-                            mtr[i][j] *= -1;
-                            mtr[i][j - 1] *= -1;
-                            sum -= mtr[i][j - 1] * 2;
-                            // cout << "Remove: " << mtr[i][j - 1] * 2 << '\n';
-                        }
-                    }
-                }
-                // cout << "Add: " << mtr[i][j] << '\n';
-                sum += mtr[i][j];
+                cin >> mtr[i][j];
+                if (mtr[i][j] < 0) ++blw;
+                mn = min(mn, abs(mtr[i][j]));
+                sum += abs(mtr[i][j]);
             }
         }
-        cout << sum << '\n';
+        blw & 1 ? cout << sum - 2 * mn << '\n' : cout << sum << '\n';
     }
 
 #ifndef ONLINE_JUDGE
