@@ -40,6 +40,8 @@ using TI = tuple<int, int, int>;
 #define ZEROS_B(x) __builtin_clz(x)
 #define ZEROS_E(x) __builtin_ctz(x)
 
+#define endl '\n'
+
 constexpr double pi = acos(-1);
 constexpr int mod = 998244353;
 constexpr double eps = 1e-10;
@@ -80,17 +82,16 @@ auto main() -> int {
     while (t--) {
         int n, k;
         cin >> n >> k;
-        auto all(n * k);
-        VI nums(all);
-        LPI(i, 0, all, 1) { cin >> nums[i]; }
+        int nums[n*k];
+        LPI(i, 0, n * k, 1) { cin >> nums[i]; }
+        ll sum = 0LL;
         if (n == 1 || n == 2) {
-            auto sum(0LL);
-            LPI(i, 0, all, n) { sum += all[i]; }
-            cout << sum << '\n';
+            LPI(i, 0, n * k, n) { sum += nums[i]; }
         } else {
-            // check how many from left can be taken, so the one from the right can be median
-            // how tf do i do that
+            int md = (n + 1) / 2 - 1;
+            LPI(i, 1, k + 1, 1) { sum += nums[n * k - i * (n - md)]; }
         }
+        cout << sum << endl;
     }
 
 #ifndef ONLINE_JUDGE
