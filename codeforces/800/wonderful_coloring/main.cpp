@@ -40,8 +40,6 @@ using TI = tuple<int, int, int>;
 #define ZEROS_B(x) __builtin_clz(x)
 #define ZEROS_E(x) __builtin_ctz(x)
 
-#define endl '\n'
-
 constexpr double pi = acos(-1);
 constexpr int mod = 998244353;
 constexpr double eps = 1e-10;
@@ -69,9 +67,7 @@ auto main() -> int {
     // freopen("input.txt", "r", stdin);
     // freopen("output.txt", "w", stdout);
 
-#ifndef ONLINE_JUDGE
     clock_t begin = clock();
-#endif
 
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -80,14 +76,26 @@ auto main() -> int {
     int t;
     cin >> t;
     while (t--) {
-        int n, k;
-        cin >> n >> k;
-        int nums[n * k];
-        LPI(i, 0, n * k, 1) { cin >> nums[i]; }
-        ll sum = 0LL;
-        int md = (n + 1) / 2 - 1;
-        LPI(i, 1, k + 1, 1) { sum += nums[n * k - i * (n - md)]; }
-        cout << sum << endl;
+        unordered_map<char, char> colors;
+        string s;
+        cin >> s;
+        auto cnt{0};
+        LPI(i, 0, s.size(), 1) {
+            if (colors[s[i]] == 'r') {
+                colors[s[i]] = 'b';
+                ++cnt;
+                continue;
+            }
+            if (colors[s[i]] == 'g') {
+                colors[s[i]] = 'b';
+                ++cnt;
+                continue;
+            }
+            if (colors[s[i]] == 'b') continue;
+            colors[s[i]] = 'r';
+            ++cnt;
+        }
+        cout << cnt / 2 << '\n';
     }
 
 #ifndef ONLINE_JUDGE

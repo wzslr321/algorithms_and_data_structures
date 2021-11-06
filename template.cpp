@@ -67,7 +67,9 @@ auto main() -> int {
     // freopen("input.txt", "r", stdin);
     // freopen("output.txt", "w", stdout);
 
+#ifndef ONLINE_JUDGE
     clock_t begin = clock();
+#endif
 
     ios::sync_with_stdio(false);
     cin.tie(0);
@@ -76,7 +78,9 @@ auto main() -> int {
     int t;
     cin >> t;
     while (t--) {
+
     }
+
 #ifndef ONLINE_JUDGE
     clock_t end = clock();
     cout << "\n\nExecuted In: " << double(end - begin) / CLOCKS_PER_SEC * 1000
