@@ -63,10 +63,10 @@ T LCM(T a, T b) {
     return a / GCD(a, b) * b;
 }
 
-auto least(const VVI& nums) -> int {
-    int lst = INT_MAX;
-    LPI(i, 0, nums.size()) {
-        LPI(j, 0, nums[i].size()) {}
+void print_matrix(const VVI& matrix) {
+    LPI(i, 0, matrix.size(), 1) {
+        LPI(j, 0, matrix.size(), 1) { cout << matrix[i][j] << ' '; }
+        cout << endl;
     }
 }
 
@@ -80,7 +80,6 @@ auto main() -> int {
 
     ios::sync_with_stdio(false);
     cin.tie(0);
-    cout.tie(0);
 
     int t;
     cin >> t;
@@ -88,17 +87,30 @@ auto main() -> int {
         int n;
         cin >> n;
         if (n == 1) {
-            cout << '1' << '\n';
+            cout << '1' << endl;
         }
         if (n == 2) {
-            cout << '-1' << '\n';
+            cout << "-1" << endl;
         }
-        VVI nums;
-        auto lst(1);
+        int least = 1;
+        int second = 0;
+        VVI matrix;
         LPI(i, 0, n, 1) {
-            VI row(n);
-            LPI(j, 0, n, 1) { row.PB(lst + 2 * j); }
+            VI row{least};
+            if (i == 0) {
+                LPI(j, 1, n, 1) { row.PB(least + j * 2); }
+                second = row[n - 1] - 1;
+            } else {
+                row.PB(second);
+                LPI(j, 2, n, 1) { row.PB(second + (j - 1) * 2); }
+                second = row[n - 1] - 1;
+            }
+            matrix.PB(row);
         }
+        matrix[0][0] = matrix[n - 1][n - 1];
+        matrix[n - 1][n - 1] = 1;
+
+        print_matrix(matrix);
     }
 
 #ifndef ONLINE_JUDGE
