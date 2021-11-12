@@ -89,15 +89,20 @@ class rtree {
         node->parent = NULL;
         node->children = vector<Node*>{};
         node->key = ++size;
-        auto nd = dfs(index);
+        auto nd = bfs(index);
         nd->children.PB(node);
         node->parent = nd;
     }
 
     bool szukaj() {
         auto node{root};
+        if(!scan(node->children)) return false;
         stack<Node*> st;
-        st.push(node);
+        if (node->children.size() > 0) {
+            for (int i = 0; i < node->children.size(); ++i) {
+                st.push(node->children[i]);
+            }
+        }
         while (st.size() > 0) {
             auto current{st.top()};
             st.pop();
@@ -106,26 +111,26 @@ class rtree {
                     st.push(current->children[i]);
                 }
             }
-            if (current->children.size() > 0) {
+            if (current->children.size() > 0 && current->parent != NULL) {
                 if (!scan(current->children)) return false;
             }
         }
         return true;
     }
 
-    Node* dfs(int val) {
+    Node* bfs(int val) {
         auto node{root};
-        stack<Node*> st;
-        st.push(node);
-        while (st.size() > 0) {
-            auto current{st.top()};
+        queue<Node*> qq;
+        qq.push(node);
+        while (qq.size() > 0) {
+            auto current{qq.front()};
             if (current->key == val) {
                 return current;
             }
-            st.pop();
+            qq.pop();
             if (current->children.size() > 0) {
                 for (int i = 0; i < current->children.size(); ++i) {
-                    st.push(current->children[i]);
+                    qq.push(current->children[i]);
                 }
             }
         }
