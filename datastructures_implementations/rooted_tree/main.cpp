@@ -46,7 +46,7 @@ class rooted_tree {
             auto tmp = node;
             top->left = node;
             node->depth = top->depth + 1;
-            height = max(height, node->depth + 1);
+            height = max(height, node->depth);
             // cout << "Inserted node with value: " << node->data
             // << " to: " << top->data << " as left child" << endl;
         } else {
