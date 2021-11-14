@@ -147,8 +147,10 @@ class rooted_tree {
         if (node->right != nullptr) {
             // deepest = node->right;
             auto tmp = node->top->left;
-            while (tmp->right != node) {
-                tmp = tmp->right;
+            if (tmp != node) {
+                while (tmp->right != node) {
+                    tmp = tmp->right;
+                }
             }
             tmp->right = node->right;
             if (node->top->left == node) {
@@ -256,11 +258,12 @@ auto main() -> int {
     r_tree.insert_at(13, 9);
     r_tree.insert_at(14, 9);
     r_tree.insert_at(15, 14);
+    r_tree.insert_at(99, 7);
     r_tree.print_tree();
     cout << "Height: " << r_tree.get_height() << '\n';
     auto deepest = r_tree.get_deepest();
     cout << "Deepest node: " << deepest->data << '\n';
-    r_tree.delete_node(9);
+    r_tree.delete_node(7);
 
     r_tree.print_tree();
 
