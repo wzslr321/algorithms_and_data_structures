@@ -32,10 +32,9 @@ class rooted_tree {
         node->left = NULL;
         node->right = NULL;
         node->depth = 0;
-        node->deepest = false;
         if (root == NULL) {
             root = node;
-            ++height;
+            deepest = node;
             return;
         }
         auto top = bfs(parent_data);
@@ -44,8 +43,7 @@ class rooted_tree {
         if (top->left == NULL) {
             top->left = node;
             node->depth = top->depth + 1;
-            height = max(height, node->depth);
-            if (height == node->depth) node->deepest = true;
+            if (node->depth > deepest->depth) deepest = node;
         } else {
             auto child = top->left;
             while (child->right != NULL) {
@@ -82,7 +80,7 @@ class rooted_tree {
         st.push(node);
         while (st.size() > 0) {
             auto current = st.top();
-            if (current->depth == depth) return current;
+            if (current->depth == depth && current != deepest) return current;
             st.pop();
             if (current->left != NULL) {
                 st.push(current->left);
@@ -96,19 +94,20 @@ class rooted_tree {
         return NULL;
     }
 
-    int get_height() { return height; }
+    int get_height() { return deepest->depth; }
+    Node<T>* get_deepest() { return deepest; }
 
     void delete_node(int value) {
         auto node = bfs(value);
         if (node == NULL) return;
         if (node->top == NULL) {
             root = NULL;
-            height = 0;
+            deepest = NULL;
             delete node;
             return;
         }
         if (node->right != NULL) {
-            node->right->deepest = true;
+            deepest = node->right;
             node->top->left = node->right;
             if (node->left != NULL) {
                 node->left->top = node->right;
@@ -118,12 +117,11 @@ class rooted_tree {
         }
         auto eq = dfs(node->depth);
         if (node->left != NULL) {
-            if (node->deepest) {
+            if (node == deepest) {
                 if (eq == NULL) {
-                    node->left->deepest = true;
-                    --height;
+                    deepest = node->left;
                 } else {
-                    eq->deepest = true;
+                    deepest = eq;
                 }
             }
             node->left->top = node->top;
@@ -131,11 +129,12 @@ class rooted_tree {
             delete node;
             return;
         }
-        if (node->deepest) {
-            if (eq == NULL) {
-                --height;
+        if (node == deepest) {
+            if (eq != NULL) {
+                deepest = eq;
             } else {
-                eq->deepest = true;
+                deepest = node->top;
+                cout << "!!!!!\n\n";
             }
         }
         if (node->top->left == node) {
@@ -209,16 +208,17 @@ auto main() -> int {
     r_tree.insert_at(18, 9);
     r_tree.insert_at(50, 18);
     r_tree.print_tree();
-    // r_tree.delete_node(50);
-    // r_tree.delete_node(18);
-    // r_tree.delete_node(13);
+    r_tree.delete_node(50);
+    r_tree.delete_node(18);
+    r_tree.delete_node(13);
+    r_tree.delete_node(12);
+    r_tree.delete_node(16);
 
     r_tree.print_tree();
-    auto node = r_tree.bfs(50);
-    cout << boolalpha;
-    cout << "Depth: " << node->depth << ' ' << node->deepest << '\n';
 
     cout << "Height: " << r_tree.get_height() << '\n';
+    auto deepest = r_tree.get_deepest();
+    cout << "Deepest node: " << deepest->data << '\n';
 
     return 0;
 }
