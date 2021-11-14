@@ -18,83 +18,77 @@ class rooted_tree {
    public:
     rooted_tree() { root = NULL; }
 
-    void insert_at(T data, int position) {
+    void insert_at(T data, T parent_data) {
         auto node = new Node<T>;
+        node->top = NULL;
         node->data = data;
         node->left = NULL;
         node->right = NULL;
-        node->top = NULL;
         if (root == NULL) {
             root = node;
             return;
         }
-        auto parent = bfs(position);
-        if (parent == NULL) {
-            cout << "Incorrect position\n";
+        auto top = bfs(parent_data);
+        if (top == NULL) {
+            cout << "There is no such a node\n";
             return;
         }
-        node->top = parent;
-        if (parent->left == NULL) {
-            parent->left = node;
+        node->top = top;
+        if (top->left == NULL) {
+            top->left = node;
+            cout << "Inserted node with value: " << node->data
+                 << " to: " << top->data << " as left child" << endl;
         } else {
-            auto tmp = parent->left;
-            while (tmp->right != NULL) {
-                tmp = tmp->right;
+            auto child = top->left;
+            while (child->right != NULL) {
+                child = child->right;
             }
-            tmp->right = node;
+            child->right = node;
+            cout << "Inserted node with value: " << node->data
+                 << " to: " << top->data << " as sibling of: " << child->data
+                 << endl;
         }
     }
 
-    Node<T>* bfs(int index) {
-        int current_index = 0;
-        auto node{root};
+    Node<T>* bfs(T parent_data) {
+        auto node = root;
         queue<Node<T>*> qq;
         qq.push(node);
         while (qq.size() > 0) {
             auto current = qq.front();
-            ++current_index;
-            if (current_index == index) return current;
+            if (current->data == parent_data) return current;
             qq.pop();
             if (current->left != NULL) {
                 qq.push(current->left);
-            }
-            while (current->right != NULL) {
-                qq.push(current->right);
-                current = current->right;
+                current = current->left;
+                while (current->right != NULL) {
+                    qq.push(current->right);
+                    current = current->right;
+                }
             }
         }
         return NULL;
     }
 
-    void print_info(const Node<T>* node) {
-        cout << "Value: " << node->data << endl;
-        if (node->top) cout << "Parent: " << node->top->data << endl;
-        if (node->left) cout << "Left: " << node->left->data << endl;
-        if (node->right) cout << "Right: " << node->right->data << endl;
-    }
-
-    void print_tree() {
-        auto node{root};
-        queue<Node<T>*> qq;
-        qq.push(node);
-        while (qq.size() > 0) {
-            auto current = qq.front();
-            // print_info(current);
-            cout << current->data << ' ';
-            qq.pop();
-            if (current->left != NULL) {
-                qq.push(current->left);
-            }
-            while (current->right != NULL) {
-                qq.push(current->right);
-                current = current->right;
-            }
-        }
-    }
+    void print_tree() {}
 };
 
 auto main() -> int {
     auto r_tree = rooted_tree<int>();
+
+    /*
+     *
+     *                  1
+     *                  |
+     *         2 ------ 3 --------- 4
+     *         |        |           |
+     *      |--       - |           |
+     *      |        |              |
+     *      5 -- 6   7 - 8 9 10     11
+     *           |
+     *           12
+     *
+     */
 
     r_tree.insert_at(1, 0);
     r_tree.insert_at(2, 1);
