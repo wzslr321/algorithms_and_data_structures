@@ -9,7 +9,6 @@ struct Node {
     Node<T>* left;
     Node<T>* right;
     int depth;
-    bool deepest;
 };
 
 template <typename T>
@@ -17,11 +16,13 @@ class rooted_tree {
    private:
     Node<T>* root;
     int height;
+    Node<T>* deepest;
 
    public:
     rooted_tree() {
         root = NULL;
         height = 0;
+        deepest = NULL;
     }
 
     void insert_at(T data, T parent_data) {
@@ -75,6 +76,26 @@ class rooted_tree {
         return NULL;
     }
 
+    Node<T>* dfs(int depth) {
+        auto node = root;
+        stack<Node<T>*> st;
+        st.push(node);
+        while (st.size() > 0) {
+            auto current = st.top();
+            if (current->depth == depth) return current;
+            st.pop();
+            if (current->left != NULL) {
+                st.push(current->left);
+                current = current->left;
+                while (current->right != NULL) {
+                    st.push(current->right);
+                    current = current->right;
+                }
+            }
+        }
+        return NULL;
+    }
+
     int get_height() { return height; }
 
     void delete_node(int value) {
@@ -94,14 +115,29 @@ class rooted_tree {
             }
             delete node;
             return;
-        } else if (node->left != NULL) {
-            if (node->deepest) --height;
+        }
+        auto eq = dfs(node->depth);
+        if (node->left != NULL) {
+            if (node->deepest) {
+                if (eq == NULL) {
+                    node->left->deepest = true;
+                    --height;
+                } else {
+                    eq->deepest = true;
+                }
+            }
             node->left->top = node->top;
             node->top->left = node->left;
             delete node;
             return;
         }
-        if (node->deepest) --height;
+        if (node->deepest) {
+            if (eq == NULL) {
+                --height;
+            } else {
+                eq->deepest = true;
+            }
+        }
         if (node->top->left == node) {
             node->top->left = NULL;
         } else {
@@ -157,27 +193,6 @@ class rooted_tree {
 auto main() -> int {
     auto r_tree = rooted_tree<int>();
 
-    /*
-     *  I  hope i represented this tree correctly, it is not easy
-     *  to visualize things as a comments. print_tree function should do better
-     * work.
-     *
-     *                  1
-     *                  |
-     *         3 ------ 8 -------------- 4
-     *         |        |                |
-     *      |--       - |                |
-     *      |         |                  |
-     *      5 -- 16   7 - 21 - 9 - 10    11
-     *           |           |
-     *           12         -----
-     *                     |    |
-     *                    13   18
-     *                          |
-     *                          50
-     *
-     */
-
     r_tree.insert_at(1, 0);
     r_tree.insert_at(3, 1);
     r_tree.insert_at(8, 1);
@@ -194,38 +209,16 @@ auto main() -> int {
     r_tree.insert_at(18, 9);
     r_tree.insert_at(50, 18);
     r_tree.print_tree();
-    r_tree.delete_node(50);
-    r_tree.delete_node(18);
+    // r_tree.delete_node(50);
+    // r_tree.delete_node(18);
     // r_tree.delete_node(13);
 
     r_tree.print_tree();
-    /*
     auto node = r_tree.bfs(50);
     cout << boolalpha;
-    cout << "Node " << node->data << " is deepest: " << node->deepest << '\n';
-    */
-    cout << "Height: " << r_tree.get_height() << '\n';
+    cout << "Depth: " << node->depth << ' ' << node->deepest << '\n';
 
-    // PRINT_TREE RESULT:
-    /*
-     * Value: 1	     Parent: xx     Left Child: 3		 Right Sibling:
-     * xx Value: 3	     Parent: 1	    Left Child: 5		 Right
-     * Sibling: 8 Value: 8	     Parent: 1	    Left Child: 7
-     * Right Sibling: 4 Value: 4	     Parent: 1	    Left Child: 11
-     * Right Sibling: xx Value: 5	     Parent: 3	    Left Child: xx
-     * Right Sibling: 16 Value: 16	 Parent: 3	    Left Child: 12
-     * Right Sibling: xx Value: 7	     Parent: 8	    Left Child: xx
-     * Right Sibling: 21 Value: 21	 Parent: 8	    Left Child: xx
-     * Right Sibling: 9 Value: 9	     Parent: 8	    Left Child: 13
-     * Right Sibling: 10 Value: 10	 Parent: 8	    Left Child: xx
-     * Right Sibling: xx Value: 11	 Parent: 4	    Left Child: xx
-     * Right Sibling: xx Value: 12	 Parent: 16	    Left Child: xx
-     * Right Sibling: xx Value: 13	 Parent: 9	    Left Child: xx
-     * Right Sibling: 18 Value: 18	 Parent: 9	    Left Child: 50
-     * Right Sibling: xx Value: 50	 Parent: 18	    Left Child: xx
-     * Right Sibling: xx
-     *
-     */
+    cout << "Height: " << r_tree.get_height() << '\n';
 
     return 0;
 }
