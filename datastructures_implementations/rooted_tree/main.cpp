@@ -20,33 +20,33 @@ class rooted_tree {
 
    public:
     rooted_tree() {
-        root = NULL;
+        root = nullptr;
         height = 0;
-        deepest = NULL;
+        deepest = nullptr;
     }
 
     void insert_at(T data, T parent_data) {
         auto node = new Node<T>;
-        node->top = NULL;
+        node->top = nullptr;
         node->data = data;
-        node->left = NULL;
-        node->right = NULL;
+        node->left = nullptr;
+        node->right = nullptr;
         node->depth = 0;
-        if (root == NULL) {
+        if (root == nullptr) {
             root = node;
             deepest = node;
             return;
         }
         auto top = bfs(parent_data);
-        if (top == NULL) return;
+        if (top == nullptr) return;
         node->top = top;
-        if (top->left == NULL) {
+        if (top->left == nullptr) {
             top->left = node;
             node->depth = top->depth + 1;
             if (node->depth > deepest->depth) deepest = node;
         } else {
             auto child = top->left;
-            while (child->right != NULL) {
+            while (child->right != nullptr) {
                 child = child->right;
             }
             child->right = node;
@@ -62,16 +62,16 @@ class rooted_tree {
             auto current = qq.front();
             if (current->data == parent_data) return current;
             qq.pop();
-            if (current->left != NULL) {
+            if (current->left != nullptr) {
                 qq.push(current->left);
                 current = current->left;
-                while (current->right != NULL) {
+                while (current->right != nullptr) {
                     qq.push(current->right);
                     current = current->right;
                 }
             }
         }
-        return NULL;
+        return nullptr;
     }
 
     Node<T>* dfs(int depth) {
@@ -82,16 +82,16 @@ class rooted_tree {
             auto current = st.top();
             if (current->depth == depth && current != deepest) return current;
             st.pop();
-            if (current->left != NULL) {
+            if (current->left != nullptr) {
                 st.push(current->left);
                 current = current->left;
-                while (current->right != NULL) {
+                while (current->right != nullptr) {
                     st.push(current->right);
                     current = current->right;
                 }
             }
         }
-        return NULL;
+        return nullptr;
     }
 
     void update_height_in_subtree(Node<T>* st_root) {
@@ -102,10 +102,10 @@ class rooted_tree {
             auto current = st.top();
             current->depth -= 1;
             st.pop();
-            if (current->left != NULL) {
+            if (current->left != nullptr) {
                 st.push(current->left);
                 current = current->left;
-                while (current->right != NULL) {
+                while (current->right != nullptr) {
                     st.push(current->right);
                     current = current->right;
                 }
@@ -118,45 +118,57 @@ class rooted_tree {
 
     void delete_node(int value) {
         auto node = bfs(value);
-        if (node == NULL) return;
-        if (node->top == NULL) {
-            if (node->left == NULL) {
-                root = NULL;
-                deepest = NULL;
+        if (node == nullptr) return;
+        if (node->top == nullptr) {
+            if (node->left == nullptr) {
+                root = nullptr;
+                deepest = nullptr;
                 delete node;
                 return;
             } else {
                 root = node->left;
-                root->top = NULL;
+                root->top = nullptr;
                 auto tmp = root->right;
-                while (tmp != NULL) {
+                while (tmp != nullptr) {
                     tmp->top = root;
                     tmp = tmp->right;
                 }
                 tmp = root->left;
-                while (tmp->right != NULL) {
+                while (tmp->right != nullptr) {
                     tmp = tmp->right;
                 }
 
                 tmp->right = root->right;
-                root->right = NULL;
+                root->right = nullptr;
                 update_height_in_subtree(root);
                 return;
             }
         }
-        if (node->right != NULL) {
-            deepest = node->right;
-            node->top->left = node->right;
-            if (node->left != NULL) {
-                node->left->top = node->right;
+        if (node->right != nullptr) {
+            // deepest = node->right;
+            auto tmp = node->top->left;
+            while (tmp->right != node) {
+                tmp = tmp->right;
+            }
+            tmp->right = node->right;
+            if (node->top->left == node) {
+                node->top->left = node->right;
+            }
+            if (node->left != nullptr) {
+                node->right->left = node->left;
+                tmp = node->left;
+                while (tmp != nullptr) {
+                    tmp->top = node->right;
+                    tmp = tmp->right;
+                }
             }
             delete node;
             return;
         }
         auto eq = dfs(node->depth);
-        if (node->left != NULL) {
+        if (node->left != nullptr) {
             if (node == deepest) {
-                if (eq != NULL) {
+                if (eq != nullptr) {
                     deepest = eq;
                 } else {
                     deepest = node->left;
@@ -168,37 +180,37 @@ class rooted_tree {
             return;
         }
         if (node == deepest) {
-            if (eq != NULL) {
+            if (eq != nullptr) {
                 deepest = eq;
             } else {
                 deepest = node->top;
             }
         }
         if (node->top->left == node) {
-            node->top->left = NULL;
+            node->top->left = nullptr;
         } else {
             auto tmp = node->top->left;
             while (tmp->right != node) {
                 tmp = tmp->right;
             }
-            tmp->right = NULL;
+            tmp->right = nullptr;
         }
-        node->top = NULL;
+        node->top = nullptr;
         delete node;
     }
 
     void print_node(const Node<T>* node) {
         cout << "Value: " << node->data << '\t';
-        if (node->top != NULL)
+        if (node->top != nullptr)
             cout << " Parent: " << node->top->data << '\t';
         else
             cout << " Parent: xx " << '\t';
-        if (node->left != NULL)
+        if (node->left != nullptr)
             cout << " Left Child: " << node->left->data << '\t' << '\t';
         else
             cout << " Left Child: xx" << '\t' << '\t';
 
-        if (node->right != NULL)
+        if (node->right != nullptr)
             cout << " Right Sibling: " << node->right->data;
         else
             cout << " Right Sibling: xx";
@@ -213,10 +225,10 @@ class rooted_tree {
             auto current = qq.front();
             print_node(current);
             qq.pop();
-            if (current->left != NULL) {
+            if (current->left != nullptr) {
                 qq.push(current->left);
                 current = current->left;
-                while (current->right != NULL) {
+                while (current->right != nullptr) {
                     qq.push(current->right);
                     current = current->right;
                 }
@@ -230,30 +242,25 @@ auto main() -> int {
     auto r_tree = rooted_tree<int>();
 
     r_tree.insert_at(1, 0);
+    r_tree.insert_at(2, 1);
     r_tree.insert_at(3, 1);
-    r_tree.insert_at(8, 1);
     r_tree.insert_at(4, 1);
-    r_tree.insert_at(5, 3);
-    r_tree.insert_at(16, 3);
-    r_tree.insert_at(7, 8);
-    r_tree.insert_at(21, 8);
-    r_tree.insert_at(9, 8);
-    r_tree.insert_at(10, 8);
+    r_tree.insert_at(5, 2);
+    r_tree.insert_at(6, 2);
+    r_tree.insert_at(7, 3);
+    r_tree.insert_at(8, 3);
+    r_tree.insert_at(9, 3);
+    r_tree.insert_at(10, 3);
     r_tree.insert_at(11, 4);
-    r_tree.insert_at(12, 16);
+    r_tree.insert_at(12, 6);
     r_tree.insert_at(13, 9);
-    r_tree.insert_at(18, 9);
-    r_tree.insert_at(50, 18);
+    r_tree.insert_at(14, 9);
+    r_tree.insert_at(15, 14);
     r_tree.print_tree();
     cout << "Height: " << r_tree.get_height() << '\n';
     auto deepest = r_tree.get_deepest();
     cout << "Deepest node: " << deepest->data << '\n';
-    // r_tree.delete_node(50);
-    // r_tree.delete_node(18);
-    // r_tree.delete_node(13);
-    // r_tree.delete_node(12);
-    // r_tree.delete_node(16);
-    r_tree.delete_node(1);
+    r_tree.delete_node(9);
 
     r_tree.print_tree();
 
