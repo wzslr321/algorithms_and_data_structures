@@ -5,7 +5,8 @@
 template <typename T> struct Node {
   T data;
   Node<T> *parent;
-  std::vector<Node<T> *> neighbours;
+  std::vector<Node<T> *> children;
+  Node<T> *sibling;
 };
 
 template <typename T> class rooted_tree {
@@ -28,27 +29,28 @@ template <typename T> class rooted_tree {
     auto node = new Node<T>;
     node->data = value;
     node->parent = nullptr;
-    node->neighbours = {};
+    node->children = {};
+    node->sibling = nullptr;
 
     return node;
   }
 
-  void dfs(const Node<T> *s_root) {
-    std::cout << s_root->data << ' '; 
-    for (const auto &n : s_root->neighbours) {
+  void dfs(const Node<T> *node) {
+    print_node(node);
+    for (const auto &n : node->children) {
       dfs(n);
     }
   }
 
-  Node<T> *search(Node<T> *s_root, const T value) {
-    if (s_root == nullptr)
+  Node<T> *dfs(Node<T> *node, const T value) {
+    if (node == nullptr)
       return nullptr;
-    if (s_root->data == value)
-      return s_root;
+    if (node->data == value)
+      return node;
 
-    for (const auto &n : s_root->neighbours) {
-      auto result = search(n, value);
-      if (result->data == value)
+    for (const auto &n : node->children) {
+      auto result = dfs(n, value);
+      if (result != nullptr && result->data == value)
         return result;
     }
 
@@ -60,30 +62,57 @@ template <typename T> class rooted_tree {
     if (root == nullptr)
       return insert_root(node);
 
-    auto parent = search(root, top);
+    auto parent = dfs(root, top);
     if (parent == nullptr) {
       std::cout << "There is no such a node : " << top << '\n';
       return;
     }
+    node->parent = parent;
+    auto children = parent->children;
+    /*
+    if (children.back() != nullptr)
+      children.back()->sibling = node;
+      */
+    children.push_back(node);
+  }
 
-    parent->neighbours.push_back(node);
+  void print_node(const Node<T> *node) {
+
+    std::cout << "Value : " << node->data << "\tparent: ";
+    if (node->parent == nullptr) {
+      std::cout << node->parent;
+    } else {
+      std::cout << node->parent->data;
+    }
+    std::cout << "\tchildren: ";
+    for (const auto &n : node->children) {
+      std::cout << n->data << ' ';
+    }
+    std::cout << '\n';
   }
 };
 
 auto main() -> int {
   auto tree = rooted_tree<int>{};
 
-  tree.insert_to(12, 5);
-  tree.insert_to(5, 13);
-  tree.insert_to(13, 15);
+  tree.insert_to(0, 1);
+  tree.insert_to(1, 2);
+  tree.insert_to(1, 3);
+  tree.insert_to(1, 4);
+  tree.insert_to(2, 5);
+  tree.insert_to(2, 6);
+  tree.insert_to(3, 7);
+  tree.insert_to(3, 8);
+  tree.insert_to(3, 9);
+  tree.insert_to(3, 10);
+  tree.insert_to(4, 11);
+  tree.insert_to(6, 12);
+  tree.insert_to(9, 13);
+  tree.insert_to(9, 14);
 
   const auto root = tree.get_root();
 
-  std::cout << "Tree: ";
-
   tree.dfs(root);
-
-  std::cout << '\n';
 
   return EXIT_SUCCESS;
 }
