@@ -63,16 +63,13 @@ template <typename T> class rooted_tree {
       return insert_root(node);
 
     auto parent = dfs(root, top);
-    if (parent == nullptr) {
-      std::cout << "There is no such a node : " << top << '\n';
+    if (parent == nullptr)
       return;
-    }
     node->parent = parent;
-    auto children = parent->children;
-    /*
-    if (children.back() != nullptr)
+
+    auto &children = parent->children;
+    if (!children.empty())
       children.back()->sibling = node;
-      */
     children.push_back(node);
   }
 
@@ -83,6 +80,11 @@ template <typename T> class rooted_tree {
       std::cout << node->parent;
     } else {
       std::cout << node->parent->data;
+    }
+    if (node->sibling != nullptr) {
+      std::cout << "\tsibling: " << node->sibling->data;
+    } else {
+      std::cout << "\tsibling: " << node->sibling;
     }
     std::cout << "\tchildren: ";
     for (const auto &n : node->children) {
