@@ -77,7 +77,6 @@ auto main() -> int {
     int t;
     cin >> t;
     while (t--) {
-
     }
 
 #ifndef ONLINE_JUDGE

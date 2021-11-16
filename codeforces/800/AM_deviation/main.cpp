@@ -74,29 +74,13 @@ auto main() -> int {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n;
-    cin >> n;
-    int rows = 0;
-    int cols = 0;
-    char arr[n][n];
-    LPI(i, 0, n, 1) {
-        int row = 0;
-        LPI(j, 0, n, 1) {
-            cin >> arr[i][j];
-            if (arr[i][j] == 'C') ++row;
-        }
-        if (row > 1) rows += row;
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        (a + c - 2 * b) % 3 ? cout << "1\n" : cout << "0\n";
     }
-    LPI(i, 0, n, 1) {
-        int col = 0;
-        LPI(j, 0, n, 1) {
-            if (arr[j][i] == 'C') ++col;
-        }
-        if (col > 1) cols += col;
-    }
-    // cout << rows / 2 + 1 + cols / 2 + 1 << endl;
-    cout << rows << ' ' << cols << endl;
-
 
 #ifndef ONLINE_JUDGE
     clock_t end = clock();

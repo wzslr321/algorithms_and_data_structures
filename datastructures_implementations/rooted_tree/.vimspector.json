@@ -1,0 +1,14 @@
+{
+  "configurations": {
+    "Launch": {
+      "adapter": "CodeLLDB",
+      "configuration": {
+        "request": "launch",
+        "program": "main",
+        "externalConsole": true,
+        "MIMode": "lldb"
+      }
+    }
+  }
+}
+

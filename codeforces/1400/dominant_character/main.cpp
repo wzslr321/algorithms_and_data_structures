@@ -62,15 +62,26 @@ template <typename T>
 T LCM(T a, T b) {
     return a / GCD(a, b) * b;
 }
-
-int solve(const string& s, int in) {
+int solve(const string& s, int in, bool& git) {
     int a = 0;
     int b = 0;
     int c = 0;
+    bool aa = true;
     LPI(i, in, s.size(), 1) {
         if (s[i] == 'a') ++a;
-        if (s[i] == 'b') ++b;
-        if (s[i] == 'c') ++c;
+        if (b > a || c > a) return INT_MAX;
+        if (s[i] == 'b') {
+            ++b;
+            aa = false;
+        }
+        if (s[i] == 'c') {
+            ++c;
+            aa = false;
+        }
+        if (aa && a > 1) {
+            git = true;
+            return a;
+        }
         if (a > b && a > c) {
             if (a + b + c >= 2) return i - in + 1;
         }
@@ -79,16 +90,12 @@ int solve(const string& s, int in) {
 }
 
 auto main() -> int {
-    // freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
 #ifndef ONLINE_JUDGE
     clock_t begin = clock();
 #endif
-
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-
     int t;
     cin >> t;
     while (t--) {
@@ -96,19 +103,24 @@ auto main() -> int {
         string s;
         cin >> n >> s;
         int mini = INT_MAX;
+        bool git = false;
         LPI(i, 0, n, 1) {
-            if (s[i] == 'a') mini = min(mini, solve(s, i));
-            if (mini == 2) break;
+            if (s[i] == 'a') {
+                auto szukaj = solve(s, i, git);
+                if (git) {
+                    mini = szukaj;
+                    break;
+                }
+                mini = min(mini, solve(s, i, git));
+            }
         }
 
         mini == INT_MAX ? cout << "-1\n" : cout << mini << endl;
     }
-
 #ifndef ONLINE_JUDGE
     clock_t end = clock();
     cout << "\n\nExecuted In: " << double(end - begin) / CLOCKS_PER_SEC * 1000
          << " ms\n";
 #endif
-
     return 0;
 }

@@ -74,11 +74,16 @@ auto main() -> int {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int t;
-    cin >> t;
-    while (t--) {
-
+    int n;
+    cin >> n;
+    char arr[n];
+    LPI(i, 0, n, 1) {
+        string s;
+        cin >> s;
+        arr[i] = s[0];
     }
+
+
 
 #ifndef ONLINE_JUDGE
     clock_t end = clock();

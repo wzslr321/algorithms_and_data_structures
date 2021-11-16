@@ -77,7 +77,16 @@ auto main() -> int {
     int t;
     cin >> t;
     while (t--) {
-
+        ll n;
+        cin >> n;
+        ll arr[n];
+        ll sum = 0LL;
+        LPI(i, 0, n, 1) {
+            cin >> arr[i];
+            sum += arr[i];
+        }
+        int rem = sum % n;
+        cout << rem * (n - rem ) << endl;
     }
 
 #ifndef ONLINE_JUDGE
