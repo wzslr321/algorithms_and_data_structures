@@ -33,6 +33,13 @@ template <typename T> class rooted_tree {
     return node;
   }
 
+  void dfs(const Node<T> *s_root) {
+    std::cout << s_root->data << ' '; 
+    for (const auto &n : s_root->neighbours) {
+      dfs(n);
+    }
+  }
+
   Node<T> *search(Node<T> *s_root, const T value) {
     if (s_root == nullptr)
       return nullptr;
@@ -55,12 +62,11 @@ template <typename T> class rooted_tree {
 
     auto parent = search(root, top);
     if (parent == nullptr) {
-      std::cout << "There is no such a node\n";
+      std::cout << "There is no such a node : " << top << '\n';
       return;
     }
 
-    auto nb = parent->neighbours;
-    nb.push_back(node);
+    parent->neighbours.push_back(node);
   }
 };
 
@@ -69,7 +75,15 @@ auto main() -> int {
 
   tree.insert_to(12, 5);
   tree.insert_to(5, 13);
-  tree.insert_to(6, 10);
+  tree.insert_to(13, 15);
+
+  const auto root = tree.get_root();
+
+  std::cout << "Tree: ";
+
+  tree.dfs(root);
+
+  std::cout << '\n';
 
   return EXIT_SUCCESS;
 }
