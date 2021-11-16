@@ -5,7 +5,7 @@
 template <typename T> struct Node {
   T data;
   Node<T> *parent;
-  std::vector<Node<T> *> *neighbours;
+  std::vector<Node<T> *> neighbours;
 };
 
 template <typename T> class rooted_tree {
@@ -28,24 +28,24 @@ template <typename T> class rooted_tree {
     auto node = new Node<T>;
     node->data = value;
     node->parent = nullptr;
-    node->neighbours = nullptr;
-
-    std::cout << "Node value: " << node->data << '\n';
+    node->neighbours = {};
 
     return node;
   }
 
-  void dfs(Node<T> *node, Node<T> *parent, const T wanted = 0) {
+  Node<T> *search(Node<T> *s_root, const T value) {
+    if (s_root == nullptr)
+      return nullptr;
+    if (s_root->data == value)
+      return s_root;
 
-    std::cout << node->data;
-    if (node->data == wanted)
-      std::cout << "FOUND!!!\n";
-    node->parent = parent;
-    for (const auto &n : *node->neighbours) {
-      if (n != node->parent) {
-        dfs(n, node);
-      }
+    for (const auto &n : s_root->neighbours) {
+      auto result = search(n, value);
+      if (result->data == value)
+        return result;
     }
+
+    return nullptr;
   }
 
   void insert_to(const T top, const T value) {
@@ -53,7 +53,14 @@ template <typename T> class rooted_tree {
     if (root == nullptr)
       return insert_root(node);
 
-    dfs(root, nullptr, top);
+    auto parent = search(root, top);
+    if (parent == nullptr) {
+      std::cout << "There is no such a node\n";
+      return;
+    }
+
+    auto nb = parent->neighbours;
+    nb.push_back(node);
   }
 };
 
