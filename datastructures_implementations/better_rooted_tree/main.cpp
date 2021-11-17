@@ -5,7 +5,7 @@
 template <typename T> struct Node {
   T data;
   Node<T> *parent;
-  std::vector<Node<T> *> *children;
+  std::vector<Node<T> *> children;
   Node<T> *sibling;
 };
 
@@ -29,7 +29,7 @@ template <typename T> class rooted_tree {
     auto node = new Node<T>;
     node->data = value;
     node->parent = nullptr;
-    node->children = nullptr;
+    node->children = {};
     node->sibling = nullptr;
 
     return node;
@@ -37,19 +37,16 @@ template <typename T> class rooted_tree {
 
   void dfs(const Node<T> *node) {
     print_node(node);
-    auto &children = *node->children;
-    for (const auto &n : children) {
+    for (const auto &n : node->children) {
       dfs(n);
     }
   }
 
   Node<T> *dfs(Node<T> *node, const T value) {
-    if (node == nullptr)
-      return nullptr;
-    if (node->data == value)
+    if (node == nullptr || node->data == value)
       return node;
 
-    for (const auto &n : *node->children) {
+    for (const auto &n : node->children) {
       auto result = dfs(n, value);
       if (result != nullptr && result->data == value)
         return result;
@@ -68,21 +65,14 @@ template <typename T> class rooted_tree {
       return;
     node->parent = parent;
 
-    auto vec = std::vector<Node<T> *>();
-    // std::cout << parent->children << '\n';
-    if (parent->children == nullptr) {
-      parent->children = &vec;
-    }
-    // auto &children = *parent->children;
-    if (!parent->children->empty()) {
-      parent->children->back()->sibling = node;
-      // std::cout << "Child: " << children.back()->data << '\n';
-    }
-    parent->children->push_back(node);
-    std::cout << "Children size: " << parent->children->size() << '\n';
+    auto &children = parent->children;
+    if (!children.empty())
+      children.back()->sibling = node;
+    children.push_back(node);
   }
 
   void print_node(const Node<T> *node) {
+
     std::cout << "Value : " << node->data << "\tparent: ";
     if (node->parent == nullptr) {
       std::cout << node->parent;
@@ -95,7 +85,7 @@ template <typename T> class rooted_tree {
       std::cout << "\tsibling: " << node->sibling;
     }
     std::cout << "\tchildren: ";
-    for (const auto &n : *node->children) {
+    for (const auto &n : node->children) {
       std::cout << n->data << ' ';
     }
     std::cout << '\n';
