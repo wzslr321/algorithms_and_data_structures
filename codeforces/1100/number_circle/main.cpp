@@ -82,15 +82,12 @@ auto main() -> int {
         cin >> nums[i];
     }
     sort(nums.begin(),nums.end());
-    LPI(i,0,n -1 ,1) {
-       sum += nums[i];
-    }
-    if(sum <= nums[n-1]) {
+    if(nums[n-1] >= nums[n-2] + nums[n-3]) {
         cout << "NO\n";
     } else {
         cout << "YES\n";
-        cout << nums[1] << ' ' << nums[0] << ' ' << nums[2] << ' ';
-        LPI(i,3,n,1){
+        cout << nums[n-2] << ' ' << nums[n-1] << ' ';
+        for(int i = n - 3; i >= 0; --i){
             cout << nums[i] << ' ';
         }
     }
