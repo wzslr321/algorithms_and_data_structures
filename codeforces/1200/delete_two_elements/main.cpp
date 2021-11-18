@@ -78,26 +78,23 @@ auto main() -> int {
   while (t--) {
     int n;
     cin >> n;
-    VI arr(n);
-    ll sum = 0;
+    int arr[n];
+    ll sum = 0LL;
     LPI(i, 0, n, 1) {
       cin >> arr[i];
       sum += arr[i];
     }
-    sort(arr.begin(), arr.end());
-    auto av = (double)sum / n;
-    int cool = 0;
-    LPI(i,0,n,1) {
-        LPD(j,n-1,i,1) {
-            auto avg = (sum - arr[i] - arr[j]) / (n - 2.);
-            if (avg == av){
-                ++cool;
-            }
-            else if(avg > av) {
-                ++i;
-                j = n;
-            }
-        }
+    if ((2 * sum) % n != 0) {
+      cout << "0\n";
+      continue;
+    }
+    ll cool = 0LL;
+    ll need = (2 * sum) / n;
+    LPI(i, 0, n, 1) {
+      LPD(j, n - 1, i, 1) {
+        if (arr[j] == need - arr[i])
+          ++cool;
+      }
     }
     cout << cool << '\n';
   }
