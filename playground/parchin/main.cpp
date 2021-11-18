@@ -62,7 +62,6 @@ template <typename T> T gcd(T a, T b) {
 
 template <typename T> T LCM(T a, T b) { return a / GCD(a, b) * b; }
 
-
 auto main() -> int {
   // freopen("input.txt", "r", stdin);
   // freopen("output.txt", "w", stdout);
@@ -74,30 +73,30 @@ auto main() -> int {
   ios::sync_with_stdio(false);
   cin.tie(0);
 
-    int n;
-    cin >> n;
-    int maks = INT_MIN;
-    int mini = INT_MAX;
-    int result = INT_MIN;
-    int arr[n+1]{};
-    arr[0] = INT_MAX;
-    for(int i = 1; i <= n; ++i) {
-        cin >> arr[i];
-        if(arr[i] > arr[i-1]) {
-            result = max(result, maks-mini);
-            maks = 0;
-            mini = 0;
-        }
-        maks = max(maks,arr[i]);
-        mini = min(maks,arr[i]);
+  int n;
+  cin >> n;
+  int maks = INT_MIN;
+  int mini = INT_MAX;
+  int result = INT_MIN;
+  int arr[n + 1]{};
+  arr[0] = INT_MAX;
+  for (int i = 1; i <= n; ++i) {
+    cin >> arr[i];
+    if (arr[i] > arr[i - 1]) {
+      result = max(result, maks - mini);
+      maks = 0;
+      mini = 0;
     }
-    cout << max(result, maks - mini) << '\n';
+    maks = max(maks, arr[i]);
+    mini = min(maks, arr[i]);
+  }
+  cout << max(result, maks - mini) << '\n';
 
 #ifndef ONLINE_JUDGE
-    clock_t end = clock();
-    cout << "\n\nExecuted In: " << double(end - begin) / CLOCKS_PER_SEC * 1000
-         << " ms\n";
+  clock_t end = clock();
+  cout << "\n\nExecuted In: " << double(end - begin) / CLOCKS_PER_SEC * 1000
+       << " ms\n";
 #endif
 
-    return 0;
-  }
+  return 0;
+}

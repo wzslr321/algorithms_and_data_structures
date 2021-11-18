@@ -19,7 +19,7 @@ typedef tree<int, null_type, less<int>, rb_tree_tag,
 #define MP make_pair
 
 #define LPI(i, a, b, d) for (int i = a; i < b; i += d)
-#define LPD(i, a, b, d) for (int i = a; i < b; i -= d)
+#define LPD(i, a, b, d) for (int i = a; i > b; i -= d)
 #define REP(n) for (int i = 0; i < n; ++i)
 
 #ifndef INT_MAX
@@ -62,13 +62,11 @@ template <typename T> T gcd(T a, T b) {
 
 template <typename T> T LCM(T a, T b) { return a / GCD(a, b) * b; }
 
+bool solve() {};
+
 auto main() -> int {
   // freopen("input.txt", "r", stdin);
   // freopen("output.txt", "w", stdout);
-
-#ifndef ONLINE_JUDGE
-  clock_t begin = clock();
-#endif
 
   ios::sync_with_stdio(false);
   cin.tie(0);
@@ -76,13 +74,8 @@ auto main() -> int {
   int t;
   cin >> t;
   while (t--) {
+      solve();
   }
-
-#ifndef ONLINE_JUDGE
-  clock_t end = clock();
-  cout << "\n\nExecuted In: " << double(end - begin) / CLOCKS_PER_SEC * 1000
-       << " ms\n";
-#endif
 
   return 0;
 }
