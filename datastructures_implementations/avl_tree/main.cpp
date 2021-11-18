@@ -73,27 +73,46 @@ template <typename T> struct avl_tree {
   }
 
   void ufs(Node<T> *node) {
+    if (node == nullptr)
+      return;
     ++node->height;
-    if (node->parent != nullptr) {
-      if (node->parent->height == node->height) {
-        if (node->right != nullptr) {
-          // node->parent->right = node->right;
-          // node->right->left = node;
-          // node->parent = node->right;
-        } else {
-          auto tmp = node->parent->parent;
-          node->right = node->parent;
-          node->parent->parent = node;
-          node->parent = tmp;
-          node->right->height -= 1;
-          node->right->left = nullptr;
-          if (tmp == nullptr)
-            root = node;
-        }
+
+    auto left_height = 0;
+    auto right_height = 0;
+    if (node->left != nullptr)
+      left_height = node->left->height;
+    if (node->right != nullptr)
+      right_height = node->right->height;
+
+    auto tmp = node->parent;
+    if (left_height > right_height + 1) {
+      if (node->parent != nullptr) {
+        node->parent->left = node->left;
+        node->parent->height -= 1;
       }
-      node = node->parent;
-      // ufs(node);
+      node->parent = node->left;
+      node->left->right = node;
+      node->left->parent = tmp;
+      node->left->height -= 1;
+      node->left = nullptr;
+      node->height -= 2;
     }
+    if (right_height > left_height + 1) {
+      if (node->parent != nullptr) {
+        node->parent->right = node->right;
+        node->parent->height -= 1;
+      }
+      node->parent = node->right;
+      node->right->left = node;
+      node->right->parent = tmp;
+      node->right->height -= 1;
+      node->right = nullptr;
+      node->height -= 2;
+    }
+    if (tmp == nullptr)
+      root = node;
+    node = node->parent;
+    ufs(node);
   }
 
   void insert(T value) {
@@ -109,21 +128,20 @@ template <typename T> struct avl_tree {
     node->parent = parent;
     if (parent->value > node->value) {
       parent->left = node;
-      if (parent->right == nullptr)
-        ufs(parent);
     } else {
       parent->right = node;
-      if (parent->left == nullptr)
-        ufs(parent);
     }
+    ufs(parent);
   }
 };
 
 auto main() -> int {
   avl_tree<int> tree{};
   tree.insert(5);
-  tree.insert(4);
-  tree.insert(3);
+  tree.insert(6);
+  tree.insert(7);
+  tree.insert(8);
+  tree.insert(9);
 
   const auto root = tree.get_root();
   tree.dfs(root);
