@@ -56,16 +56,33 @@ template <typename T> struct avl_tree {
   }
 
   Node<T> *dfs(Node<T> *node, T value) {
+    if (node == nullptr || node->value == value)
+      return node;
+    auto left = dfs(node->left, value);
+    auto right = dfs(node->right, value);
+    return left == nullptr ? right : left;
+  }
+
+  Node<T> *find_max_in_subtree(Node<T> *node) {
+    if (node == nullptr)
+      return node;
+    while (node->right != nullptr) {
+      node = node->right;
+    }
+    return node;
+  }
+
+  Node<T> *search_parent(Node<T> *node, T value) {
     if (node == nullptr)
       return node;
     if (node->value > value) {
       auto tmp = node;
-      node = dfs(node->left, value);
+      node = search_parent(node->left, value);
       if (node == nullptr)
         return tmp;
     } else {
       auto tmp = node;
-      node = dfs(node->right, value);
+      node = search_parent(node->right, value);
       if (node == nullptr)
         return tmp;
     }
@@ -125,7 +142,7 @@ template <typename T> struct avl_tree {
       root = node;
       return;
     }
-    const auto &parent = dfs(root, value);
+    const auto &parent = search_parent(root, value);
     if (parent == nullptr)
       return;
     node->parent = parent;
@@ -135,6 +152,42 @@ template <typename T> struct avl_tree {
       parent->right = node;
     }
     ufs(parent);
+  }
+
+  void remove(T value) {
+    const auto &node = dfs(root, value);
+    if (node == nullptr)
+      return;
+    const auto &max_node = find_max_in_subtree(node->left);
+    if (max_node != nullptr) {
+      std::cout << "\n\nMAX NODE: " << max_node->value;
+      if (node->right != nullptr)
+        max_node->right = node->right;
+      max_node->parent = nullptr;
+      if (node->parent != nullptr) {
+        max_node->parent = node->parent;
+        node->parent->left = max_node;
+        if (node->value > node->parent->value) {
+          node->parent->right = max_node;
+        }
+      }
+    } else if (node->right != nullptr) {
+      if (node->left != nullptr)
+        node->right->left = node->left;
+      node->right->parent = nullptr;
+      if (node->parent != nullptr) {
+        node->right->parent = node->parent;
+        node->parent->right = node->right;
+        if (node->value > node->parent->value) {
+          node->parent->left = node->right;
+        }
+      }
+    }
+    ufs(node);
+    node->left = nullptr;
+    node->right = nullptr;
+    node->parent = nullptr;
+    delete node;
   }
 };
 
@@ -154,12 +207,17 @@ auto main() -> int {
   tree.insert(21);
   tree.insert(22);
   tree.insert(23);
-  tree.insert(24);
-  tree.insert(25);
 
   const auto root = tree.get_root();
   tree.dfs(root);
   std::cout << "\nHeight: " << tree.get_height(root) << '\n';
+
+  tree.remove(19);
+  tree.remove(21);
+  // tree.remove(20);
+
+  std::cout << "\n\n";
+  tree.dfs(root);
 
   return 0;
 }
