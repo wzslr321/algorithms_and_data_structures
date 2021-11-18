@@ -42,16 +42,17 @@ template <typename T> struct avl_tree {
     } else {
       std::cout << node->parent << '\t';
     }
-    std::cout << '\n';
+    std::cout << "Height: " << node->height << '\n';
   }
 
   void dfs(Node<T> *node) {
     print_node(node);
-    if (node->left != nullptr)
+    if (node->left != nullptr) {
       dfs(node->left);
-    else if (node->right != nullptr)
+    }
+    if (node->right != nullptr) {
       dfs(node->right);
-    std::cout << '\n';
+    }
   }
 
   Node<T> *dfs(Node<T> *node, T value) {
@@ -72,21 +73,26 @@ template <typename T> struct avl_tree {
   }
 
   void ufs(Node<T> *node) {
-    std::cout << "i am here";
     ++node->height;
     if (node->parent != nullptr) {
       if (node->parent->height == node->height) {
         if (node->right != nullptr) {
-          node->parent->right = node->right;
-          node->right->left = node;
-          node->parent = node->right;
+          // node->parent->right = node->right;
+          // node->right->left = node;
+          // node->parent = node->right;
         } else {
-          node->parent->left = node->left;
-          node->left->left = node;
-          node->parent = node->left;
+          auto tmp = node->parent->parent;
+          node->right = node->parent;
+          node->parent->parent = node;
+          node->parent = tmp;
+          node->right->height -= 1;
+          node->right->left = nullptr;
+          if (tmp == nullptr)
+            root = node;
         }
       }
-      ufs(node->parent);
+      node = node->parent;
+      // ufs(node);
     }
   }
 
@@ -103,12 +109,12 @@ template <typename T> struct avl_tree {
     node->parent = parent;
     if (parent->value > node->value) {
       parent->left = node;
-      // if (parent->right == nullptr)
-      // ufs(node);
+      if (parent->right == nullptr)
+        ufs(parent);
     } else {
       parent->right = node;
-      // if (parent->left == nullptr)
-      // ufs(node);
+      if (parent->left == nullptr)
+        ufs(parent);
     }
   }
 };
@@ -121,7 +127,7 @@ auto main() -> int {
 
   const auto root = tree.get_root();
   tree.dfs(root);
-  std::cout << "Height: " << tree.get_height(root) << '\n';
+  std::cout << "\nHeight: " << tree.get_height(root) << '\n';
 
   return 0;
 }
