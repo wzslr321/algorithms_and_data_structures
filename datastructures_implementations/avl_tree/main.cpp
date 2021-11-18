@@ -108,6 +108,8 @@ template <typename T> struct avl_tree {
       }
       node->parent = node->left;
       auto lsub = node->left->right;
+      if (lsub != nullptr)
+        lsub->parent = node;
       node->left->right = node;
       node->left->parent = tmp;
       node->left->height -= 1;
@@ -122,6 +124,8 @@ template <typename T> struct avl_tree {
       }
       node->parent = node->right;
       auto rsub = node->right->left;
+      if (rsub != nullptr)
+        rsub->parent = node;
       node->right->left = node;
       node->right->parent = tmp;
       node->right->height -= 1;
@@ -184,6 +188,12 @@ template <typename T> struct avl_tree {
       }
     }
     ufs(node);
+    if (node->parent != nullptr) {
+      if (node->value > node->parent->value)
+        node->parent->right = nullptr;
+      else
+        node->parent->left = nullptr;
+    }
     node->left = nullptr;
     node->right = nullptr;
     node->parent = nullptr;
@@ -203,17 +213,17 @@ auto main() -> int {
   tree.insert(15);
   tree.insert(16);
   tree.insert(19);
-  tree.insert(20);
-  tree.insert(21);
-  tree.insert(22);
-  tree.insert(23);
+  // tree.insert(20);
+  // tree.insert(21);
+  // tree.insert(22);
+  // tree.insert(23);
 
   const auto root = tree.get_root();
   tree.dfs(root);
   std::cout << "\nHeight: " << tree.get_height(root) << '\n';
 
   tree.remove(19);
-  tree.remove(21);
+  // tree.remove(21);
   // tree.remove(20);
 
   std::cout << "\n\n";
