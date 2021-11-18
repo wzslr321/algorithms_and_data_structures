@@ -80,9 +80,11 @@ auto main() -> int {
     cin >> n;
     int arr[n];
     ll sum = 0LL;
+    map<int, int> mp;
     LPI(i, 0, n, 1) {
       cin >> arr[i];
       sum += arr[i];
+      ++mp[arr[i]];
     }
     if ((2 * sum) % n != 0) {
       cout << "0\n";
@@ -91,12 +93,12 @@ auto main() -> int {
     ll cool = 0LL;
     ll need = (2 * sum) / n;
     LPI(i, 0, n, 1) {
-      LPD(j, n - 1, i, 1) {
-        if (arr[j] == need - arr[i])
-          ++cool;
-      }
+      if (mp[need - arr[i]])
+        cool += mp[need - arr[i]];
+      if (arr[i] == need - arr[i])
+        --cool;
     }
-    cout << cool << '\n';
+    cout << cool / 2LL << '\n';
   }
 
 #ifndef ONLINE_JUDGE
