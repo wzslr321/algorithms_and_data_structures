@@ -84,14 +84,19 @@ struct avl_tree {
     return node;
   }
 
-  void ufs(Node *node) {
+  void ufs(Node *node, bool insert = false) {
     if (!node) return;
     auto left_height = 0;
     auto right_height = 0;
     if (node->left) left_height = node->left->height;
     if (node->right) right_height = node->right->height;
-    node->height = std::max(left_height, right_height) + 1;
 
+    if (insert) node->height = std::max(left_height, right_height) + 1;
+
+    std::cout << "UFS: " << node->value << ' ' << left_height << ' '
+              << right_height << '\n';
+
+    auto tmp2 = node;
     auto tmp = node->parent;
     if (left_height > right_height + 1) {
       if (node->parent) {
@@ -106,7 +111,19 @@ struct avl_tree {
       node->left->height -= 1;
       node->left = lsub;
       node->left = nullptr;
-      node->height -= 2;
+      if (node->left) {
+        if (node->right) {
+          node->height = std::max(node->left->height, node->right->height) + 1;
+        } else {
+          node->height = node->left->height + 1;
+        }
+      } else {
+        if (node->right) {
+          node->height = node->right->height + 1;
+        } else {
+          node->height -= 2;
+        }
+      }
     }
     if (right_height > left_height + 1) {
       if (node->parent) {
@@ -121,11 +138,25 @@ struct avl_tree {
       node->right->height -= 1;
       node->right = node->right->left;
       node->right = rsub;
-      node->height -= 2;
+      if (node->left) {
+        if (node->right) {
+          node->height = std::max(node->left->height, node->right->height) + 1;
+        } else {
+          node->height = node->left->height + 1;
+        }
+      } else {
+        if (node->right) {
+          node->height = node->right->height + 1;
+        } else {
+          node->height -= 2;
+        }
+      }
     }
     if (!tmp) root = node;
+    if (root->parent) root = root->parent;
     node = node->parent;
-    ufs(node);
+    ufs(node, insert);
+    // if (tmp2->parent) tmp2->parent->left = tmp2;
   }
 
   void insert(int value) {
@@ -143,16 +174,20 @@ struct avl_tree {
     } else {
       parent->right = node;
     }
-    ufs(parent);
+    ufs(parent, true);
   }
 
   void delete_leaf(Node *node) {
     if (!node->parent) root = nullptr;
 
-    if (node == node->parent->left)
+    if (node == node->parent->left) {
+      if (!node->parent->right) node->parent->height -= 1;
       node->parent->left = nullptr;
-    else
+    } else {
+      if (!node->parent->left) node->parent->height -= 1;
       node->parent->right = nullptr;
+    }
+    ufs(node->parent);
 
     node->parent = nullptr;
     delete node;
@@ -164,18 +199,36 @@ struct avl_tree {
     //
     const auto &node = dfs(root, value);
     if (!node) return;
-    const auto &max_node = find_max_in_subtree(node->left);
-    if (max_node.first) {
-      node->value = max_node.first->value;
+    const auto &max_node_pair = find_max_in_subtree(node->left);
+    const auto &child = max_node_pair.first;
+    const auto &parent = max_node_pair.second;
+    if (child) {
+      std::cout << "TO REMOVE: " << child->value << '\n';
+    }
+    if (parent) {
+      std::cout << "WITH PARENT " << parent->value << '\n';
+    }
+    if (child) {
+      node->value = child->value;
+      if (child == parent->left) {
+        parent->left = child->left;
+      } else {
+        if (!parent->left) parent->height -= 1;
+        parent->right = child->left;
+      }
     } else {
       if (node->right) {
         node->value = node->right->value;
         node->right->parent = nullptr;
         delete node->right;
       } else {
+        delete_leaf(node);
       }
     }
-    // ufs(node);
+    if (parent) {
+      std::cout << "\nPARENT: " << parent->value << '\n';
+    }
+    ufs(parent);
   }
 };
 
@@ -193,18 +246,16 @@ auto main() -> int {
   tree.insert(19);
   tree.insert(21);
 
-  const auto root = tree.get_root();
-  tree.dfs(root);
-  std::cout << "\nHeight: " << tree.get_height(root) << '\n';
+  tree.dfs(tree.get_root());
+  std::cout << "\nHeight: " << tree.get_height(tree.get_root()) << '\n';
 
-  tree.remove(19);
-  tree.remove(15);
-  tree.remove(10);
+  tree.remove(1);
+  tree.remove(3);
 
   std::cout << "\n\n";
-  tree.dfs(root);
+  tree.dfs(tree.get_root());
 
-  std::cout << "\nHeight: " << tree.get_height(root) << '\n';
+  std::cout << "\nHeight: " << tree.get_height(tree.get_root()) << '\n';
 
   return 0;
 }
