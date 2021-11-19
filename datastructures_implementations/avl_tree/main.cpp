@@ -46,16 +46,16 @@ struct avl_tree {
     return node;
   }
 
-  void rotate(Node *node, Node *subtree_child) {
-    auto tmp = node->parent;
+  void rotate(Node *node, Node *&subtree_child) {
     if (node->parent) {
       if (subtree_child == node->left)
         node->parent->left = subtree_child;
       else
         node->parent->right = subtree_child;
 
-      node->parent->height -= 1; // have this in mind;
+      node->parent->height -= 1;
     }
+    subtree_child->parent = node->parent;
     node->parent = subtree_child;
     Node *subtree = nullptr;
     if (subtree_child == node->left)
@@ -67,7 +67,6 @@ struct avl_tree {
 
     subtree_child == node->left ? subtree_child->right = node
                                 : subtree_child->left = node;
-    subtree_child->parent = tmp;
     subtree_child->height = node->height;
     subtree_child == node->left ? subtree_child = nullptr
                                 : subtree_child = subtree;
@@ -93,8 +92,9 @@ struct avl_tree {
 
     node->height = std::max(left_height, right_height) + 1;
 
-    if (left_height > right_height + 1) rotate(node, node->right);
-    if (right_height > left_height + 1) rotate(node, node->left);
+    if (left_height > right_height + 1) rotate(node, node->left);
+    if (right_height > left_height + 1) rotate(node, node->right);
+
     if (!node->parent) root = node;
 
     update(node->parent, insert);
@@ -172,6 +172,7 @@ auto main() -> int {
   tree.insert(5);
   tree.insert(4);
   tree.insert(3);
+  /*
   tree.insert(2);
   tree.insert(1);
   tree.insert(6);
@@ -180,8 +181,9 @@ auto main() -> int {
   tree.insert(16);
   tree.insert(19);
   tree.insert(21);
-  // scan(tree.get_root());
-  // std::cout << "\nHeight: " << tree.get_height(tree.get_root()) << '\n';
+  */
+  scan(tree.get_root());
+  std::cout << "\nHeight: " << tree.get_height(tree.get_root()) << '\n';
 
   // std::cout << "\n\n";
   // scan(tree.get_root());
