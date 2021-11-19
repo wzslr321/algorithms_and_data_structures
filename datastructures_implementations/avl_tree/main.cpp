@@ -47,68 +47,68 @@ struct avl_tree {
 
   void dfs(Node *node) {
     print_node(node);
-    if (node->left != nullptr) {
+    if (node->left) {
       dfs(node->left);
     }
-    if (node->right != nullptr) {
+    if (node->right) {
       dfs(node->right);
     }
   }
 
   Node *dfs(Node *node, int value) {
-    if (node == nullptr || node->value == value)
+    if (!node || node->value == value)
       return node;
     auto left = dfs(node->left, value);
     auto right = dfs(node->right, value);
-    return left == nullptr ? right : left;
+    return !left ? right : left;
   }
 
-  Node *find_max_in_subtree(Node *node) {
-    if (node == nullptr)
-      return node;
-    while (node->right != nullptr) {
+  std::pair<Node *, Node *> find_max_in_subtree(Node *node) {
+    if (!node)
+      return std::pair<Node *, Node *>{nullptr, nullptr};
+    while (node->right) {
       node = node->right;
     }
-    return node;
+    return std::pair<Node *, Node *>{node, node->parent};
   }
 
   Node *search_parent(Node *node, int value) {
-    if (node == nullptr)
+    if (!node)
       return node;
     if (node->value > value) {
       auto tmp = node;
       node = search_parent(node->left, value);
-      if (node == nullptr)
+      if (!node)
         return tmp;
     } else {
       auto tmp = node;
       node = search_parent(node->right, value);
-      if (node == nullptr)
+      if (!node)
         return tmp;
     }
     return node;
   }
 
   void ufs(Node *node) {
-    if (node == nullptr)
+    if (!node)
       return;
     auto left_height = 0;
     auto right_height = 0;
-    if (node->left != nullptr)
+    if (node->left)
       left_height = node->left->height;
-    if (node->right != nullptr)
+    if (node->right)
       right_height = node->right->height;
     node->height = std::max(left_height, right_height) + 1;
 
     auto tmp = node->parent;
     if (left_height > right_height + 1) {
-      if (node->parent != nullptr) {
+      if (node->parent) {
         node->parent->left = node->left;
         node->parent->height -= 1;
       }
       node->parent = node->left;
       auto lsub = node->left->right;
-      if (lsub != nullptr)
+      if (lsub)
         lsub->parent = node;
       node->left->right = node;
       node->left->parent = tmp;
@@ -118,13 +118,13 @@ struct avl_tree {
       node->height -= 2;
     }
     if (right_height > left_height + 1) {
-      if (node->parent != nullptr) {
+      if (node->parent) {
         node->parent->right = node->right;
         node->parent->height -= 1;
       }
       node->parent = node->right;
       auto rsub = node->right->left;
-      if (rsub != nullptr)
+      if (rsub)
         rsub->parent = node;
       node->right->left = node;
       node->right->parent = tmp;
@@ -133,7 +133,7 @@ struct avl_tree {
       node->right = rsub;
       node->height -= 2;
     }
-    if (tmp == nullptr)
+    if (!tmp)
       root = node;
     node = node->parent;
     ufs(node);
@@ -142,12 +142,12 @@ struct avl_tree {
   void insert(int value) {
     auto node = new Node{};
     node->value = value;
-    if (root == nullptr) {
+    if (!root) {
       root = node;
       return;
     }
     const auto &parent = search_parent(root, value);
-    if (parent == nullptr)
+    if (!parent)
       return;
     node->parent = parent;
     if (parent->value > node->value) {
@@ -160,24 +160,12 @@ struct avl_tree {
 
   void remove(int value) {
     const auto &node = dfs(root, value);
-    if (node == nullptr)
+    if (!node)
       return;
     const auto &max_node = find_max_in_subtree(node->left);
-    if (max_node != nullptr) {
-      node->value = max_node->value;
-    } else {
-      //
+    if (max_node.first) {
+      node->value = max_node.first->value;
     }
-    if (max_node == node->left)
-      node->left = nullptr;
-    if (max_node->parent > max_node)
-      max_node->parent->left = nullptr;
-    else
-      max_node->parent->right = nullptr;
-    max_node->parent = nullptr;
-    max_node->left = nullptr;
-    max_node->right = nullptr;
-    delete max_node;
   }
 };
 
