@@ -1,16 +1,16 @@
 #include <iostream>
 
-template <typename T> struct Node {
-  T value;
-  Node<T> *left = nullptr;
-  Node<T> *right = nullptr;
-  Node<T> *parent = nullptr;
+struct Node {
+  int value;
+  Node *left = nullptr;
+  Node *right = nullptr;
+  Node *parent = nullptr;
   int height = 1;
 };
 
-template <typename T> struct avl_tree {
+struct avl_tree {
  private:
-  Node<T> *root;
+  Node *root;
   int height;
 
  public:
@@ -19,10 +19,10 @@ template <typename T> struct avl_tree {
     height = 0;
   }
 
-  Node<T> *get_root() { return root; }
-  int get_height(Node<T> *node) { return node->height; }
+  Node *get_root() { return root; }
+  int get_height(Node *node) { return node->height; }
 
-  void print_node(Node<T> *node) {
+  void print_node(Node *node) {
     std::cout << "Value: " << node->value << '\t';
     std::cout << "Left Child: ";
     if (node->left != nullptr) {
@@ -45,7 +45,7 @@ template <typename T> struct avl_tree {
     std::cout << "Height: " << node->height << '\n';
   }
 
-  void dfs(Node<T> *node) {
+  void dfs(Node *node) {
     print_node(node);
     if (node->left != nullptr) {
       dfs(node->left);
@@ -55,7 +55,7 @@ template <typename T> struct avl_tree {
     }
   }
 
-  Node<T> *dfs(Node<T> *node, T value) {
+  Node *dfs(Node *node, int value) {
     if (node == nullptr || node->value == value)
       return node;
     auto left = dfs(node->left, value);
@@ -63,7 +63,7 @@ template <typename T> struct avl_tree {
     return left == nullptr ? right : left;
   }
 
-  Node<T> *find_max_in_subtree(Node<T> *node) {
+  Node *find_max_in_subtree(Node *node) {
     if (node == nullptr)
       return node;
     while (node->right != nullptr) {
@@ -72,7 +72,7 @@ template <typename T> struct avl_tree {
     return node;
   }
 
-  Node<T> *search_parent(Node<T> *node, T value) {
+  Node *search_parent(Node *node, int value) {
     if (node == nullptr)
       return node;
     if (node->value > value) {
@@ -89,7 +89,7 @@ template <typename T> struct avl_tree {
     return node;
   }
 
-  void ufs(Node<T> *node) {
+  void ufs(Node *node) {
     if (node == nullptr)
       return;
     auto left_height = 0;
@@ -139,8 +139,8 @@ template <typename T> struct avl_tree {
     ufs(node);
   }
 
-  void insert(T value) {
-    auto node = new Node<T>{};
+  void insert(int value) {
+    auto node = new Node{};
     node->value = value;
     if (root == nullptr) {
       root = node;
@@ -158,51 +158,31 @@ template <typename T> struct avl_tree {
     ufs(parent);
   }
 
-  void remove(T value) {
+  void remove(int value) {
     const auto &node = dfs(root, value);
     if (node == nullptr)
       return;
     const auto &max_node = find_max_in_subtree(node->left);
     if (max_node != nullptr) {
-      std::cout << "\n\nMAX NODE: " << max_node->value;
-      if (node->right != nullptr)
-        max_node->right = node->right;
-      max_node->parent = nullptr;
-      if (node->parent != nullptr) {
-        max_node->parent = node->parent;
-        node->parent->left = max_node;
-        if (node->value > node->parent->value) {
-          node->parent->right = max_node;
-        }
-      }
-    } else if (node->right != nullptr) {
-      if (node->left != nullptr)
-        node->right->left = node->left;
-      node->right->parent = nullptr;
-      if (node->parent != nullptr) {
-        node->right->parent = node->parent;
-        node->parent->right = node->right;
-        if (node->value > node->parent->value) {
-          node->parent->left = node->right;
-        }
-      }
+      node->value = max_node->value;
+    } else {
+      //
     }
-    ufs(node);
-    if (node->parent != nullptr) {
-      if (node->value > node->parent->value)
-        node->parent->right = nullptr;
-      else
-        node->parent->left = nullptr;
-    }
-    node->left = nullptr;
-    node->right = nullptr;
-    node->parent = nullptr;
-    delete node;
+    if (max_node == node->left)
+      node->left = nullptr;
+    if (max_node->parent > max_node)
+      max_node->parent->left = nullptr;
+    else
+      max_node->parent->right = nullptr;
+    max_node->parent = nullptr;
+    max_node->left = nullptr;
+    max_node->right = nullptr;
+    delete max_node;
   }
 };
 
 auto main() -> int {
-  avl_tree<int> tree{};
+  avl_tree tree{};
   tree.insert(5);
   tree.insert(4);
   tree.insert(3);
@@ -213,21 +193,20 @@ auto main() -> int {
   tree.insert(15);
   tree.insert(16);
   tree.insert(19);
-  // tree.insert(20);
-  // tree.insert(21);
-  // tree.insert(22);
-  // tree.insert(23);
+  tree.insert(21);
 
   const auto root = tree.get_root();
   tree.dfs(root);
   std::cout << "\nHeight: " << tree.get_height(root) << '\n';
 
   tree.remove(19);
-  // tree.remove(21);
-  // tree.remove(20);
+  tree.remove(15);
+  tree.remove(10);
 
   std::cout << "\n\n";
   tree.dfs(root);
+
+  std::cout << "\nHeight: " << tree.get_height(root) << '\n';
 
   return 0;
 }
