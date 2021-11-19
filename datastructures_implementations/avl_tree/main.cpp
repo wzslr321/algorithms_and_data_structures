@@ -56,16 +56,14 @@ struct avl_tree {
   }
 
   Node *dfs(Node *node, int value) {
-    if (!node || node->value == value)
-      return node;
+    if (!node || node->value == value) return node;
     auto left = dfs(node->left, value);
     auto right = dfs(node->right, value);
     return !left ? right : left;
   }
 
   std::pair<Node *, Node *> find_max_in_subtree(Node *node) {
-    if (!node)
-      return std::pair<Node *, Node *>{nullptr, nullptr};
+    if (!node) return std::pair<Node *, Node *>{nullptr, nullptr};
     while (node->right) {
       node = node->right;
     }
@@ -73,31 +71,25 @@ struct avl_tree {
   }
 
   Node *search_parent(Node *node, int value) {
-    if (!node)
-      return node;
+    if (!node) return node;
     if (node->value > value) {
       auto tmp = node;
       node = search_parent(node->left, value);
-      if (!node)
-        return tmp;
+      if (!node) return tmp;
     } else {
       auto tmp = node;
       node = search_parent(node->right, value);
-      if (!node)
-        return tmp;
+      if (!node) return tmp;
     }
     return node;
   }
 
   void ufs(Node *node) {
-    if (!node)
-      return;
+    if (!node) return;
     auto left_height = 0;
     auto right_height = 0;
-    if (node->left)
-      left_height = node->left->height;
-    if (node->right)
-      right_height = node->right->height;
+    if (node->left) left_height = node->left->height;
+    if (node->right) right_height = node->right->height;
     node->height = std::max(left_height, right_height) + 1;
 
     auto tmp = node->parent;
@@ -108,8 +100,7 @@ struct avl_tree {
       }
       node->parent = node->left;
       auto lsub = node->left->right;
-      if (lsub)
-        lsub->parent = node;
+      if (lsub) lsub->parent = node;
       node->left->right = node;
       node->left->parent = tmp;
       node->left->height -= 1;
@@ -124,8 +115,7 @@ struct avl_tree {
       }
       node->parent = node->right;
       auto rsub = node->right->left;
-      if (rsub)
-        rsub->parent = node;
+      if (rsub) rsub->parent = node;
       node->right->left = node;
       node->right->parent = tmp;
       node->right->height -= 1;
@@ -133,8 +123,7 @@ struct avl_tree {
       node->right = rsub;
       node->height -= 2;
     }
-    if (!tmp)
-      root = node;
+    if (!tmp) root = node;
     node = node->parent;
     ufs(node);
   }
@@ -147,8 +136,7 @@ struct avl_tree {
       return;
     }
     const auto &parent = search_parent(root, value);
-    if (!parent)
-      return;
+    if (!parent) return;
     node->parent = parent;
     if (parent->value > node->value) {
       parent->left = node;
@@ -158,14 +146,36 @@ struct avl_tree {
     ufs(parent);
   }
 
+  void delete_leaf(Node *node) {
+    if (!node->parent) root = nullptr;
+
+    if (node == node->parent->left)
+      node->parent->left = nullptr;
+    else
+      node->parent->right = nullptr;
+
+    node->parent = nullptr;
+    delete node;
+  }
+
   void remove(int value) {
+    //
+    // remember to udpate height smh
+    //
     const auto &node = dfs(root, value);
-    if (!node)
-      return;
+    if (!node) return;
     const auto &max_node = find_max_in_subtree(node->left);
     if (max_node.first) {
       node->value = max_node.first->value;
+    } else {
+      if (node->right) {
+        node->value = node->right->value;
+        node->right->parent = nullptr;
+        delete node->right;
+      } else {
+      }
     }
+    // ufs(node);
   }
 };
 
