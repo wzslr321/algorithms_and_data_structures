@@ -48,20 +48,17 @@ struct avl_tree {
   }
 
   void rotate_right(Node *node) {
-    auto tmp = node->parent;
     if (node->parent) {
       node->parent->left = node->left;
       node->parent->height -= 1;
     }
+    node->left->parent = node->parent;
     node->parent = node->left;
-    auto lsub = node->left->right;
-    if (lsub) lsub->parent = node;
+    auto subtree = node->left->right;
+    if (subtree) subtree->parent = node;
     node->left->right = node;
-    node->left->parent = tmp;
-    // node->left->height -= 1;
     node->left->height = node->height;
-    node->left = lsub;
-    node->left = nullptr;
+    node->left = subtree;
     if (node->left) {
       if (node->right) {
         node->height = std::max(node->left->height, node->right->height) + 1;
@@ -78,20 +75,17 @@ struct avl_tree {
   }
 
   void rotate_left(Node *node) {
-    auto tmp = node->parent;
-
     if (node->parent) {
       node->parent->right = node->right;
       node->parent->height -= 1;
     }
+    node->right->parent = node->parent;
     node->parent = node->right;
-    auto rsub = node->right->left;
-    if (rsub) rsub->parent = node;
+    auto subtree = node->right->left;
+    if (subtree) subtree->parent = node;
     node->right->left = node;
-    node->right->parent = tmp;
     node->right->height = node->height;
-    node->right = node->right->left;
-    node->right = rsub;
+    node->right = subtree;
     if (node->left) {
       if (node->right) {
         node->height = std::max(node->left->height, node->right->height) + 1;
@@ -180,6 +174,7 @@ struct avl_tree {
     } else {
       if (!max_node->parent->left) max_node->parent->height -= 1;
       max_node->parent->right = max_node->left;
+      if (max_node->left) max_node->left->parent = node->left;
     }
     update(max_node->parent);
   }
@@ -199,6 +194,14 @@ auto main() -> int {
   tree.remove(24);
   tree.remove(40);
   tree.remove(39);
+  tree.remove(38);
+  tree.remove(37);
+  tree.remove(44);
+  tree.remove(43);
+  tree.remove(42);
+  tree.remove(41);
+  tree.remove(36);
+  tree.remove(35);
 
   std::cout << "\n\n";
   scan(tree.get_root());
