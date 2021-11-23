@@ -74,23 +74,39 @@ auto main() -> int {
   while (t--) {
       int n,a,b;
       cin >> n >> a >> b;
-      int i{n};
-      if(b < n/2 || a > n/2) {
+      VI nums;
+      for(int i = n; i > n/2; --i) {
+          if(i != b && i != a) {
+            if(a == min(a,i)) {
+                nums.PB(i);
+            }
+          }
+      }
+      if(nums.size() == n/2) {
           cout << "-1\n";
           continue;
       }
-      for(i; i >= n/2 + 1; --i) {
-           if(i != b) {
-              cout << i << ' '; 
-           }
+      nums.PB(a);
+      if(nums.size() < n/2) {
+          cout << "-1\n";
+          continue;
       }
-      cout << a << ' '; 
-      cout << b << ' ';
+      nums.PB(b);
       for(int j = n/2; j > 0; --j) {
-           if(j != a) {
-              cout << j << ' '; 
+           if(j != a && j != b) {
+                if(b == max(b,j)) {
+                    nums.PB(j);
+                }
            }
       }
+      if(nums.size() == n) {
+        LPI(i,0,n,1){
+            cout << nums[i] << ' ';
+        }
+      } else {
+          cout << "-1";
+      }
+
       cout << '\n';
   }
 
