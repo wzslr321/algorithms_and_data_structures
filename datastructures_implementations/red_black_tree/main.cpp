@@ -44,6 +44,24 @@ class red_black_tree {
     }
   }
 
+  bool is_uncle_red(Node *node, bool is_left) {
+    auto right_uncle = node->parent->right;
+    if (is_left && right_uncle && right_uncle->color == 'r') {
+      node->parent->right->color = 'b';
+      node->color = 'b';
+      if (node->parent != root) node->parent->color = 'r';
+      return true;
+    }
+    auto left_uncle = node->parent->left;
+    if (!is_left && left_uncle && left_uncle->color == 'r') {
+      node->parent->right->color = 'b';
+      node->color = 'b';
+      if (node->parent != root) node->parent->color = 'r';
+      return true;
+    }
+    return false;
+  }
+
   void insert(int value) {
     auto node = new Node(value);
     if (!root) {
@@ -54,11 +72,15 @@ class red_black_tree {
     const auto &parent = find_parent(root, value);
     if (!parent) return;
     node->parent = parent;
+
     bool is_child_left = parent->value > node->value;
     is_child_left ? parent->left = node : parent->right = node;
+
     if (node->color == 'r' && parent->color == 'r') {
       bool is_parent_left = parent->parent->value > parent->value;
-      if (!is_parent_left && !is_child_left) rotate_left(node->parent);
+      bool colors_touched = is_uncle_red(parent, is_parent_left);
+      if (!colors_touched && !is_parent_left && !is_child_left)
+        rotate_left(node->parent);
     }
   }
 };
@@ -71,6 +93,7 @@ auto main() -> int {
   tree.insert(26);
   tree.insert(41);
   tree.insert(47);
+  tree.insert(30);
   display(tree.get_root());
 
   return 0;
