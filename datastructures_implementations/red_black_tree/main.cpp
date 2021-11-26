@@ -55,6 +55,68 @@ class red_black_tree {
     return false;
   }
 
+  void rotate(Node *node) {
+    if (!node) return;
+    if (!node->parent) return;
+    auto grandparent = node->parent->parent;
+    node->parent->parent = node;
+    if (node == node->parent->right) {
+
+      node->parent->right = node->left;
+      node->left->parent = node->parent;
+      node->left = node->parent;
+
+      if (grandparent) {
+        if (node->parent == grandparent->left)
+          grandparent->left = node;
+        else
+          grandparent->right = node;
+
+        node->parent = grandparent;
+      } else {
+        node->color = 'b';
+        root = node;
+      }
+    } else {
+      node->parent->left = node->right;
+      if (node->right) node->right->parent = node->parent;
+      node->right = node->parent;
+      node->right->color = 'r';
+      node->parent->parent = node;
+      node->parent = grandparent;
+      if (grandparent) {
+        if (node->parent == grandparent->left)
+          grandparent->left = node;
+        else
+          grandparent->right = node;
+
+        node->parent = grandparent;
+      } else {
+        node->color = 'b';
+        root = node;
+      }
+    }
+
+    if (node->color == 'r' && node->left && node->left->color == 'r') {
+      return rotate(node);
+    }
+    if (node->color == 'r' && node->right && node->right->color == 'r') {
+      return rotate(node);
+    }
+  }
+
+  void push_blackness(Node *node) {
+    node->left->color = 'b';
+    node->right->color = 'b';
+    if (node != root) node->color = 'r';
+  }
+
+  bool is_grandparent_rotatable(Node *node) {
+    if (!node || node->color != 'r') return false;
+    if (node->parent && node->parent->color == 'r') return true;
+    return false;
+  }
+
   void insert(int value) {
     auto node = new Node(value);
     if (!root) {
@@ -75,13 +137,12 @@ class red_black_tree {
     if (parent->color == 'r') {
       bool can_push_blackness = is_uncle_red(grandparent);
       if (can_push_blackness) {
-        grandparent->left->color = 'b';
-        grandparent->right->color = 'b';
-        if (grandparent != root) grandparent->color = 'r';
-        return;
+        push_blackness(grandparent);
+        bool canRotate = is_grandparent_rotatable(grandparent);
+        if (canRotate) rotate(grandparent);
+      } else {
+        rotate_left(parent);
       }
-
-      rotate_left(parent);
     }
   }
 };
@@ -95,13 +156,12 @@ auto main() -> int {
   tree.insert(41);
   tree.insert(47);
   tree.insert(30);
-  /*
   tree.insert(17);
   tree.insert(14);
   tree.insert(28);
   tree.insert(38);
   tree.insert(35);
-  */
+
   display(tree.get_root());
 
   return 0;
