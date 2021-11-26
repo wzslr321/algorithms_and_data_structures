@@ -61,22 +61,9 @@ class red_black_tree {
     auto grandparent = node->parent->parent;
     node->parent->parent = node;
     if (node == node->parent->right) {
-
       node->parent->right = node->left;
       node->left->parent = node->parent;
       node->left = node->parent;
-
-      if (grandparent) {
-        if (node->parent == grandparent->left)
-          grandparent->left = node;
-        else
-          grandparent->right = node;
-
-        node->parent = grandparent;
-      } else {
-        node->color = 'b';
-        root = node;
-      }
     } else {
       node->parent->left = node->right;
       if (node->right) node->right->parent = node->parent;
@@ -84,17 +71,17 @@ class red_black_tree {
       node->right->color = 'r';
       node->parent->parent = node;
       node->parent = grandparent;
-      if (grandparent) {
-        if (node->parent == grandparent->left)
-          grandparent->left = node;
-        else
-          grandparent->right = node;
+    }
+    if (grandparent) {
+      if (node->parent == grandparent->left)
+        grandparent->left = node;
+      else
+        grandparent->right = node;
 
-        node->parent = grandparent;
-      } else {
-        node->color = 'b';
-        root = node;
-      }
+      node->parent = grandparent;
+    } else {
+      node->color = 'b';
+      root = node;
     }
 
     if (node->color == 'r' && node->left && node->left->color == 'r') {
