@@ -40,25 +40,18 @@ class red_black_tree {
     node->left->color = 'r';
     if (node->left == root) {
       node->color = 'b';
+      node->parent = nullptr;
       root = node;
     }
   }
 
-  bool is_uncle_red(Node *node, bool is_left) {
-    auto right_uncle = node->parent->right;
-    if (is_left && right_uncle && right_uncle->color == 'r') {
-      node->parent->right->color = 'b';
-      node->color = 'b';
-      if (node->parent != root) node->parent->color = 'r';
-      return true;
-    }
-    auto left_uncle = node->parent->left;
-    if (!is_left && left_uncle && left_uncle->color == 'r') {
-      node->parent->right->color = 'b';
-      node->color = 'b';
-      if (node->parent != root) node->parent->color = 'r';
-      return true;
-    }
+  bool is_uncle_red(Node *node) {
+    if (!node) return false;
+
+    bool is_left_red = node->left && node->left->color == 'r';
+    bool is_right_red = node->right && node->right->color == 'r';
+
+    if (is_left_red && is_right_red) return true;
     return false;
   }
 
@@ -73,14 +66,22 @@ class red_black_tree {
     if (!parent) return;
     node->parent = parent;
 
-    bool is_child_left = parent->value > node->value;
-    is_child_left ? parent->left = node : parent->right = node;
+    if (node->value > parent->value)
+      parent->right = node;
+    else
+      parent->left = node;
 
-    if (node->color == 'r' && parent->color == 'r') {
-      bool is_parent_left = parent->parent->value > parent->value;
-      bool colors_touched = is_uncle_red(parent, is_parent_left);
-      if (!colors_touched && !is_parent_left && !is_child_left)
-        rotate_left(node->parent);
+    auto grandparent = parent->parent;
+    if (parent->color == 'r') {
+      bool can_push_blackness = is_uncle_red(grandparent);
+      if (can_push_blackness) {
+        grandparent->left->color = 'b';
+        grandparent->right->color = 'b';
+        if (grandparent != root) grandparent->color = 'r';
+        return;
+      }
+
+      rotate_left(parent);
     }
   }
 };
@@ -94,6 +95,13 @@ auto main() -> int {
   tree.insert(41);
   tree.insert(47);
   tree.insert(30);
+  /*
+  tree.insert(17);
+  tree.insert(14);
+  tree.insert(28);
+  tree.insert(38);
+  tree.insert(35);
+  */
   display(tree.get_root());
 
   return 0;
