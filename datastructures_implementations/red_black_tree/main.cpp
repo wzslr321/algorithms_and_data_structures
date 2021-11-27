@@ -123,10 +123,16 @@ class red_black_tree {
     if (node->parent->color != 'r') return;
     if (!grandparent) return;
 
+    if(is_uncle_red(grandparent)) return push_blackness(grandparent);
+
     if (node == node->parent->left && grandparent->right == node->parent)
       return single_rotate_right(node->parent);
     if (node == node->parent->right && grandparent->left == node->parent)
       return single_rotate_left(node->parent);
+    if (node == node->parent->right && grandparent->right == node->parent)
+      return rotate_left(node->parent);
+    if (node == node->parent->left && grandparent->left == node->parent)
+      return rotate_right(node->parent);
   }
 
   void insert_root(Node *node) {
@@ -173,15 +179,9 @@ void display(const Node *node);
 auto main() -> int {
   red_black_tree tree{};
 
-  tree.insert(25);
-  tree.insert(50);
-  tree.insert(40);
-  tree.insert(60);
-  tree.insert(70);
-  tree.insert(55);
-  tree.insert(58);
-  tree.insert(45);
-
+  for (int i = 1; i <= 50; ++i) {
+    tree.insert(i);
+  }
   display(tree.get_root());
 
   return 0;
