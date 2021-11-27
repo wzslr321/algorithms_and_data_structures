@@ -6,7 +6,7 @@
 
 If push_blackness fails, consider all the possibilities
 
-* First scenario - Node and its parent are both right children
+* <b>First scenario </b> - Node and its parent are both right children
   
         25 (black) --> Grandparent
          |
@@ -22,7 +22,7 @@ If push_blackness fails, consider all the possibilities
      Grandparent->right = Parent->left 
      Parent->left = Grandparent
      if(Grandparent->parent){
-         Parent->parent = Grandparent->parent;
+          Parent->parent = Grandparent->parent;
           Grandparent->parent->value > Grandparent->value
               ? Grandparent->left = Parent;
               : Grandparent->right = Parent;
@@ -69,3 +69,62 @@ If push_blackness fails, consider all the possibilities
 #
 
 ![rotate left visualization](rotate_left.png)
+
+#
+
+* <b>Second scenario</b> - Node and its parent are both left children
+  
+                75      (black) --> Grandparent
+                |
+           50 --         (red) --> Parent
+           |
+      25 --              (red) --> Child
+
+Everything is pretty similar here, only the direction changes.
+
+<b> Pseudocode </b>
+
+     Grandparent->left = Parent->right
+     Parent->right = Grandparent
+     if(Grandparent->parent){
+          Parent->parent = Grandparent->parent;
+          Grandparent->parent->value > Grandparent->value
+              ? Grandparent->left = Parent;
+              : Grandparent->right = Parent;
+     } else { 
+        root = Parent
+     }
+
+     Grandparent->parent = Parent
+     Parent->right ? Parent->right->parent == Grandparent
+
+  <b> C++ </b>
+
+```c++
+    void rotate_right(Node *node) {
+        auto parent = node->parent;
+
+        parent->color = 'r';
+        parent->left = node->right;
+        node->right = parent;
+
+        if (parent->parent) {
+            node->parent = parent->parent;
+
+        if (node->parent->value > parent->value)
+            parent->parent->left = node;
+        else
+            parent->parent->right = node;
+
+        } else {
+          node->color = 'b';
+          node->parent = nullptr;
+          root = node;
+        }
+
+        parent->parent = node;
+        if (node->right) node->right->parent = parent;
+    }
+```
+
+<h3> I believe visualization is not needed for this. </h3>
