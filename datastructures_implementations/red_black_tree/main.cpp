@@ -33,18 +33,6 @@ class red_black_tree {
     return node;
   }
 
-  void rotate_left(Node *node) {
-    node->parent->right = nullptr;
-    node->left = node->parent;
-    node->left->parent = node;
-    node->left->color = 'r';
-    if (node->left == root) {
-      node->color = 'b';
-      node->parent = nullptr;
-      root = node;
-    }
-  }
-
   bool is_uncle_red(Node *node) {
     if (!node) return false;
 
@@ -62,15 +50,16 @@ class red_black_tree {
     node->parent->parent = node;
     if (node == node->parent->right) {
       node->parent->right = node->left;
-      node->left->parent = node->parent;
+      if (node->left) node->left->parent = node->parent;
       node->left = node->parent;
+      node->left->color = 'r';
     } else {
       node->parent->left = node->right;
       if (node->right) node->right->parent = node->parent;
       node->right = node->parent;
       node->right->color = 'r';
+      node->color = 'b';
       node->parent->parent = node;
-      node->parent = grandparent;
     }
     if (grandparent) {
       if (node->parent == grandparent->left)
@@ -81,6 +70,7 @@ class red_black_tree {
       node->parent = grandparent;
     } else {
       node->color = 'b';
+      node->parent = nullptr;
       root = node;
     }
 
@@ -128,7 +118,7 @@ class red_black_tree {
         bool canRotate = is_grandparent_rotatable(grandparent);
         if (canRotate) rotate(grandparent);
       } else {
-        rotate_left(parent);
+        rotate(parent);
       }
     }
   }
@@ -148,6 +138,7 @@ auto main() -> int {
   tree.insert(28);
   tree.insert(38);
   tree.insert(35);
+  tree.insert(10);
 
   display(tree.get_root());
 
