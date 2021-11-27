@@ -14,13 +14,9 @@ struct Node {
 class red_black_tree {
  private:
   Node *root;
-  int height;
 
  public:
-  red_black_tree() {
-    root = nullptr;
-    height = 0;
-  }
+  red_black_tree() { root = nullptr; }
 
   const Node *get_root() { return root; }
 
@@ -43,44 +39,32 @@ class red_black_tree {
     return false;
   }
 
-  void rotate(Node *node) {
-    if (!node) return;
-    if (!node->parent) return;
-    auto grandparent = node->parent->parent;
-    node->parent->parent = node;
-    if (node == node->parent->right) {
-      node->parent->right = node->left;
-      if (node->left) node->left->parent = node->parent;
-      node->left = node->parent;
-      node->left->color = 'r';
-    } else {
-      node->parent->left = node->right;
-      if (node->right) node->right->parent = node->parent;
-      node->right = node->parent;
-      node->right->color = 'r';
-      node->color = 'b';
-      node->parent->parent = node;
-    }
-    if (grandparent) {
-      if (node->parent == grandparent->left)
-        grandparent->left = node;
-      else
-        grandparent->right = node;
+  void rotate_left(Node *node) {
+    auto parent = node->parent;
 
-      node->parent = grandparent;
+    parent->color = 'r';
+    parent->right = node->left;
+    node->left = parent;
+
+    if (parent->parent) {
+      node->parent = parent->parent;
+
+      if (node->parent->value > parent->value)
+        parent->parent->left = node;
+      else
+        parent->parent->right = node;
+
     } else {
       node->color = 'b';
       node->parent = nullptr;
       root = node;
     }
 
-    if (node->color == 'r' && node->left && node->left->color == 'r') {
-      return rotate(node);
-    }
-    if (node->color == 'r' && node->right && node->right->color == 'r') {
-      return rotate(node);
-    }
+    parent->parent = node;
+    if (node->left) node->left->parent = parent;
   }
+
+  void rotate_right(Node *node) {}
 
   void push_blackness(Node *node) {
     node->left->color = 'b';
@@ -90,36 +74,49 @@ class red_black_tree {
 
   bool is_grandparent_rotatable(Node *node) {
     if (!node || node->color != 'r') return false;
+    const auto &grandparent = node->parent->parent;
+    if (node->parent && is_uncle_red(grandparent)) {
+      push_blackness(grandparent);
+      return false;
+    }
     if (node->parent && node->parent->color == 'r') return true;
     return false;
   }
 
-  void insert(int value) {
-    auto node = new Node(value);
-    if (!root) {
-      node->color = 'b';
-      root = node;
-      return;
-    }
-    const auto &parent = find_parent(root, value);
-    if (!parent) return;
-    node->parent = parent;
+  void insert_root(Node *node) {
+    node->color = 'b';
+    root = node;
+  }
 
+  void insert_to_parent(Node *node, Node *parent) {
+    node->parent = parent;
     if (node->value > parent->value)
       parent->right = node;
     else
       parent->left = node;
+  }
+
+  void insert(int value) {
+    auto node = new Node(value);
+    if (!root) return insert_root(node);
+
+    const auto &parent = find_parent(root, value);
+    if (!parent) return;
+    insert_to_parent(node, parent);
 
     auto grandparent = parent->parent;
+    // Inserted node and it's parent are red - actions are needed.
     if (parent->color == 'r') {
-      bool can_push_blackness = is_uncle_red(grandparent);
-      if (can_push_blackness) {
-        push_blackness(grandparent);
-        bool canRotate = is_grandparent_rotatable(grandparent);
-        if (canRotate) rotate(grandparent);
-      } else {
-        rotate(parent);
-      }
+      // Grandparent can't be null here
+
+      // If uncle of inserted node is also red, push_blackness is enough
+      if (is_uncle_red(grandparent)) return push_blackness(grandparent);
+
+      // Otherwise, rotation is needed.
+
+      // Node and Parent are both right childs --> rotate left -- 1st scenario
+      if (parent->right == node && grandparent->right == parent)
+        return rotate_left(parent);
     }
   }
 };
@@ -129,9 +126,10 @@ void display(const Node *node);
 auto main() -> int {
   red_black_tree tree{};
 
-  tree.insert(26);
-  tree.insert(41);
-  tree.insert(47);
+  tree.insert(25);
+  tree.insert(50);
+  tree.insert(75);
+  /*
   tree.insert(30);
   tree.insert(17);
   tree.insert(14);
@@ -139,6 +137,11 @@ auto main() -> int {
   tree.insert(38);
   tree.insert(35);
   tree.insert(10);
+  tree.insert(30);
+  tree.insert(20);
+  tree.insert(29);
+  tree.insert(18);
+  */
 
   display(tree.get_root());
 
@@ -181,3 +184,51 @@ void display(const Node *node) {
     display(node->right);
   }
 }
+
+//
+// INSERTION NOTES
+//
+//
+
+/*
+ * If push_blackness fails, consider all the possibilities
+ *
+ * 1.            25 (black) --> Grandparent
+ *               |
+ *                -- 50 (red) --> Parent
+ *                    |
+ *                     --
+ *                       75 (red) --> Child
+ *
+ * Here, inserted node is right child, and it's parent is also right child.
+ * rotate_left is needed here - node with value 75 takes place of it's parent.
+ *
+ * Grandparent->right = Parent->left
+ * Parent->left = Grandparent
+ * Grandparent->parent
+ *    ?
+ *      Parent->parent = Grandparent->parent;
+ *      Grandparent->parent->value > Grandparent->value
+ *          ? Grandparent->left = Parent;
+ *          : Grandparent->right = Parent;
+ *    : root = Parent
+ *
+ * Grandparent->parent = Parent
+ * Parent->left ? Parent->left->parent == Grandparent
+ *
+ * 
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
