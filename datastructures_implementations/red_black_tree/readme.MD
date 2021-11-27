@@ -103,6 +103,7 @@ If push_blackness can't be done, consider all possibilities
     auto parent = node->parent;
 
     parent->color = 'r';
+    node->color = 'b';
     parent->right = node->left;
     node->left = parent;
 
@@ -115,7 +116,6 @@ If push_blackness can't be done, consider all possibilities
         parent->parent->right = node;
 
     } else {
-      node->color = 'b';
       node->parent = nullptr;
       root = node;
     }
@@ -170,6 +170,7 @@ Everything is pretty similar here, only the direction changes.
         auto parent = node->parent;
 
         parent->color = 'r';
+        node->color = 'b';
         parent->left = node->right;
         node->right = parent;
 
@@ -182,7 +183,6 @@ Everything is pretty similar here, only the direction changes.
             parent->parent->right = node;
 
         } else {
-          node->color = 'b';
           node->parent = nullptr;
           root = node;
         }

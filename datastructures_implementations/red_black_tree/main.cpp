@@ -43,8 +43,10 @@ public:
     void rotate_left(Node *node) {
         auto parent = node->parent;
 
+        node->color = 'b';
         parent->color = 'r';
         parent->right = node->left;
+        if (node->left) node->left->parent = parent;
         node->left = parent;
 
         if (parent->parent) {
@@ -56,20 +58,19 @@ public:
                 parent->parent->right = node;
 
         } else {
-            node->color = 'b';
             node->parent = nullptr;
             root = node;
         }
-
         parent->parent = node;
-        if (node->left) node->left->parent = parent;
     }
 
     void rotate_right(Node *node) {
         auto parent = node->parent;
 
         parent->color = 'r';
+        node->color = 'b';
         parent->left = node->right;
+        if (node->right) node->right->parent = parent;
         node->right = parent;
 
         if (parent->parent) {
@@ -81,13 +82,11 @@ public:
                 parent->parent->right = node;
 
         } else {
-            node->color = 'b';
             node->parent = nullptr;
             root = node;
         }
 
         parent->parent = node;
-        if (node->right) node->right->parent = parent;
     }
 
     void single_rotate_left(Node* node) {
@@ -171,19 +170,10 @@ auto main() -> int {
     tree.insert(25);
     tree.insert(50);
     tree.insert(40);
-    /*
-    tree.insert(30);
-    tree.insert(17);
-    tree.insert(14);
-    tree.insert(28);
-    tree.insert(38);
-    tree.insert(35);
-    tree.insert(10);
-    tree.insert(30);
-    tree.insert(20);
-    tree.insert(29);
-    tree.insert(18);
-    */
+    tree.insert(60);
+    tree.insert(70);
+    tree.insert(55);
+
 
     display(tree.get_root());
 
