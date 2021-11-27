@@ -90,21 +90,32 @@ public:
         if (node->right) node->right->parent = parent;
     }
 
+    void single_rotate_left(Node* node) {
+        auto parent = node->parent;
+        auto tmp = node->right->left;
+        node->parent = node->right;
+        parent->left = node->right;
+        node->right->parent = parent;
+        node->right->left = node;
+        node->right = tmp;
+        rotate_right(node->parent);
+    }
+
+    void single_rotate_right(Node* node) {
+        auto parent = node->parent;
+        auto tmp = node->left->right;
+        node->parent = node->left;
+        parent->right = node->left;
+        node->left->parent = parent;
+        node->left->right= node;
+        node->left = tmp;
+        rotate_left(node->parent);
+    }
+
     void push_blackness(Node *node) {
         node->left->color = 'b';
         node->right->color = 'b';
         if (node != root) node->color = 'r';
-    }
-
-    bool is_grandparent_rotatable(Node *node) {
-        if (!node || node->color != 'r') return false;
-        const auto &grandparent = node->parent->parent;
-        if (node->parent && is_uncle_red(grandparent)) {
-            push_blackness(grandparent);
-            return false;
-        }
-        if (node->parent && node->parent->color == 'r') return true;
-        return false;
     }
 
     void insert_root(Node *node) {
@@ -143,6 +154,10 @@ public:
                 return rotate_left(parent);
             if (parent->left == node && grandparent->left == parent)
                 return rotate_right(parent);
+            if (parent->right == node && grandparent->left == parent)
+                return single_rotate_left(parent);
+            if (parent->left == node && grandparent->right == parent)
+                return single_rotate_right(parent);
 
         }
     }
@@ -153,9 +168,9 @@ void display(const Node *node);
 auto main() -> int {
     red_black_tree tree{};
 
-    tree.insert(75);
-    tree.insert(50);
     tree.insert(25);
+    tree.insert(50);
+    tree.insert(40);
     /*
     tree.insert(30);
     tree.insert(17);
