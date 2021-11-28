@@ -40,53 +40,57 @@ class red_black_tree {
     return false;
   }
 
-  void rotate_left(Node *node) {
-    auto parent = node->parent;
+  void check_rotation(Node *node) {
+    auto grandparent = node->parent->parent;
 
+    if (node == node->parent->left && grandparent->right == node->parent)
+      return single_rotate_right(node->parent);
+    if (node == node->parent->right && grandparent->left == node->parent)
+      return single_rotate_left(node->parent);
+    if (node == node->parent->right && grandparent->right == node->parent)
+      return rotate_left(node->parent);
+    if (node == node->parent->left && grandparent->left == node->parent)
+      return rotate_right(node->parent);
+  }
+
+  void update_on_rotation(Node *node, Node *grandparent) {
     node->color = 'b';
-    parent->color = 'r';
-    parent->right = node->left;
-    if (node->left) node->left->parent = parent;
-    node->left = parent;
+    node->parent->color = 'r';
 
-    if (parent->parent) {
-      node->parent = parent->parent;
+    if (grandparent) {
+      node->parent = grandparent;
 
-      if (node->parent->value > parent->value)
-        parent->parent->left = node;
+      if (grandparent->value > node->parent->value)
+        grandparent->left = node;
       else
-        parent->parent->right = node;
+        grandparent->right = node;
 
     } else {
       node->parent = nullptr;
       root = node;
     }
-    parent->parent = node;
+
+    grandparent = node;
+  }
+
+  void rotate_left(Node *node) {
+    auto parent = node->parent;
+
+    parent->right = node->left;
+    if (node->left) node->left->parent = parent;
+    node->left = parent;
+
+    update_on_rotation(node, parent->parent);
   }
 
   void rotate_right(Node *node) {
     auto parent = node->parent;
 
-    parent->color = 'r';
-    node->color = 'b';
     parent->left = node->right;
     if (node->right) node->right->parent = parent;
     node->right = parent;
 
-    if (parent->parent) {
-      node->parent = parent->parent;
-
-      if (node->parent->value > parent->value)
-        parent->parent->left = node;
-      else
-        parent->parent->right = node;
-
-    } else {
-      node->parent = nullptr;
-      root = node;
-    }
-
-    parent->parent = node;
+    update_on_rotation(node, parent->parent);
   }
 
   void single_rotate_left(Node *node) {
@@ -123,16 +127,9 @@ class red_black_tree {
     if (node->parent->color != 'r') return;
     if (!grandparent) return;
 
-    if(is_uncle_red(grandparent)) return push_blackness(grandparent);
+    if (is_uncle_red(grandparent)) return push_blackness(grandparent);
 
-    if (node == node->parent->left && grandparent->right == node->parent)
-      return single_rotate_right(node->parent);
-    if (node == node->parent->right && grandparent->left == node->parent)
-      return single_rotate_left(node->parent);
-    if (node == node->parent->right && grandparent->right == node->parent)
-      return rotate_left(node->parent);
-    if (node == node->parent->left && grandparent->left == node->parent)
-      return rotate_right(node->parent);
+    check_rotation(node);
   }
 
   void insert_root(Node *node) {
@@ -162,14 +159,7 @@ class red_black_tree {
 
       if (is_uncle_red(grandparent)) return push_blackness(grandparent);
 
-      if (parent->right == node && grandparent->right == parent)
-        return rotate_left(parent);
-      if (parent->left == node && grandparent->left == parent)
-        return rotate_right(parent);
-      if (parent->right == node && grandparent->left == parent)
-        return single_rotate_left(parent);
-      if (parent->left == node && grandparent->right == parent)
-        return single_rotate_right(parent);
+      check_rotation(node);
     }
   }
 };
@@ -186,6 +176,9 @@ auto main() -> int {
 
   return 0;
 }
+
+
+// Print related stuff below;
 
 void print_node(const Node *node) {
   std::cout << "Value: " << node->value << '\t';
