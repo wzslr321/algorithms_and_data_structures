@@ -3,58 +3,47 @@
 #include <iostream>
 #include <vector>
 
-auto scan(const std::vector<std::string> &data, std::string filter)
-    -> std::string {
-  std::string oxygen = "";
-
-  for (int i{0}; i < data[0].size(); ++i) {
+void scan(const std::vector<std::string> &data, std::string &filter) {
+  for (int i{0}; i <= filter.size(); ++i) {
     int ones = 0;
     int zeros = 0;
+    std::vector<std::string> matches;
     for (int j{0}; j < data.size(); ++j) {
       bool invalid = false;
-      for (int y{0}; y < filter.size(); ++y) {
+      for (int y = 0; y < filter.size(); ++y) {
         if (data[j][y] != filter[y]) {
           invalid = true;
           break;
         }
       }
       if (invalid) continue;
+      matches.push_back(data[j]);
       if (data[j][i] == '1')
         ++ones;
       else
         ++zeros;
     }
+    if (matches.size() == 1) return;
     if (ones >= zeros)
-      oxygen.push_back('1');
+      filter.push_back('1');
     else
-      oxygen.push_back('0');
-    filter = oxygen;
+      filter.push_back('0');
   }
-  std::cout << oxygen << '\n';
-  return oxygen;
 }
 auto main() -> int {
   std::vector<std::string> data;
-  int ones = 0;
-  int zeros = 0;
   while (std::cin) {
     std::string s;
     std::cin >> s;
-    if (s[0] == '1')
-      ++ones;
-    else
-      ++zeros;
     if (s == "1") break;
     data.push_back(s);
   }
 
   std::string filter = "";
-  if (ones >= zeros)
-    filter = "1";
-  else
-    filter = "0";
 
   scan(data, filter);
+
+  std::cout << filter << '\n';
 
   return 0;
 }
