@@ -28,7 +28,7 @@ int main() {
   for (int i = 0; i < numbers.size(); ++i) {
     marked.push_back(numbers[i]);
     auto result = scan(boards, marked);
-    if (result) {
+    if (result != -1) {
       winner_board = result;
       last_drawn = numbers[i];
       break;
@@ -50,8 +50,10 @@ int main() {
 int sum(const std::vector<std::vector<int>> &board,
         const std::vector<int> &marked) {
   int sum = 0;
+  std::cout << '\n';
   for (int i = 0; i < 5; ++i) {
     for (int j = 0; j < 5; ++j) {
+      std::cout << board[i][j] << ' ';
       bool isCool = true;
       for (size_t y = 0; y < marked.size(); ++y) {
         if (board[i][j] == marked[y]) {
@@ -61,14 +63,15 @@ int sum(const std::vector<std::vector<int>> &board,
       }
       if (isCool) sum += board[i][j];
     }
+    std::cout << '\n';
   }
+  std::cout << '\n';
   return sum;
 }
 
 int scan(const std::vector<std::vector<std::vector<int>>> &boards,
          const std::vector<int> &marked) {
   for (int b = 0; b < boards.size(); ++b) {
-    int match_column = 0;
     for (int i = 0; i < 5; ++i) {
       int match_row = 0;
       for (int j = 0; j < 5; ++j) {
@@ -76,14 +79,19 @@ int scan(const std::vector<std::vector<std::vector<int>>> &boards,
           if (boards[b][i][j] == marked[z]) ++match_row;
         }
       }
-      for (int z = 0; z < marked.size(); ++z) {
-        if (boards[b][i][0] == marked[z]) ++match_column;
-      }
       if (match_row == 5) return b;
     }
+    for (int i = 0; i < 5; ++i) {
+      int match_column = 0;
+      for (int j = 0; j < 5; ++j) {
+        for (int z = 0; z < marked.size(); ++z) {
+          if (boards[b][j][i] == marked[z]) ++match_column;
+        }
+      }
     if (match_column == 5) return b;
+    }
   }
-  return 0;
+  return -1;
 }
 
 void get_board(std::vector<std::vector<std::vector<int>>> &boards) {
