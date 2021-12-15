@@ -18,6 +18,8 @@ bool bfs(unordered_map<int, vector<Edge>> &graph, int start, int n) {
   }
   queue<int> qq;
   qq.push(start);
+  visited[start] = true;
+  static int visited_count = 1;
   while (qq.size() > 0) {
     auto current = qq.front();
     qq.pop();
@@ -25,6 +27,7 @@ bool bfs(unordered_map<int, vector<Edge>> &graph, int start, int n) {
     for (const auto &edge : edges) {
       if (!visited[edge.to]) {
         visited[edge.to] = true;
+        ++visited_count;
         qq.push(edge.to);
       } else {
         for (const auto &edge2 : graph[edge.to]) {
@@ -35,6 +38,11 @@ bool bfs(unordered_map<int, vector<Edge>> &graph, int start, int n) {
           }
         }
       }
+    }
+  }
+  if (visited_count < n) {
+    for (int i = 0; i < n; ++i) {
+      if (!visited[i]) return bfs(graph, i, n);
     }
   }
   return false;
@@ -52,7 +60,7 @@ int main() {
     graph[data[i]].push_back(Edge(data[i], data[data[i] - 1]));
   }
 
-  bfs(graph, data[0], n) ? cout << "YES\n" : cout << "NO\n";
+  bfs(graph, 1, n) ? cout << "YES\n" : cout << "NO\n";
 
   return 0;
 }
