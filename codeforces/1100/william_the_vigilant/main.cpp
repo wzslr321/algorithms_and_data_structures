@@ -44,7 +44,6 @@ using TI = tuple<int, int, int>;
 constexpr double pi = acos(-1);
 constexpr int mod = 998244353;
 constexpr double eps = 1e-10;
-constexpr int N = 1e2 + 10;
 
 template <typename T> T gcd(T a, T b) {
   if (!a || !b) return a | b;
@@ -60,15 +59,16 @@ template <typename T> T gcd(T a, T b) {
 
 template <typename T> T LCM(T a, T b) { return a / GCD(a, b) * b; }
 
-int solve(string &s) {
-  int ans = 0;
-  LPI(i, 2, s.size(), 1) {
-    if (s[i] == 'c' && s[i - 1] == 'b' && s[i - 2] == 'a') {
-      s[i - 2] == 'b';
-      ++ans;
-    }
-  }
-  return ans;
+const int N = 1e5 + 3;
+char s[N];
+int ans = 0;
+int n, q;
+
+int solve(int p) {
+  if (p > n + 2 || p < 1) return 0;
+
+  if (s[p] == 'a' && s[p + 1] == 'b' && s[p + 2] == 'c') return 1;
+  return 0;
 }
 
 auto main() -> int {
@@ -78,26 +78,19 @@ auto main() -> int {
   ios::sync_with_stdio(false);
   cin.tie(0);
 
-  int n, q;
   cin >> n >> q;
-  string s;
-  cin >> s;
-  int out[q];
-  if (n < 2) {
-    LPI(i,0,q,1) {
-      cout << "0\n";
-    }
-    return 0;
-  }
+  cin >> s + 1;
+  LPI(i, 1, n, 1) { ans += solve(i); }
   LPI(i, 0, q, 1) {
     int pos;
-    cin >> pos;
     char c;
+    cin >> pos;
     cin >> c;
-    s[pos - 1] = c;
-    out[i] = solve(s);
+    ans -= solve(pos - 2) + solve(pos - 1) + solve(pos);
+    s[pos] = c;
+    ans += solve(pos - 2) + solve(pos - 1) + solve(pos);
+    cout << ans << '\n';
   }
-  LPI(i, 0, q, 1) { cout << out[i] << '\n'; }
 
   return 0;
 }
