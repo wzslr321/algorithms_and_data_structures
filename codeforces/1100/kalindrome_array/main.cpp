@@ -120,12 +120,13 @@ auto main() -> int {
             }
             ans = false;
           }
-          ++i;
-          --j;
+          ++si;
+          --sj;
       }
       ans || inn ? cout << "YES\n" : cout << "NO\n";
   }
 
   return 0;
 }
+
 
