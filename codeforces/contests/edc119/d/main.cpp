@@ -17,23 +17,21 @@ using VS = vector<string>;
 using VVS = vector<VS>;
 using PI = pair<int, int>;
 
-int coins[3]{1, 2, 3};
 const int N = 1000000;
 bool ready[N];
+bool ready1[N];
+bool ready2[N];
 int value[N];
-bool used[3];
+int value2[N];
+int value3[N];
 
-int solve(int bag) {
+int solve(int bag, int (&coins)[3], bool (&ready)[N], int (&value)[N]) {
   if (bag < 0) return 1e9 + 7;
   if (bag == 0) return 0;
   if (ready[bag]) return value[bag];
   int best = 1e9 + 7;
-  int i = 0;
   for (auto c : coins) {
-    int curr = solve(bag - c) + 1;
-    best = min(best, curr);
-    if (best == curr) used[i] = true;
-    ++i;
+    best = min(best, solve(bag - c, coins, ready, value) + 1);
   }
   ready[bag] = true;
   value[bag] = best;
@@ -51,32 +49,56 @@ auto main() -> int {
   int t;
   cin >> t;
   while (t--) {
-    LPI(i, 0, N, 1) { ready[i] = false; }
     int n;
     cin >> n;
-    int arr[n];
-    int ans = INT_MIN;
+    vector<int> arr(n);
     LPI(i, 0, n, 1) { cin >> arr[i]; }
-    bool ever_needed = false;
-    int mxarr;
-    bool n1 = false;
-    LPI(i, 0, n, 1) {
-      bool need_all = true;
-      LPI(j, 0, 3, 1) { used[j] = false; }
-      int curr = solve(arr[i]);
-      ans = max(ans, curr);
-      if (curr == ans) mxarr = arr[i];
-      LPI(j, 0, 3, 1) {
-        if (used[j] != true) need_all = false;
-      }
-      if (need_all) ever_needed = true;
-      if (n == 1) {
-        n1 = true;
-        cout << ans << '\n';
-      }
-      if(need_all && ever_needed && curr == ans) ++ans;
-    }
+    int ans = INT_MIN;
+    int coins[3]{3, 2, 1};
+    bool c3 = true;
+    bool c2 = true;
+    sort(arr.begin(), arr.end());
 
+    LPI(i, 0, n, 1) {
+      int curr = solve(arr[i], coins, ready, value);
+      if (arr[i] % 2 != 0) c2 = false;
+      if (arr[i] % 3 != 0) c3 = false;
+      ans = max(ans, curr);
+      if (arr[i] % 2 == 0 && !c2 && ans == curr) {
+        int ans2 = INT_MIN;
+        LPI(j, 0, n, 1) {
+          int coins2[3]{2, 1, 1};
+          ans2 = max(ans2, solve(arr[j], coins2, ready1, value2));
+        }
+        if (ans2 != ans) {
+          ++ans;
+        }
+        int ans3 = INT_MIN;
+        LPI(i, 0, N, 1) {
+          ready[i] = false;
+          value2[i] = INT_MIN;
+        }
+        LPI(j, 0, n, 1) {
+          int coins3[3]{2, 2, 2};
+          ans3 = max(ans3, solve(arr[j], coins3, ready1, value2));
+        }
+        if (ans3 != ans) {
+          --ans;
+        }
+      };
+
+      if (arr[i] % 3 == 0 && !c3 && ans == curr) {
+        int ans2 = INT_MIN;
+        LPI(j, 0, n, 1) {
+          int coins2[3]{3, 3, 3};
+          int cur = solve(arr[j], coins2, ready2, value3);
+          ans2 = max(ans2, cur);
+        }
+        if (ans2 != ans) {
+          ++ans;
+        }
+      }
+    }
     cout << ans << '\n';
   }
 
