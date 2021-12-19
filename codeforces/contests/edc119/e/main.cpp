@@ -17,6 +17,10 @@ using VS = vector<string>;
 using VVS = vector<VS>;
 using PI = pair<int, int>;
 
+const int N = 500 * 1000 + 13;
+
+int n;
+
 auto main() -> int {
   // freopen("input.txt", "r", stdin);
   // freopen("output.txt", "w", stdout);
@@ -26,30 +30,31 @@ auto main() -> int {
 
   int t;
   cin >> t;
-  vector<int> arr;
   unordered_map<int, vector<int>> mp;
   while (t--) {
-    int q;
+    int q, x, y;
     cin >> q;
     if (q == 1) {
-      int x;
       cin >> x;
-      arr.PB(x);
-      mp[x].PB(arr.size() - 1);
+      mp[x].PB(n++);
     } else {
-      int x, y;
       cin >> x >> y;
-      if (x == y) continue;
-      for (int i = mp[x].size() - 1; i >= 0; --i) {
-        mp[y].PB(mp[x][i]);
-        arr[mp[x][i]] = y;
-        mp[x].pop_back();
-      }
+      if (x != y) {
+        if (mp[x].size() > mp[y].size()) mp[x].swap(mp[y]);
+        for (auto i : mp[x])
+          mp[y].PB(i);
+        mp[x].clear();
+      };
     }
   }
-  for (auto el : arr) {
-    cout << el << ' ';
+  int arr[n];
+  LPI(i, 0, N, 1) {
+    for (auto j : mp[i]) {
+      arr[j] = i;
+    }
   }
+  for (auto el : arr)
+    cout << el << ' ';
   cout << '\n';
 
   return 0;
