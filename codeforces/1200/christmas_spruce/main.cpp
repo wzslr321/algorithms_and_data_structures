@@ -45,133 +45,42 @@ constexpr int mod = 998244353;
 constexpr double eps = 1e-10;
 constexpr int N = 1e2 + 10;
 
-template <typename T>
-T gcd(T a, T b) {
-    if (!a || !b) return a | b;
-    unsigned shift = __builtin_ctz(a | b);
-    a >>= __builtin_ctz(a);
-    do {
-        b >>= __builtin_ctz(b);
-        if (a > b) swap(a, b);
-        b -= a;
-    } while (b);
-    return a << shift;
+template <typename T> T gcd(T a, T b) {
+  if (!a || !b) return a | b;
+  unsigned shift = __builtin_ctz(a | b);
+  a >>= __builtin_ctz(a);
+  do {
+    b >>= __builtin_ctz(b);
+    if (a > b) swap(a, b);
+    b -= a;
+  } while (b);
+  return a << shift;
 }
 
-template <typename T>
-T LCM(T a, T b) {
-    return a / GCD(a, b) * b;
-}
-
-struct Node {
-    int key;
-    vector<Node*> children;
-    Node* parent;
-};
-
-class rtree {
-   private:
-    Node* root;
-    int size;
-
-   public:
-    rtree() {
-        size = 0;
-        auto node = new Node;
-        node->parent = NULL;
-        node->children = vector<Node*>{};
-        node->key = ++size;
-        root = node;
-    }
-
-    void insert(int index) {
-        auto node = new Node;
-        node->parent = NULL;
-        node->children = vector<Node*>{};
-        node->key = ++size;
-        auto nd = bfs(index);
-        nd->children.PB(node);
-        node->parent = nd;
-    }
-
-    bool szukaj() {
-        auto node{root};
-        if(!scan(node->children)) return false;
-        stack<Node*> st;
-        if (node->children.size() > 0) {
-            for (int i = 0; i < node->children.size(); ++i) {
-                st.push(node->children[i]);
-            }
-        }
-        while (st.size() > 0) {
-            auto current{st.top()};
-            st.pop();
-            if (current->children.size() > 0) {
-                for (int i = 0; i < current->children.size(); ++i) {
-                    st.push(current->children[i]);
-                }
-            }
-            if (current->children.size() > 0 && current->parent != NULL) {
-                if (!scan(current->children)) return false;
-            }
-        }
-        return true;
-    }
-
-    Node* bfs(int val) {
-        auto node{root};
-        queue<Node*> qq;
-        qq.push(node);
-        while (qq.size() > 0) {
-            auto current{qq.front()};
-            if (current->key == val) {
-                return current;
-            }
-            qq.pop();
-            if (current->children.size() > 0) {
-                for (int i = 0; i < current->children.size(); ++i) {
-                    qq.push(current->children[i]);
-                }
-            }
-        }
-    }
-
-    bool scan(const vector<Node*> ch) {
-        int leaf = 0;
-        LPI(i, 0, ch.size(), 1) {
-            if (ch[i]->children.size() == 0) ++leaf;
-        }
-        return leaf == 3 ? true : false;
-    }
-};
+template <typename T> T LCM(T a, T b) { return a / GCD(a, b) * b; }
 
 auto main() -> int {
-    // freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+  // freopen("input.txt", "r", stdin);
+  // freopen("output.txt", "w", stdout);
 
-#ifndef ONLINE_JUDGE
-    clock_t begin = clock();
-#endif
-
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-
-    int n;
-    cin >> n;
-    auto drzewko = rtree();
-    bool cool = false;
-    LPI(i, 0, n - 1, 1) {
-        int in;
-        cin >> in;
-        drzewko.insert(in);
+  int n;
+  cin >> n;
+  vector<int> parent(n), children(n);
+  LPI(i, 1, n, 1) {
+    cin >> parent[i];
+    parent[i]--;
+    children[parent[i]]++;
+  }
+  vector<int>leaves(n);
+  LPI(i, 0, n, 1) {
+    if (children[i] == 0) leaves[parent[i]]++;
+  }
+  LPI(i, 0, n, 1) {
+    if (children[i] > 0 && leaves[i] < 3) {
+      cout << "No\n";
+      return 0;
     }
-    drzewko.szukaj() ? cout << "Yes" : cout << "No";
-
-#ifndef ONLINE_JUDGE
-    clock_t end = clock();
-    cout << "\n\nExecuted In: " << double(end - begin) / CLOCKS_PER_SEC * 1000
-         << " ms\n";
-#endif
-
-    return 0;
+  }
+  cout << "Yes\n";
+  return 0;
 }
