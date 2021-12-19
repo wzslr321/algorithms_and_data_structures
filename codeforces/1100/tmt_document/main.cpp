@@ -47,14 +47,12 @@ constexpr double eps = 1e-10;
 constexpr int N = 1e2 + 10;
 
 template <typename T> T gcd(T a, T b) {
-  if (!a || !b)
-    return a | b;
+  if (!a || !b) return a | b;
   unsigned shift = __builtin_ctz(a | b);
   a >>= __builtin_ctz(a);
   do {
     b >>= __builtin_ctz(b);
-    if (a > b)
-      swap(a, b);
+    if (a > b) swap(a, b);
     b -= a;
   } while (b);
   return a << shift;
@@ -62,39 +60,9 @@ template <typename T> T gcd(T a, T b) {
 
 template <typename T> T LCM(T a, T b) { return a / GCD(a, b) * b; }
 
-bool solve() {
-      int n;
-      string s;
-      cin >> n >> s;
-      int tl = 0, m = 0, tr = 0;
-      if(s[0] == 'M') return false;
-      LPI(i,0,n,1) {
-          while(s[i] == 'T') {
-            ++tl;
-            ++i;
-          }
-          LPI(j,i,tl + 1 ,1) {
-            if(s[j] != 'M')  {
-                return false;
-            }
-          }
-          LPI(j,i+tl,i + tl * 2,1){
-            if(s[j] != 'T'){
-                return false;
-            }
-          }
-          i = i + 1 + tl * 2;
-      }
-      return true;
-}
-
 auto main() -> int {
   // freopen("input.txt", "r", stdin);
   // freopen("output.txt", "w", stdout);
-
-#ifndef ONLINE_JUDGE
-  clock_t begin = clock();
-#endif
 
   ios::sync_with_stdio(false);
   cin.tie(0);
@@ -102,14 +70,59 @@ auto main() -> int {
   int t;
   cin >> t;
   while (t--) {
-      solve() ? cout << "YES\n" : cout << "NO\n";
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    int m = n / 3;
+    int tl[m];
+    int tr[m];
+    int mm[m];
+    int found = 0;
+    bool ans = true;
+    int tc = 0, mc = 0;
+    LPI(i, 0, n, 1) {
+      if (s[i] == 'T')
+        ++tc;
+      else
+        ++mc;
+    }
+    if (tc != 2 * mc) {
+      cout << "NO\n";
+      continue;
+    }
+    LPI(i, 0, n, 1) {
+      if (s[i] == 'T') {
+        tl[found] = i;
+        ++found;
+        if (found == m) break;
+      }
+    }
+    found = 0;
+    LPI(i, 0, n, 1) {
+      if (s[i] == 'M') {
+        mm[found] = i;
+        if (mm[found] < tl[found]) {
+          ans = false;
+          break;
+        }
+        ++found;
+        if (found == m) break;
+      }
+    }
+    found = 0;
+    LPI(i, tl[m - 1] + 1, n, 1) {
+      if (s[i] == 'T') {
+        tr[found] = i;
+        if (tr[found] < mm[found]) {
+          ans = false;
+          break;
+        }
+        ++found;
+        if (found == m) break;
+      }
+    }
+    ans ? cout << "YES\n" : cout << "NO\n";
   }
-
-#ifndef ONLINE_JUDGE
-  clock_t end = clock();
-  cout << "\n\nExecuted In: " << double(end - begin) / CLOCKS_PER_SEC * 1000
-       << " ms\n";
-#endif
-
   return 0;
 }
