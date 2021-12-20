@@ -74,19 +74,46 @@ auto main() -> int {
   while (t--) {
       int n;
       cin >> n;
-      int arr[n];
-      unordered_map<int,vector<int>> mp;
+      ll arr[n];
 
       LPI(i,0,n,1) {
           cin >> arr[i];
-          int d = 2;
-          while(d < arr[i]) {
-              if(arr[i] % d == 0){
-                mp[i].push_back(d);
-              }
-              ++d;
+      }
+      ll gcd1; 
+      ll gcd2;
+      if(n == 2) {
+        gcd2 = arr[1];
+        gcd1 = arr[0];
+      } 
+      if(n == 3) {
+          gcd1 = gcd<ll>(arr[0], arr[2]);
+          gcd2 = arr[1];
+      }
+      if(n > 3) {
+        gcd2 = gcd<ll>(arr[1], arr[3]);
+        gcd1 = gcd<ll>(arr[0], arr[2]);
+      }
+
+      int mx;
+      if(n % 2 == 1) mx = 2;
+      else mx = 1;
+      LPI(i,2,n - mx,2) {
+        gcd1 = min(gcd1, gcd<ll>(arr[i], arr[i+2]));
+      }
+      LPI(i,3,n - mx,2) {
+        gcd2 = min(gcd2, gcd<ll>(arr[i], arr[i+2]));
+      }
+      if(gcd1 != gcd2) {
+          if(gcd1 != 1) {
+              cout << gcd1 << '\n';
+              continue;
+          }
+          if(gcd2 != 1) {
+              cout << gcd2 << '\n';
+              continue;
           }
       }
+      cout << "0\n";
   }
 
   return 0;

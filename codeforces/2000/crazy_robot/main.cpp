@@ -72,35 +72,6 @@ auto main() -> int {
   int t;
   cin >> t;
   while (t--) {
-      ll k,x;
-      cin >> k >> x;
-      ll ans = 0LL;
-      ll sum1 = 0LL;
-      int i = k;
-      while(true) {
-         sum1 = ((1LL + i) / 2.) * i;
-         ll sum2 = ((1LL + (i + 1) ) / 2.) * (i + 1);
-         if(sum1 < x && sum1 + sum2 >= x ) {
-             ans = i + 1;
-             break;
-         }
-         if( sum1 >= x) i /= 2;
-         else i += i / 2;
-      }
-      if(sum1 >= x) {
-          cout << ans << '\n';
-          continue;
-      }
-      int j = 0;
-      LPD(i,k - 1,0,1) {
-         ++j;
-         ++ans;
-         ll an = k - 1 + (j - 1) * -1LL;
-         ll sumd = ((k - 1 + an) / 2.) * j;
-         if( sum1 + sumd >= x) break;
-      }
-
-      cout << ans - 1<< '\n';
   }
 
   return 0;

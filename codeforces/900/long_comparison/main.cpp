@@ -72,21 +72,38 @@ auto main() -> int {
   int t;
   cin >> t;
   while (t--) {
-      string s;
-      cin >> s;
-      int ans = -1;
-      if(atoi(s.c_str()) % 2 == 0) {
-          cout << "0\n";
-          continue;
-      }
-      LPI(i,0,s.size(), 1) {
-          if(((int) s[i] - 48) % 2 == 0) {
-              if(i == 0) ans = 1;
-              else ans = 2;
-              break;
+      int x1,p1,x2,p2;
+      cin >> x1 >> p1 >> x2 >> p2;
+      if(x1 == x2) {
+          if(p1 > p2) {
+              cout << ">\n";
+          }
+          if(p1 < p2) {
+              cout << "<\n";
+          }
+          if(p1 == p2) {
+              cout << "=\n";
           }
       }
-      cout << ans << '\n';
+      if(x1 > x2) {
+          int diff = x1 - x2;
+          int p3 = diff / 10;
+          if(p1 + p3 >= p2) {
+              cout << ">\n";
+          } else {
+              cout << "<\n";
+          }
+      }
+      if(x2 > x1) {
+          int diff = x2- x1;
+          int p3 = diff / 10;
+          if(p2 + p3 >= p1) {
+              cout << "<\n";
+          } else {
+              cout << ">\n";
+          }
+      }
+
   }
 
   return 0;

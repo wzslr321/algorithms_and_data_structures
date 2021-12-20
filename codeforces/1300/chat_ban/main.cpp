@@ -71,26 +71,42 @@ auto main() -> int {
 
   int t;
   cin >> t;
-  while (t--) {
-      int x1 = 0,x2,y1 = 0,y2;
-      cin >>  x2 >> y2;
-      int d = abs(x1 - x2) + abs(y1 - y2);
-      int c1 = 0, c2 = 0;
-      int r1 = -1;
-      int r2 = -1;
-      LPI(i,0, max(x2,y2) + 1,1) {
-        LPI(j,0,max(x2,y2) + 1,1) {
-        int da = abs(x1 - i) + abs(y1 - j);
-        int db = abs(x2- i) + abs(y2- j);
-            if(d/2 == da && d/2 == db){
-                r1 = i;
-                r2 = j;
-                break;
-            }
-        }
+    while (t--) {
+      ll k,x;
+      cin >> k >> x;
+      ll ans = 0LL;
+      ll sum1 = 0LL;
+      int i = k;
+      while(true) {
+         sum1 = ((1LL + i) / 2.) * i;
+         ll sum2 = ((1LL + (i + 1) ) / 2.) * (i + 1);
+         if(sum1 < x && sum1 + sum2 >= x ) {
+             ans = i + 1;
+             break;
+         }
+         if( sum1 >= x) i /= 2;
+         else i += i / 2;
+      }
+      if(sum1 >= x) {
+          cout << ans << '\n';
+          continue;
+      }
+      int j = k - 1;
+      LPD(i,k - 1,0,1) {
+         ll an = k - 1 + (j - 1) * -1LL;
+         ll an2 = k - 1 + j * -1LL;
+         ll sumd = ((k - 1 + an) / 2.) * j;
+         ll sumd2 = ((k - 1 + an2) / 2.) * j + 1;
+         if(sum1 + sumd <= x && sum1 + sumd2 >= x) {
+             ans += j + 1;
+         }
+         if( sum1 + sumd >= x) {
+            j /= 2;
+            break;
+         }  else i += i / 2;
       }
 
-      cout << r1 << ' ' << r2 << '\n';
+      cout << ans << '\n';
   }
 
   return 0;

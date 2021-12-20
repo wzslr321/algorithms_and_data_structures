@@ -17,6 +17,8 @@ using VS = vector<string>;
 using VVS = vector<VS>;
 using PI = pair<int, int>;
 
+const int N = 500 * 1000 + 13;
+
 auto main() -> int {
   // freopen("input.txt", "r", stdin);
   // freopen("output.txt", "w", stdout);
@@ -26,34 +28,35 @@ auto main() -> int {
 
   int t;
   cin >> t;
+  unordered_map<int, vector<int>> mp;
+  int i = 0;
   while (t--) {
-    int n, k;
-    ll x;
-    cin >> n >> k >> x;
-    string s;
-    cin >> s;
-    int ccnt = 0;
-    for (char c : s) {
-      if (c == '*') ++ccnt;
+    int q, x, y;
+    cin >> q;
+    if (q == 1) {
+      cin >> x;
+      mp[x].PB(i++);
+    } else {
+      cin >> x >> y;
+      if (x == y) continue;
+      if (mp[x].size() > mp[y].size()) mp[x].swap(mp[y]);
+      for (auto i : mp[x])
+        mp[y].PB(i);
+      vector<int> tmp;
+      mp[x].swap(tmp);
     }
-    int maxb = x / (ccnt * k);
-    int maxbr = x % (ccnt * k);
-    string ans = "";
-    LPI(i, 0, n, 1) {
-      if (s[i] == '*') {
-        if (maxb > 0) {
-          LPI(i, 0, k, 1) { ans.PB('b'); }
-          --maxb;
-        } else {
-          LPI(i, 0, maxbr, 1) { ans.PB('b'); }
-          maxbr = 0;
-        }
-      } else {
-        ans.PB('a');
-      }
-    }
-    cout << ans << '\n';
   }
+  int arr[i];
+  LPI(i, 0, N, 1) {
+    for (auto j : mp[i]) {
+      arr[j] = i;
+    }
+  }
+
+  for (auto el : arr) {
+    cout << el << ' ';
+  }
+  cout << '\n';
 
   return 0;
 }
