@@ -43,29 +43,34 @@ auto main() -> int {
   int usedels = 0;
   int curr = 0;
 
+  int prev = 2;
   while (usedels < N) {
     int picked = sorted[curr].second;
     if (used[picked] == true) {
       ++curr;
       continue;
     }
-    if (!(curr & 1)) {
+
+    if (prev == 2) {
+      prev = 1;
       teams[picked] = 1;
       ++usedels;
-      LPI(i, 1, K + 1, 1) {
+      int lk = K;
+      LPI(i, 1, lk + 1, 1) {
         if (picked - i < 0) break;
         if (used[picked - i]) {
-          ++K;
+          ++lk;
           continue;
         }
         teams[picked - i] = 1;
         used[picked - i] = true;
         ++usedels;
       }
-      LPI(i, 1, K + 1, 1) {
+      lk = K;
+      LPI(i, 1, lk + 1, 1) {
         if (picked + i >= N) break;
         if (used[picked + i]) {
-          ++K;
+          ++lk;
           continue;
         }
         teams[picked + i] = 1;
@@ -73,22 +78,25 @@ auto main() -> int {
         ++usedels;
       }
     } else {
+      prev = 2;
       teams[picked] = 2;
       ++usedels;
-      LPI(i, 1, K + 1, 1) {
+      int lk = K;
+      LPI(i, 1, lk + 1, 1) {
         if (picked - i < 0) break;
         if (used[picked - i]) {
-          ++K;
+          ++lk;
           continue;
         }
         teams[picked - i] = 2;
         used[picked - i] = true;
         ++usedels;
       }
-      LPI(i, 1, K + 1, 1) {
+      lk = K;
+      LPI(i, 1, lk + 1, 1) {
         if (picked + i >= N) break;
         if (used[picked + i]) {
-          ++K;
+          ++lk;
           continue;
         }
         teams[picked + i] = 2;
