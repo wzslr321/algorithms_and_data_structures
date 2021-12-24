@@ -17,100 +17,71 @@ using VS = vector<string>;
 using VVS = vector<VS>;
 using PI = pair<int, int>;
 
-int N, K;
-
 auto main() -> int {
   // freopen("input.txt", "r", stdin);
   // freopen("output.txt", "w", stdout);
 
   ios::sync_with_stdio(false);
   cin.tie(0);
+  int N, K;
 
   cin >> N >> K;
 
-  vector<int> arr(N);
-  vector<pair<int, int>> sorted(N);
-  vector<int> teams(N);
-  vector<bool> used(N);
+  int arr[N];
+  bool used[N];
+  priority_queue<pair<int, int>> pq;
+  int teams[N];
 
   LPI(i, 0, N, 1) {
     cin >> arr[i];
-    sorted[i] = make_pair(arr[i], i);
+    pq.push({arr[i], i});
+    used[i] = false;
   }
 
-  sort(sorted.begin(), sorted.end(),
-       [](pair<int, int> &a, pair<int, int> &b) { return a.first > b.first; });
   int usedels = 0;
-  int curr = 0;
+  int now = 1;
 
-  int prev = 2;
   while (usedels < N) {
-    int picked = sorted[curr].second;
-    if (used[picked] == true) {
-      ++curr;
-      continue;
+    while (used[pq.top().second]) {
+      pq.pop();
     }
-
-    if (prev == 2) {
-      prev = 1;
-      teams[picked] = 1;
-      ++usedels;
-      int lk = K;
-      LPI(i, 1, lk + 1, 1) {
-        if (picked - i < 0) break;
-        if (used[picked - i]) {
-          ++lk;
-          continue;
-        }
-        teams[picked - i] = 1;
-        used[picked - i] = true;
-        ++usedels;
-      }
-      lk = K;
-      LPI(i, 1, lk + 1, 1) {
-        if (picked + i >= N) break;
-        if (used[picked + i]) {
-          ++lk;
-          continue;
-        }
-        teams[picked + i] = 1;
-        used[picked + i] = true;
-        ++usedels;
-      }
-    } else {
-      prev = 2;
-      teams[picked] = 2;
-      ++usedels;
-      int lk = K;
-      LPI(i, 1, lk + 1, 1) {
-        if (picked - i < 0) break;
-        if (used[picked - i]) {
-          ++lk;
-          continue;
-        }
-        teams[picked - i] = 2;
-        used[picked - i] = true;
-        ++usedels;
-      }
-      lk = K;
-      LPI(i, 1, lk + 1, 1) {
-        if (picked + i >= N) break;
-        if (used[picked + i]) {
-          ++lk;
-          continue;
-        }
-        teams[picked + i] = 2;
-        used[picked + i] = true;
-        ++usedels;
-      }
-    }
+    int picked = pq.top().second;
+    pq.pop();
     used[picked] = true;
-    ++curr;
+
+    teams[picked] = now;
+    ++usedels;
+    int lk = K;
+    LPI(i, 1, lk + 1, 1) {
+      if (picked - i < 0) break;
+      if (used[picked - i]) {
+        ++lk;
+        continue;
+      }
+      teams[picked - i] = now;
+      used[picked - i] = true;
+      ++usedels;
+    }
+    lk = K;
+    LPI(i, 1, lk + 1, 1) {
+      if (picked + i >= N) break;
+      if (used[picked + i]) {
+        ++lk;
+        continue;
+      }
+      teams[picked + i] = now;
+      used[picked + i] = true;
+      ++usedels;
+    }
+    if (now == 1)
+      now = 2;
+    else
+      now = 1;
   }
 
-  LPI(i, 0, N, 1) { cout << teams[i]; }
-
-  cout << '\n';
+  for (auto el : teams) {
+    cout << el;
+  }
 
   return 0;
 }
