@@ -18,9 +18,8 @@ typedef tree<int, null_type, less<int>, rb_tree_tag,
 #define PB push_back
 #define MP make_pair
 
-#define LPI(i, a, b, d) for (int i = a; i < b; i += d)
-#define LPD(i, a, b, d) for (int i = a; i < b; i -= d)
-#define REP(n) for(int i = 0; i < n; ++i);
+#define LPI(i, a, b, d) for (int i{a}; i < b; i += d)
+#define LPD(i, a, b, d) for (int i{a}; i < b; i -= d)
 
 #ifndef INT_MAX
 #define INT_MAX 2147483647
@@ -78,28 +77,11 @@ auto main() -> int {
     int t;
     cin >> t;
     while (t--) {
-        int n;
-        cin >> n;
-        VI a(n);
-        VI b(n);
-        LPI(i,0,n,1){
-            cin >> a[i];
+        int u, v;
+        cin >> u >> v;
+        LPI(i,1,10,1) {
+            int curr = 
         }
-        LPI(i,0,n,1){
-            cin >> b[i];
-        }
-        sort(a.begin(), a.end());
-        sort(b.begin(), b.end());
-        bool bad = false;
-        LPI(i,0,n,1) {
-            if(a[i] != b[i] && a[i] + 1 != b[i]){
-                bad = true;
-                break;
-            }
-        }
-
-        bad ? cout << "NO\n" : cout << "YES\n";
-
     }
 
 #ifndef ONLINE_JUDGE
@@ -109,4 +91,4 @@ auto main() -> int {
 #endif
 
     return 0;
-}
+
