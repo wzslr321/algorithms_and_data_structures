@@ -21,6 +21,14 @@ class red_black_tree {
 
   const Node *get_root() { return root; }
 
+  Node *find_node(Node *node, int value) {
+    if (!node) return node;
+    if (node->value == value) return node;
+    auto direction = node->value > value ? node->left : node->right;
+    node = find_node(direction, value);
+    return node;
+  }
+
   Node *find_parent(Node *node, int value) {
     if (!node) return node;
     auto tmp = node;
@@ -162,57 +170,21 @@ class red_black_tree {
       check_rotation(node);
     }
   }
-};
 
-void display(const Node *node);
+  // needs to be implemented
+  void remove(int value) {
+    auto node = find_node(root, value);
+    if (!node) return;
+    std::cout << node->value << '\n';
+  }
+};
 
 auto main() -> int {
   red_black_tree tree{};
 
-  for (int i = 1; i <= 50; ++i) {
+  for (int i = 1; i <= 10; ++i) {
     tree.insert(i);
   }
-  display(tree.get_root());
 
   return 0;
-}
-
-
-// Print related stuff below;
-
-void print_node(const Node *node) {
-  std::cout << "Value: " << node->value << '\t';
-  std::cout << "Left Child: ";
-  if (node->left != nullptr) {
-    std::cout << node->left->value << '\t';
-  } else {
-    std::cout << node->left << '\t';
-  }
-  std::cout << "Right child: ";
-  if (node->right != nullptr) {
-    std::cout << node->right->value << '\t';
-  } else {
-    std::cout << node->right << '\t';
-  }
-  std::cout << "Parent: ";
-  if (node->parent != nullptr) {
-    std::cout << node->parent->value << '\t';
-  } else {
-    std::cout << node->parent << '\t';
-  }
-  std::cout << "Color: " << (node->color == 'r' ? "red" : "black") << '\n';
-}
-
-void display(const Node *node) {
-  if (!node) {
-    std::cout << "Tree is empty\n";
-    return;
-  }
-  print_node(node);
-  if (node->left) {
-    display(node->left);
-  }
-  if (node->right) {
-    display(node->right);
-  }
 }

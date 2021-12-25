@@ -24,24 +24,16 @@ auto main() -> int {
   ios::sync_with_stdio(false);
   cin.tie(0);
 
-  int n;
-  cin >> n;
-  VS arr(n);
-  LPI(i, 0, n, 1) { cin >> arr[i]; }
-  sort(arr.begin(), arr.end(),
-       [](string a, string b) { return a.size() < b.size(); });
-
-  LPI(i, 0, n - 1, 1) {
-    if (arr[i + 1].find(arr[i]) == string::npos) {
-      cout << "NO\n";
-      return 0;
-    }
-  }
-
-  cout << "YES\n";
-
-  for (auto el : arr) {
-    cout << el << '\n';
+  int t;
+  cin >> t;
+  while (t--) {
+    int n;
+    cin >> n;
+    int mini = INT_MAX;
+    int maxi = INT_MIN;
+    vector<int> arr(n);
+    LPI(i, 0, n, 1) { cin >> arr[i]; }
+    sort(arr.begin(), arr.end());
   }
 
   return 0;

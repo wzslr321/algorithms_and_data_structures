@@ -74,26 +74,14 @@ void scan(const std::vector<std::vector<std::vector<int>>> &boards,
     if (is_winner != std::end(winners)) continue;
     for (int i = 0; i < 5; ++i) {
       int match_row = 0;
-      for (int j = 0; j < 5; ++j) {
-        for (int z = 0; z < marked.size(); ++z) {
-          if (boards[b][i][j] == marked[z]) ++match_row;
-        }
-      }
-      if (match_row == 5) {
-        // I don't like this part too, i hope my laziness will allow me to
-        // refactor it later
-        auto is_winner = std::find(winners.begin(), winners.end(), b);
-        if (is_winner == std::end(winners)) winners.push_back(b);
-      }
-    }
-    for (int i = 0; i < 5; ++i) {
       int match_column = 0;
       for (int j = 0; j < 5; ++j) {
         for (int z = 0; z < marked.size(); ++z) {
+          if (boards[b][i][j] == marked[z]) ++match_row;
           if (boards[b][j][i] == marked[z]) ++match_column;
         }
       }
-      if (match_column == 5) {
+      if (match_row == 5 || match_column == 5) {
         auto is_winner = std::find(winners.begin(), winners.end(), b);
         if (is_winner == std::end(winners)) winners.push_back(b);
       }

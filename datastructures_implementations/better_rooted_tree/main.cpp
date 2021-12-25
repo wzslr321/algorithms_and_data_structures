@@ -7,6 +7,9 @@ template <typename T> struct Node {
   Node<T> *parent;
   std::vector<Node<T> *> children;
   Node<T> *sibling;
+  Node() : data(0), parent(nullptr), children({}), sibling(nullptr) {}
+  explicit Node(T data)
+      : data(data), parent(nullptr), children({}), sibling(nullptr) {}
 };
 
 template <typename T> class rooted_tree {
@@ -20,75 +23,39 @@ template <typename T> class rooted_tree {
     height = 0;
   }
 
-  const int &get_height() { return height; }
+  const int get_height() { return height; }
   const Node<T> *get_root() { return root; }
 
   void insert_root(Node<T> *&node) { root = node; }
 
-  Node<T> *create_node(const T value) {
-    auto node = new Node<T>;
-    node->data = value;
-    node->parent = nullptr;
-    node->children = {};
-    node->sibling = nullptr;
-
-    return node;
-  }
-
   void dfs(const Node<T> *node) {
-    print_node(node);
     for (const auto &n : node->children) {
       dfs(n);
     }
   }
 
   Node<T> *dfs(Node<T> *node, const T value) {
-    if (node == nullptr || node->data == value)
-      return node;
+    if (node == nullptr || node->data == value) return node;
 
     for (const auto &n : node->children) {
       auto result = dfs(n, value);
-      if (result != nullptr && result->data == value)
-        return result;
+      if (result && result->data == value) return result;
     }
 
     return nullptr;
   }
 
   void insert_to(const T top, const T value) {
-    auto node = create_node(value);
-    if (root == nullptr)
-      return insert_root(node);
+    auto node = new Node<T>(value);
+    if (!root) return insert_root(node);
 
     auto parent = dfs(root, top);
-    if (parent == nullptr)
-      return;
+    if (!parent) return;
     node->parent = parent;
 
     auto &children = parent->children;
-    if (!children.empty())
-      children.back()->sibling = node;
+    if (!children.empty()) children.back()->sibling = node;
     children.push_back(node);
-  }
-
-  void print_node(const Node<T> *node) {
-
-    std::cout << "Value : " << node->data << "\tparent: ";
-    if (node->parent == nullptr) {
-      std::cout << node->parent;
-    } else {
-      std::cout << node->parent->data;
-    }
-    if (node->sibling != nullptr) {
-      std::cout << "\tsibling: " << node->sibling->data;
-    } else {
-      std::cout << "\tsibling: " << node->sibling;
-    }
-    std::cout << "\tchildren: ";
-    for (const auto &n : node->children) {
-      std::cout << n->data << ' ';
-    }
-    std::cout << '\n';
   }
 };
 

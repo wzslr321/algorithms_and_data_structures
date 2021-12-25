@@ -74,21 +74,16 @@ int scan(const std::vector<std::vector<std::vector<int>>> &boards,
   for (int b = 0; b < boards.size(); ++b) {
     for (int i = 0; i < 5; ++i) {
       int match_row = 0;
-      for (int j = 0; j < 5; ++j) {
-        for (int z = 0; z < marked.size(); ++z) {
-          if (boards[b][i][j] == marked[z]) ++match_row;
-        }
-      }
-      if (match_row == 5) return b;
-    }
-    for (int i = 0; i < 5; ++i) {
       int match_column = 0;
       for (int j = 0; j < 5; ++j) {
         for (int z = 0; z < marked.size(); ++z) {
+          if (boards[b][i][j] == marked[z]) ++match_row;
           if (boards[b][j][i] == marked[z]) ++match_column;
         }
       }
-    if (match_column == 5) return b;
+      if (match_row == 5 || match_column == 5) {
+        return b;
+      }
     }
   }
   return -1;

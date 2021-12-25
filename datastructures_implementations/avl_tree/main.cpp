@@ -2,10 +2,13 @@
 
 struct Node {
   int value;
-  Node *left = nullptr;
-  Node *right = nullptr;
-  Node *parent = nullptr;
+  Node *left;
+  Node *right;
+  Node *parent;
   int height = 1;
+  Node() : value(0), left(nullptr), right(nullptr), parent(nullptr) {}
+  explicit Node(int value)
+      : value(value), left(nullptr), right(nullptr), parent(nullptr) {}
 };
 
 struct avl_tree {
@@ -117,8 +120,7 @@ struct avl_tree {
   }
 
   void insert(int value) {
-    auto node = new Node{};
-    node->value = value;
+    auto node = new Node(value);
     if (!root) {
       root = node;
       return;
@@ -180,16 +182,11 @@ struct avl_tree {
   }
 };
 
-void scan(const Node *node);
-
 auto main() -> int {
   avl_tree tree{};
   for (auto i = 1; i < 49; ++i) {
     tree.insert(i);
   }
-
-  scan(tree.get_root());
-  std::cout << "\nHeight: " << tree.get_height(tree.get_root()) << '\n';
 
   tree.remove(24);
   tree.remove(40);
@@ -203,49 +200,5 @@ auto main() -> int {
   tree.remove(36);
   tree.remove(35);
 
-  std::cout << "\n\n";
-  scan(tree.get_root());
-
-  std::cout << "\nHeight: " << tree.get_height(tree.get_root()) << '\n';
-
   return 0;
-}
-
-// Niżej jest tylko wyświetlanie
-
-void print_node(const Node *node) {
-  std::cout << "Value: " << node->value << '\t';
-  std::cout << "Left Child: ";
-  if (node->left != nullptr) {
-    std::cout << node->left->value << '\t';
-  } else {
-    std::cout << node->left << '\t';
-  }
-  std::cout << "Right child: ";
-  if (node->right != nullptr) {
-    std::cout << node->right->value << '\t';
-  } else {
-    std::cout << node->right << '\t';
-  }
-  std::cout << "Parent: ";
-  if (node->parent != nullptr) {
-    std::cout << node->parent->value << '\t';
-  } else {
-    std::cout << node->parent << '\t';
-  }
-  std::cout << "Height: " << node->height << '\n';
-}
-
-void scan(const Node *node) {
-  if (!node) {
-    std::cout << "Tree is empty\n";
-    return;
-  }
-  print_node(node);
-  if (node->left) {
-    scan(node->left);
-  }
-  if (node->right) {
-    scan(node->right);
-  }
 }

@@ -2,21 +2,22 @@
 #include <queue>
 #include <stack>
 
-using namespace std;
-
-template <typename T> struct Node {
-  T data;
-  Node<T> *top;
-  Node<T> *left;
-  Node<T> *right;
+struct Node {
+  int value;
+  Node *top;
+  Node *left;
+  Node *right;
   int depth;
+  Node() : value(0), top(nullptr), left(nullptr), right(nullptr), depth(0) {}
+  explicit Node(int val)
+      : value(val), top(nullptr), left(nullptr), right(nullptr), depth(0) {}
 };
 
-template <typename T> class rooted_tree {
+class rooted_tree {
  private:
-  Node<T> *root;
+  Node *root;
   int height;
-  Node<T> *deepest;
+  Node *deepest;
 
  public:
   rooted_tree() {
@@ -25,30 +26,23 @@ template <typename T> class rooted_tree {
     deepest = nullptr;
   }
 
-  void insert_at(T data, T parent_data) {
-    auto node = new Node<T>;
-    node->top = nullptr;
-    node->data = data;
-    node->left = nullptr;
-    node->right = nullptr;
-    node->depth = 0;
-    if (root == nullptr) {
+  void insert_at(int value, int parent_data) {
+    auto node = new Node(value);
+    if (!root) {
       root = node;
       deepest = node;
       return;
     }
     auto top = bfs(parent_data);
-    if (top == nullptr)
-      return;
+    if (!top) return;
     node->top = top;
-    if (top->left == nullptr) {
+    if (!top->left) {
       top->left = node;
       node->depth = top->depth + 1;
-      if (node->depth > deepest->depth)
-        deepest = node;
+      if (node->depth > deepest->depth) deepest = node;
     } else {
       auto child = top->left;
-      while (child->right != nullptr) {
+      while (child->right) {
         child = child->right;
       }
       child->right = node;
@@ -56,19 +50,18 @@ template <typename T> class rooted_tree {
     }
   }
 
-  Node<T> *bfs(T parent_data) {
+  Node *bfs(int parent_data) {
     auto node = root;
-    queue<Node<T> *> qq;
+    std::queue<Node *> qq;
     qq.push(node);
     while (qq.size() > 0) {
       auto current = qq.front();
-      if (current->data == parent_data)
-        return current;
+      if (current->value == parent_data) return current;
       qq.pop();
-      if (current->left != nullptr) {
+      if (current->left) {
         qq.push(current->left);
         current = current->left;
-        while (current->right != nullptr) {
+        while (current->right) {
           qq.push(current->right);
           current = current->right;
         }
@@ -77,19 +70,18 @@ template <typename T> class rooted_tree {
     return nullptr;
   }
 
-  Node<T> *dfs(int depth) {
+  Node *dfs(int depth) {
     auto node = root;
-    stack<Node<T> *> st;
+    std::stack<Node *> st;
     st.push(node);
     while (st.size() > 0) {
       auto current = st.top();
-      if (current->depth == depth && current != deepest)
-        return current;
+      if (current->depth == depth && current != deepest) return current;
       st.pop();
-      if (current->left != nullptr) {
+      if (current->left) {
         st.push(current->left);
         current = current->left;
-        while (current->right != nullptr) {
+        while (current->right) {
           st.push(current->right);
           current = current->right;
         }
@@ -98,18 +90,18 @@ template <typename T> class rooted_tree {
     return nullptr;
   }
 
-  void update_height_in_subtree(Node<T> *st_root) {
+  void update_height_in_subtree(Node *st_root) {
     auto node = st_root;
-    stack<Node<T> *> st;
+    std::stack<Node *> st;
     st.push(node);
     while (st.size() > 0) {
       auto current = st.top();
       current->depth -= 1;
       st.pop();
-      if (current->left != nullptr) {
+      if (current->left) {
         st.push(current->left);
         current = current->left;
-        while (current->right != nullptr) {
+        while (current->right) {
           st.push(current->right);
           current = current->right;
         }
@@ -118,14 +110,13 @@ template <typename T> class rooted_tree {
   }
 
   int get_height() { return deepest->depth; }
-  Node<T> *get_deepest() { return deepest; }
+  Node *get_deepest() { return deepest; }
 
   void delete_node(int value) {
     auto node = bfs(value);
-    if (node == nullptr)
-      return;
-    if (node->top == nullptr) {
-      if (node->left == nullptr) {
+    if (!node) return;
+    if (!node->top) {
+      if (!node->left) {
         root = nullptr;
         deepest = nullptr;
         delete node;
@@ -134,12 +125,12 @@ template <typename T> class rooted_tree {
         root = node->left;
         root->top = nullptr;
         auto tmp = root->right;
-        while (tmp != nullptr) {
+        while (tmp) {
           tmp->top = root;
           tmp = tmp->right;
         }
         tmp = root->left;
-        while (tmp->right != nullptr) {
+        while (tmp->right) {
           tmp = tmp->right;
         }
 
@@ -149,8 +140,7 @@ template <typename T> class rooted_tree {
         return;
       }
     }
-    if (node->right != nullptr) {
-      // deepest = node->right;
+    if (node->right) {
       auto tmp = node->top->left;
       if (tmp != node) {
         while (tmp->right != node) {
@@ -158,13 +148,11 @@ template <typename T> class rooted_tree {
         }
       }
       tmp->right = node->right;
-      if (node->top->left == node) {
-        node->top->left = node->right;
-      }
-      if (node->left != nullptr) {
+      if (node->top->left == node) node->top->left = node->right;
+      if (node->left) {
         node->right->left = node->left;
         tmp = node->left;
-        while (tmp != nullptr) {
+        while (tmp) {
           tmp->top = node->right;
           tmp = tmp->right;
         }
@@ -173,13 +161,12 @@ template <typename T> class rooted_tree {
       return;
     }
     auto eq = dfs(node->depth);
-    if (node->left != nullptr) {
+    if (node->left) {
       if (node == deepest) {
-        if (eq != nullptr) {
+        if (eq)
           deepest = eq;
-        } else {
+        else
           deepest = node->left;
-        }
       }
       node->left->top = node->top;
       node->top->left = node->left;
@@ -187,7 +174,7 @@ template <typename T> class rooted_tree {
       return;
     }
     if (node == deepest) {
-      if (eq != nullptr) {
+      if (eq) {
         deepest = eq;
       } else {
         deepest = node->top;
@@ -205,48 +192,10 @@ template <typename T> class rooted_tree {
     node->top = nullptr;
     delete node;
   }
-
-  void print_node(const Node<T> *node) {
-    cout << "Value: " << node->data << '\t';
-    if (node->top != nullptr)
-      cout << " Parent: " << node->top->data << '\t';
-    else
-      cout << " Parent: xx " << '\t';
-    if (node->left != nullptr)
-      cout << " Left Child: " << node->left->data << '\t' << '\t';
-    else
-      cout << " Left Child: xx" << '\t' << '\t';
-
-    if (node->right != nullptr)
-      cout << " Right Sibling: " << node->right->data;
-    else
-      cout << " Right Sibling: xx";
-    cout << '\n';
-  }
-
-  void print_tree() {
-    auto node = root;
-    queue<Node<T> *> qq;
-    qq.push(node);
-    while (qq.size() > 0) {
-      auto current = qq.front();
-      print_node(current);
-      qq.pop();
-      if (current->left != nullptr) {
-        qq.push(current->left);
-        current = current->left;
-        while (current->right != nullptr) {
-          qq.push(current->right);
-          current = current->right;
-        }
-      }
-    }
-    cout << '\n';
-  }
 };
 
 auto main() -> int {
-  auto r_tree = rooted_tree<int>();
+  auto r_tree = rooted_tree();
 
   r_tree.insert_at(1, 0);
   r_tree.insert_at(2, 1);
@@ -264,17 +213,7 @@ auto main() -> int {
   r_tree.insert_at(14, 9);
   r_tree.insert_at(15, 14);
   r_tree.insert_at(99, 7);
-  r_tree.print_tree();
-  cout << "Height: " << r_tree.get_height() << '\n';
-  auto deepest = r_tree.get_deepest();
-  cout << "Deepest node: " << deepest->data << '\n';
   r_tree.delete_node(7);
-
-  r_tree.print_tree();
-
-  cout << "Height: " << r_tree.get_height() << '\n';
-  deepest = r_tree.get_deepest();
-  cout << "Deepest node: " << deepest->data << '\n';
 
   return 0;
 }

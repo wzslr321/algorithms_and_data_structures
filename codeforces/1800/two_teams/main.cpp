@@ -55,6 +55,7 @@ auto main() -> int {
     LPI(i, 1, lk + 1, 1) {
       if (picked - i < 0) break;
       if (used[picked - i]) {
+        if (used[picked - i] == pq.top().second) pq.pop();
         ++lk;
         continue;
       }
@@ -66,6 +67,7 @@ auto main() -> int {
     LPI(i, 1, lk + 1, 1) {
       if (picked + i >= N) break;
       if (used[picked + i]) {
+        if (used[picked + i] == pq.top().second) pq.pop();
         ++lk;
         continue;
       }
@@ -73,10 +75,8 @@ auto main() -> int {
       used[picked + i] = true;
       ++usedels;
     }
-    if (now == 1)
-      now = 2;
-    else
-      now = 1;
+
+    now == 1 ? now = 2 : now = 1;
   }
 
   for (auto el : teams) {
@@ -85,3 +85,4 @@ auto main() -> int {
 
   return 0;
 }
+
