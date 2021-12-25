@@ -12,9 +12,7 @@ using namespace std;
 #define LPI(i, a, b, d) for (int i = a; i < b; i += d)
 
 using VI = vector<int>;
-using VVI = vector<VI>;
 using VS = vector<string>;
-using VVS = vector<VS>;
 using PI = pair<int, int>;
 
 auto main() -> int {

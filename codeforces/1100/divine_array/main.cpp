@@ -10,9 +10,7 @@ using namespace std;
 #define LPI(i, a, b, d) for (int i{a}; i < b; i += d)
 
 using VI = vector<int>;
-using VVI = vector<VI>;
 using VS = vector<string>;
-using VVS = vector<VS>;
 using PI = pair<int, int>;
 
 int arr[2000];
@@ -27,7 +25,7 @@ auto main() -> int {
   int t;
   cin >> t;
   while (t--) {
-    int n,q;
+    int n, q;
     cin >> n;
     for (int i = 0; i < n; ++i) {
       cin >> arr[i];
@@ -47,7 +45,7 @@ auto main() -> int {
       ++ts;
     }
     while (q--) {
-      int x,k;
+      int x, k;
       cin >> x >> k;
       k = min(k, n);
       cout << trans[k][x - 1] << '\n';

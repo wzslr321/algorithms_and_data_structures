@@ -1,7 +1,17 @@
 <p align="center"> 
-  This repository will contain C++ code which I will wrote during my hopefully fruitful relationship with competetive programming. <br> 
-  It may contain either C++/Data Structures/Algorithms learning related things, CP exercises or materials idk. 
+  This repository will contain C++ code related to Algorithms and Datastructures <br> 
 </p> 
+
+---
+
+<p align="center"> 
+    Please, don't read the code if you are C++ lover, code here is awful - written only for codeforces/leetcode purposes
+<p> 
+
+     <a href = "https://github.com/wzslr321/datastructures_implementation">
+        Related repository containing Datastructures Implementations
+     </a>
+</p>
 
 <p>
 <a href = "https://codeforces.com/profile/Creatix"> codeforces </a>

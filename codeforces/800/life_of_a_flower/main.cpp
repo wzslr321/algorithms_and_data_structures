@@ -32,7 +32,7 @@ auto main() -> int {
     int ans = 1;
     int arr[n];
     LPI(i, 0, n, 1) { cin >> arr[i]; }
-    if(arr[0]) ++ans;
+    if (arr[0]) ++ans;
     LPI(i, 1, n, 1) {
       if (arr[i] && arr[i - 1]) ans += 5;
       if (!arr[i] && !arr[i - 1]) {
