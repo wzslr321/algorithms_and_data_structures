@@ -5,9 +5,10 @@
 ---
 
 <p align="center"> 
-    Please, don't read the code if you are C++ lover, code here is awful - written only for codeforces/leetcode purposes
-<p> 
-
+    <b> Please, don't read the code if you are C++ lover, code here is awful - written only for codeforces/leetcode purposes </b> ❗️
+</p>
+  
+<p>
      <a href = "https://github.com/wzslr321/datastructures_implementation">
         Related repository containing Datastructures Implementations
      </a>
