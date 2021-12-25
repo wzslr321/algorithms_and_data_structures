@@ -16,9 +16,6 @@ using VS = vector<string>;
 using PI = pair<int, int>;
 
 auto main() -> int {
-  // freopen("input.txt", "r", stdin);
-  // freopen("output.txt", "w", stdout);
-
   ios::sync_with_stdio(false);
   cin.tie(0);
 
