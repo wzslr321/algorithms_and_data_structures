@@ -1,4 +1,3 @@
-
 /*
  *
  * https://leetcode.com/problems/two-sum/
@@ -13,48 +12,47 @@
 
 using namespace std;
 
-vector<int> twoSum(vector<int>& nums, int target) {
-    map<int, int> mv{};
-    map<int, int> mi1{};
-    map<int, int> mi2{};
-    vector<int> ni{};
-    int l{};
-    for (int i{0}; i < nums.size(); i++) {
-        l++;
-        int needed{target - nums[i]};
-        if (nums[i] == needed) {
-            ni.push_back(i);
-        }
-        mv[nums[i]] = needed;
-        mi1[i] = needed;
-        mi2[needed] = i;
-        if (nums[i] == mv[needed]) {
-            int st = mi2[mv[needed]];
-            if (st == mi2[needed]) {
-                if (ni.size() <= 1) {
-                    continue;
-                } else {
-                    return vector<int>{ni[0], ni[1]};
-                }
-            }
-            if (l < 2) continue;
-            const vector<int> values = {st, mi2[needed]};
-            return values;
-        }
+vector<int> twoSum(vector<int> &nums, int target) {
+  map<int, int> mv{};
+  map<int, int> mi1{};
+  map<int, int> mi2{};
+  vector<int> ni{};
+  int l{};
+  for (int i{0}; i < nums.size(); i++) {
+    l++;
+    int needed{target - nums[i]};
+    if (nums[i] == needed) {
+      ni.push_back(i);
     }
-    const vector<int> values = {};
-    return values;
+    mv[nums[i]] = needed;
+    mi1[i] = needed;
+    mi2[needed] = i;
+    if (nums[i] == mv[needed]) {
+      int st = mi2[mv[needed]];
+      if (st == mi2[needed]) {
+        if (ni.size() <= 1) {
+          continue;
+        } else {
+          return vector<int>{ni[0], ni[1]};
+        }
+      }
+      if (l < 2) continue;
+      const vector<int> values = {st, mi2[needed]};
+      return values;
+    }
+  }
+  const vector<int> values = {};
+  return values;
 }
 
 int main() {
-    vector<int> arr{-6, 1, 0, 4};
-    int target{-5};
-    auto values{twoSum(arr, target)};
+  vector<int> arr{-6, 1, 0, 4};
+  int target{-5};
+  auto values{twoSum(arr, target)};
 
-    for (int value : values) {
-        cout << value << '\n';
-    }
+  for (int value : values) {
+    cout << value << '\n';
+  }
 
-    return 0;
+  return 0;
 }
-

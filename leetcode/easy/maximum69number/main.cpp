@@ -4,18 +4,18 @@
 using namespace std;
 
 int maximum69Number(int num) {
-    string s = to_string(num);
+  string s = to_string(num);
 
-    for (auto i{0}; i < s.size(); ++i) {
-        if (s[i] == '6') {
-            s[i] = '9';
-            return stoi(s);
-        }
+  for (auto i{0}; i < s.size(); ++i) {
+    if (s[i] == '6') {
+      s[i] = '9';
+      return stoi(s);
     }
-    return num;
+  }
+  return num;
 }
 int main() {
-    cout << maximum69Number(9996) << '\n';
+  cout << maximum69Number(9996) << '\n';
 
-    return 0;
+  return 0;
 }

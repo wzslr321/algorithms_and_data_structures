@@ -17,49 +17,49 @@ unordered_map<char, char> parentheses{
 };
 
 bool isValid(string s) {
-    if ((s.size() % 2) != 0) {
-        return false;
-    }
+  if ((s.size() % 2) != 0) {
+    return false;
+  }
 
-    if (!isClosing[s[s.size() - 1]] || isClosing[s[0]]) {
-        return false;
-    }
+  if (!isClosing[s[s.size() - 1]] || isClosing[s[0]]) {
+    return false;
+  }
 
-    stack<char> p{};
+  stack<char> p{};
 
-    for (auto i{0}; i < s.size(); i++) {
-        if (!isClosing[s[i]]) {
-            p.push(s[i]);
-        } else {
-            if (p.size() > 0) {
-                if (s[i] != parentheses[p.top()]) {
-                    return false;
-                }
-
-                p.pop();
-            } else {
-                return false;
-            }
+  for (auto i{0}; i < s.size(); i++) {
+    if (!isClosing[s[i]]) {
+      p.push(s[i]);
+    } else {
+      if (p.size() > 0) {
+        if (s[i] != parentheses[p.top()]) {
+          return false;
         }
-    }
 
-    if (p.size() > 0) {
+        p.pop();
+      } else {
         return false;
+      }
     }
+  }
 
-    return true;
+  if (p.size() > 0) {
+    return false;
+  }
+
+  return true;
 };
 
 int main() {
-    /*
-    assert((isValid("()"), true));
-    assert((isValid("()[]{}"), true));
-    assert((isValid("(]"), false));
-    assert((isValid("([)]"), false));
-    assert((isValid("{[]}"), true));
-    */
+  /*
+  assert((isValid("()"), true));
+  assert((isValid("()[]{}"), true));
+  assert((isValid("(]"), false));
+  assert((isValid("([)]"), false));
+  assert((isValid("{[]}"), true));
+  */
 
-    cout << isValid("()))");
+  cout << isValid("()))");
 
-    return 0;
+  return 0;
 };
