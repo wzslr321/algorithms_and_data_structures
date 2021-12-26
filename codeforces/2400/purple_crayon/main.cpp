@@ -18,10 +18,12 @@ using VVS = vector<VS>;
 using PI = pair<int, int>;
 
 unordered_map<int, pair<int, vector<int>>> edges;
+unordered_map<int, vector<int>> deepest;
 int n, k;
 
 const int N = 2 * 10e5 + 1;
 bool exists[N];
+int max_deep = INT_MIN;
 
 void dfs(int root) {
   int depth = 0;
@@ -29,11 +31,58 @@ void dfs(int root) {
   qq.push(root);
   while (qq.size() > 0) {
     auto curr = qq.front();
-    cout << "current: " << curr << " depth: " << edges[curr].first << '\n';
+    max_deep = max(max_deep, edges[curr].first);
+    deepest[edges[curr].first].PB(curr);
     qq.pop();
     for (auto ch : edges[curr].second) {
       qq.push(ch);
     }
+  }
+}
+unordered_map<int, bool> red;
+
+bool scan_children(int node) {
+  stack<int> st;
+  st.push(node);
+  while (st.size() > 0) {
+    auto curr = st.top();
+    if (red[curr] == true) return false;
+    st.pop();
+    for (auto ch : edges[curr].second) {
+      st.push(ch);
+    }
+  }
+  return true;
+}
+
+int r = 0;
+void color_red() {
+  int i = 0;
+  int y = -1;
+  while (max_deep > 0) {
+    for (size_t j = 0; j < deepest[max_deep].size(); ++j) {
+      if (i == k) {
+        y = j;
+        return;
+      }
+      ++r;
+      red[deepest[max_deep][j]] = true;
+      ++i;
+    }
+    --max_deep;
+  }
+}
+
+int root;
+int blue = 0;
+void color_blue() {
+  int best = n / 2;
+  for (size_t i = 0; i < deepest[max_deep].size(); ++i) {
+    int curr = deepest[max_deep][i];
+    if (deepest[max_deep][i] == deepest[max_deep].back() && max_deep > 0)
+      --max_deep;
+    if (scan_children(curr)) ++blue;
+    if (blue == best) break;
   }
 }
 
@@ -45,7 +94,6 @@ auto main() -> int {
   cin.tie(0);
 
   cin >> n >> k;
-  int root;
   LPI(i, 1, n, 1) {
     int u, v;
     cin >> u >> v;
@@ -63,11 +111,16 @@ auto main() -> int {
     }
     root = u;
     edges[u].first = 0;
+    edges[v].first = 1;
     edges[u].second.PB(v);
     exists[u] = true, exists[v] = true;
   }
 
   dfs(root);
+  color_red();
+  color_blue();
+
+  cout << ((n - r - blue) * (r - blue)) << '\n';
 
   return 0;
 }
