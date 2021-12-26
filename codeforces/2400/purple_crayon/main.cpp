@@ -17,13 +17,23 @@ using VS = vector<string>;
 using VVS = vector<VS>;
 using PI = pair<int, int>;
 
+//
+
+ll n, k;
+const int N = 2 * 10e5 + 1;
+int max_deep = INT_MIN;
+
+ll r = 0LL;
+ll blue = 0LL;
+
+bool visited_dfs[N];
+bool visited_c[N];
+int infected[N];
+
 unordered_map<int, pair<int, vector<int>>> edges;
 unordered_map<int, int> parent;
 unordered_map<int, vector<int>> deepest;
-ll n, k;
-
-const int N = 2 * 10e5 + 1;
-int max_deep = INT_MIN;
+unordered_map<int, bool> red;
 
 void find_parents() {
   bool vs[N];
@@ -43,7 +53,6 @@ void find_parents() {
   }
 }
 
-bool visited_dfs[N];
 void dfs() {
   int depth = 0;
   edges[1].first = depth;
@@ -66,24 +75,6 @@ void dfs() {
     }
   }
 }
-unordered_map<int, bool> red;
-
-bool visited_sc[N];
-bool scan_children(int node) {
-  stack<int> st;
-  st.push(node);
-  while (st.size() > 0) {
-    auto curr = st.top();
-    visited_sc[curr] = true;
-    if (red[curr] == true) return false;
-    st.pop();
-    for (auto ch : edges[curr].second) {
-      if (visited_sc[ch]) continue;
-      st.push(ch);
-    }
-  }
-  return true;
-}
 
 bool should_paint(int node) {
   stack<int> st;
@@ -100,8 +91,6 @@ bool should_paint(int node) {
   return true;
 }
 
-ll r = 0LL;
-bool ez = false;
 void color_red() {
   int i = 0;
   int y = -1;
@@ -112,6 +101,12 @@ void color_red() {
         return;
       }
       if (!should_paint(deepest[max_deep][j])) continue;
+
+      int current = parent[deepest[max_deep][j]];
+      while (current != 1) {
+        infected[current] = true;
+        current = parent[current];
+      }
       ++r;
       red[deepest[max_deep][j]] = true;
       ++i;
@@ -123,20 +118,23 @@ void color_red() {
       r = n / 2;
     else
       r = k;
-
-    ez = true;
   }
 }
 
-ll blue = 0LL;
 void color_blue() {
-  int best = n / 2;
-  for (size_t i = 0; i < deepest[max_deep].size(); ++i) {
-    int curr = deepest[max_deep][i];
-    if (deepest[max_deep][i] == deepest[max_deep].back() && max_deep > 0)
-      --max_deep;
-    if (scan_children(curr)) ++blue;
-    if (blue == best) break;
+  queue<int> qq;
+  qq.push(1);
+  while (qq.size() > 0) {
+    auto curr = qq.front();
+    visited_c[curr] = true;
+    if (infected[curr] != true && red[curr] != true && curr != 1) {
+      ++blue;
+    }
+    qq.pop();
+    for (auto ch : edges[curr].second) {
+      if (visited_c[ch]) continue;
+      qq.push(ch);
+    }
   }
 }
 
@@ -158,7 +156,7 @@ auto main() -> int {
   find_parents();
   dfs();
   color_red();
-  if (!ez) color_blue();
+  color_blue();
 
   cout << static_cast<ll>(((n - r - blue) * (r - blue))) << '\n';
 
