@@ -35,7 +35,6 @@ ll infected_count = 1LL;
 unordered_map<int, pair<int, vector<int>>> edges;
 unordered_map<int, int> parent;
 unordered_map<int, vector<int>> deepest;
-vector<int> tc;
 
 void find_parents() {
   queue<int> qq;
@@ -54,7 +53,8 @@ void find_parents() {
   }
 }
 
-// update depth of nodes, so it is easy to start coloring from leaves
+bool marked[N];
+vector<pair<int, int>> kolorki;
 void dfs() {
   int depth = 0;
   edges[1].first = depth;
@@ -74,50 +74,54 @@ void dfs() {
   }
 }
 
-// maybe colored leaves are not optimal to color, though should paint returnet
-// true? this greedness should work, but what if subtree that should be painted
-// is not the largest not infected subtree, and there won't be enough crayons to
-// color that bigger subtrees later?
-void color_red() {
-  int i = 0;
-  while (max_deep >= 0) {
-    int sz = deepest[max_deep].size();
-    int j = 0;
-    bool l = true;
-    while (j < sz) {
-      int in = l ? j : sz - j - 1;
-      if (i == k || infected_count == n) return;
-      // tree is already infected, check next node
-      if (infected[deepest[max_deep][in]]) {
-        ++j;
-        continue;
-      }
-
-      int current = parent[deepest[max_deep][in]];
-      while (current != 1) {
-        if (infected[current] == true) break;
-        ++infected_count;
-        infected[current] = true;
+void powrzucaj() {
+  while (max_deep > 0) {
+    for (size_t i = 0; i < deepest[max_deep].size(); ++i) {
+      int length = 0;
+      int curr = deepest[max_deep][i];
+      int current = parent[curr];
+      marked[curr] = true;
+      while (!marked[current]) {
+        marked[current] = true;
         current = parent[current];
+        ++length;
       }
-      ++red, ++i;
-      ++infected_count;
-      infected[deepest[max_deep][in]] = true;
-      l ? l = false : l = true;
-      ++j;
+      kolorki.PB(make_pair(curr, length));
     }
     --max_deep;
   }
 }
 
-auto main() -> int {
-  // freopen("input.txt", "r", stdin);
-  // freopen("output.txt", "w", stdout);
+void color_red() {
+  sort(kolorki.begin(), kolorki.end(),
+       [](const std::pair<int, int> &a, const std::pair<int, int> &b) {
+         return a.second > b.second;
+       });
+  int lk = k;
+  LPI(i, 0, k, 1) {
+    if (infected_count == n || red == lk) break;
+    if (infected[kolorki[i].first]) {
+      ++k;
+      continue;
+    }
+    infected[kolorki[i].first] = true;
+    ++red, ++infected_count;
+    int current = parent[kolorki[i].first];
+    while (current != 1) {
+      if (infected[current]) break;
+      infected[current] = true;
+      current = parent[current];
+      ++infected_count;
+    }
+  }
+}
 
+auto main() -> int {
   ios::sync_with_stdio(false);
   cin.tie(0);
 
   cin >> n >> k;
+  int lk = k;
   LPI(i, 1, n, 1) {
     int u, v;
     cin >> u >> v;
@@ -125,22 +129,26 @@ auto main() -> int {
     edges[v].second.PB(u);
   }
   infected[1] = true;
+  marked[1] = true;
 
   find_parents();
   dfs();
+  powrzucaj();
   color_red();
 
   blue = n - infected_count;
   if (infected_count == n) {
     if (red != infected_count - 1) {
-      if (red < k) {
-        if (k > n / 2)
+      if (red < lk) {
+        if (lk > n / 2)
           red = n / 2;
         else
-          red = k;
+          red = lk;
       }
     }
   }
+  blue = max(blue, 0LL);
+  blue = min(blue, n / 2);
   cout << ((n - red - blue) * (red - blue)) << '\n';
 
   return 0;
