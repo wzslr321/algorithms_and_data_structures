@@ -21,59 +21,40 @@ vector<int> parent(N);
 string c;
 int n, k;
 int dp = 0;
+vector<bool> dped(N);
 
 string ans = "";
+auto is_worth(int node) -> bool {
+  // if(c[node] == 
+  if ((node == 1 || dped[parent[node]]) && dp < k && dped[node] != true) {
+    LPI(i, node, n, 1) {
+      if (c[i] < c[node - 1]) return false;
+    }
+    return true;
+  }
+  return false;
+}
 auto scan(int node) -> void {
-  stack<int> left;
-  queue<int> right;
-  int current = node;
-  left.push(1);
-  while (tree[current].first != 0) {
-    current = tree[current].first;
-    left.push(current);
+
+  if (tree[node].first != 0) {
+    scan(tree[node].first);
+    bool worth = is_worth(node);
+    if (worth) ans += c[node - 1], ++dp, dped[node] = true;
   }
-  current = node;
-  while (tree[current].second != 0) {
-    current = tree[current].second;
-    right.push(current);
+
+  {
+    ans += c[node - 1];
+    bool worth = is_worth(node);
+    if (worth) ans += c[node - 1], ++dp, dped[node] = true;
   }
-  while (left.size() > 0) {
-    int curr = left.top();
-    left.pop();
-    ans += c[curr - 1];
-    if ((curr == 1 || c[parent[curr] - 1] == c[curr - 1]) && dp < k) {
-      bool worth = true;
-      LPI(i, curr, n, 1) {
-        if (c[i] < c[curr - 1]) {
-          worth = false;
-          break;
-        }
-      }
-      if (worth) {
-        ans += c[curr - 1];
-        ++dp;
-      }
-    }
-  }
-  while (right.size() > 0) {
-    int curr = right.front();
-    right.pop();
-    ans += c[curr - 1];
-    if ((curr == 1 || c[parent[curr] - 1] == c[curr - 1]) && dp < k) {
-      bool worth = true;
-      LPI(i, curr, n, 1) {
-        if (c[i] < c[curr - 1]) {
-          worth = false;
-          break;
-        }
-      }
-      if (worth) {
-        ans += c[curr - 1];
-        ++dp;
-      }
-    }
+
+  if (tree[node].second != 0) {
+    scan(tree[node].second);
+    bool worth = is_worth(node);
+    if (worth) ans += c[node - 1], ++dp, dped[node] = true;
   }
 }
+
 auto main() -> int {
   ios::sync_with_stdio(false);
   cin.tie(0);
@@ -91,18 +72,3 @@ auto main() -> int {
 
   return 0;
 }
-/*
-ans += c[node - 1];
-if (node == 1 || c[parent[node]] == c[node - 1]) {
-  bool worth = true;
-  LPI(i, node, n, 1) {
-    if (c[i] < c[node - 1]) {
-      worth = false;
-      break;
-    }
-  }
-  if (worth) {
-    ans += c[node - 1];
-  }
-}
-*/
