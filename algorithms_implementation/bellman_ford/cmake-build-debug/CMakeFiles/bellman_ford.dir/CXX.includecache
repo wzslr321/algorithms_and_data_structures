@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/wiktor/Desktop/OI/algorithms_implementation/bellman_ford/main.cpp
+cstdlib
+-
+functional
+-
+iostream
+-
+optional
+-
+vector
+-
+limits
+-
+

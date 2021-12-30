@@ -3,80 +3,74 @@
 #include <iostream>
 #include <optional>
 #include <vector>
+#include <limits>
 
-template <typename T> class BellmanFord {
-  using optional_ref = std::optional<std::reference_wrapper<T>>;
+struct Edge {
+    int from, to;
+    double cost;
 
- private:
-  struct Edge {
-    T from, to;
-    T cost;
-    Edge(T f, T t, T c) : from(f), to(t), cost(c) {}
-  };
-  std::vector<std::vector<Edge>> graph;
+    Edge(int f, int t, double c) : from(f), to(t), cost(c) {}
+};
 
- public:
-  auto check_node(T n) -> std::optional<T> { std::cout << n; }
+auto create_graph(const size_t N) -> std::vector<std::vector<Edge>> {
+    auto graph = std::vector<std::vector<Edge>>{};
+    graph.resize(N);
+    return graph;
+};
 
-  auto create_graph(const size_t N) -> void { graph.resize(N); };
 
-  auto add_edge(T from, T to, T cost) -> void {
+auto add_edge(std::vector<std::vector<Edge>> &graph, int from, int to, int cost) -> void {
     graph[static_cast<size_t>(from)].push_back(Edge(from, to, cost));
-  }
+};
 
-  auto get_distances(size_t start) -> std::vector<optional_ref> {
-    auto V = graph.size();
-    std::vector<optional_ref> dist(V);
-    fill(dist.begin(), dist.end(), optional_ref{std::nullopt});
-    dist[start]->get() = 0;
+auto get_distances(std::vector<std::vector<Edge>> &graph, int V, int start) -> std::vector<std::optional<int>> {
+    std::vector<std::optional<int>> dist;
+    dist.resize(V);
+    fill(dist.begin(), dist.end(), std::optional<int>{std::nullopt});
+    dist[start] = 0.;
 
-    for (size_t i = 0; i < V - 1; ++i) {
-      for (const auto &edges : graph) {
-        for (const auto &edge : edges) {
-          auto from_i = static_cast<size_t>(edge.from);
-          auto to_i = static_cast<size_t>(edge.to);
-          T _{};
-          if (dist[to_i]->get() == _ ||
-              dist[from_i]->get() + edge.cost < dist[to_i]->get()) {
-            dist[to_i]->get() = dist[from_i]->get() + edge.cost;
-          }
+    for (auto i = 0; i < V - 1; i++) {
+        for (const auto &edges : graph) {
+            for (const auto &edge : edges) {
+                if (!dist[edge.to].has_value() || *dist[edge.from] + edge.cost < dist[edge.to]) {
+                    dist[edge.to] = *dist[edge.from] + edge.cost;
+                }
+            }
         }
-      }
     }
 
-    for (size_t i = 0; i < V - 1; ++i) {
-      for (const auto &edges : graph) {
-        for (const auto &edge : edges) {
-          auto from_i = static_cast<size_t>(edge.from);
-          auto to_i = static_cast<size_t>(edge.to);
-          T _{};
-          if (dist[from_i]->get() + edge.cost < dist[to_i]->get())
-            dist[to_i]->get() = _;
+    for (auto i = 0; i < V - 1; i++) {
+        for (const auto &edges : graph) {
+            for (const auto &edge : edges) {
+                if (dist[edge.from] == std::nullopt || *dist[edge.from] + edge.cost < dist[edge.to])
+                    dist[edge.to] = std::optional<int>{std::nullopt};
+            }
         }
-      }
     }
 
     return dist;
-  }
-};
+}
 
 // Checks if node is in negative cycle
 
 auto main() -> int {
-  BellmanFord<int> bellman_ford;
-  bellman_ford.create_graph(10);
-  bellman_ford.add_edge(0, 1, 4);
-  bellman_ford.add_edge(0, 6, 2);
-  bellman_ford.add_edge(1, 1, -1);
-  bellman_ford.add_edge(1, 2, 3);
-  bellman_ford.add_edge(6, 4, 2);
-  bellman_ford.add_edge(2, 3, 3);
-  bellman_ford.add_edge(2, 4, 1);
-  bellman_ford.add_edge(3, 5, -2);
-  bellman_ford.add_edge(4, 5, 2);
-  auto distances = bellman_ford.get_distances(0);
-  for (const auto &dist : distances) {
-    std::cout << dist->get() << '\n';
-  }
-  return EXIT_SUCCESS;
+    auto graph = create_graph(9);
+    add_edge(graph, 0, 1, 1.);
+    add_edge(graph, 1, 2, 1.);
+    add_edge(graph, 2, 4, 1.);
+    add_edge(graph, 4, 3, -3.);
+    add_edge(graph, 3, 2, 1.);
+    add_edge(graph, 1, 5, 4.);
+    add_edge(graph, 1, 6, 4.);
+    add_edge(graph, 5, 6, 5.);
+    add_edge(graph, 6, 7, 4.);
+    add_edge(graph, 5, 7, 3.);
+    auto distances = get_distances(graph, 9, 0);
+    for (const auto &dist : distances) {
+        if (dist == std::nullopt)
+            std::cout << "INFINITY\n";
+        else
+            std::cout << *dist << '\n';
+    }
+    return EXIT_SUCCESS;
 }
