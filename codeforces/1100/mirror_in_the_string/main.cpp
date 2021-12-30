@@ -22,21 +22,18 @@ auto main() -> int {
   int t;
   cin >> t;
   while (t--) {
-    int n, m, rb, cb, rd, cd;
-    cin >> n >> m >> rb >> cb >> rd >> cd;
-    int dirx = 1;
-    int diry = 1;
-    int ans = 0;
-    while (rb != rd && cb != cd) {
-      ++ans;
-      if (rb + 1 > m) dirx = -1;
-      if (rb - 1 < 0) dirx = 1;
-      rb += dirx;
-      if (cb + 1 > n) diry = -1;
-      if (cb - 1 < 0) diry = 1;
-      cb += diry;
-    }
-
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    int i = 0;
+    string ans = "";
+    while (s[i] > s[i + 1] || (i != 0 && s[i + 1] == s[i]))
+      ++i;
+    ans = s.substr(0, i + 1);
+    string rev = ans;
+    reverse(rev.begin(), rev.end());
+    ans += rev;
     cout << ans << '\n';
   }
 
