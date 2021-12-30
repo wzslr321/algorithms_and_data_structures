@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <iostream>
 #include <optional>
 #include <tuple>
@@ -6,12 +5,11 @@
 
 template<typename T>
 class BellmanFord {
-private:
+public:
     struct Edge {
-        size_t from, to;
+        size_t from;
+        size_t to;
         T cost;
-
-        Edge(size_t f, size_t t, T c) : from(f), to(t), cost(c) {}
     };
 
 protected:
@@ -19,11 +17,11 @@ protected:
     std::vector<std::optional<T>> distances;
 
 private:
-    auto find_shortest_paths(size_t start) -> void {
+    auto find_shortest_paths(const size_t start) -> void {
         auto vertices_size = graph.size();
         distances.resize(vertices_size);
         fill(distances.begin(), distances.end(), std::optional<T>{std::nullopt});
-        distances[start] = 0.;
+        distances[start] = 0;
 
         for (size_t i = 0; i < vertices_size - 1; i++) {
             for (const auto &edges : graph) {
@@ -53,10 +51,10 @@ public:
     };
 
     auto add_edge(const size_t from, const size_t to, const T cost) -> void {
-        graph[from].push_back(Edge(from, to, cost));
+        graph[from].emplace_back(Edge{from, to, cost});
     };
 
-    auto add_edges(const std::vector<std::tuple<size_t, size_t, T>> &edges)
+    auto add_edges(const std::vector<Edge> &edges)
     -> void {
         for (const auto &edge : edges) {
             auto[from, to, cost] = edge;
@@ -74,12 +72,17 @@ auto main() -> int {
     BellmanFord<int> bellman_ford{};
     size_t graph_size = 9;
     bellman_ford.create_graph(graph_size);
-    std::vector<std::tuple<size_t, size_t, int>> edges{
-            std::make_tuple(0, 1, 1), std::make_tuple(1, 2, 1),
-            std::make_tuple(2, 4, 1), std::make_tuple(4, 3, -3),
-            std::make_tuple(3, 2, 1), std::make_tuple(1, 5, 4),
-            std::make_tuple(1, 6, 4), std::make_tuple(5, 6, 5),
-            std::make_tuple(6, 7, 4), std::make_tuple(5, 7, 3),
+    std::vector<decltype(bellman_ford)::Edge> edges{
+            {0, 1, 1},
+            {1, 2, 1},
+            {2, 4, 1},
+            {4, 3, -3},
+            {3, 2, 1},
+            {1, 5, 4},
+            {1, 6, 4},
+            {5, 6, 5},
+            {6, 7, 4},
+            {5, 7, 3},
     };
     bellman_ford.add_edges(edges);
 
@@ -87,10 +90,9 @@ auto main() -> int {
     auto distances = bellman_ford.run(start);
 
     for (const auto &dist : distances) {
-        if (dist == std::nullopt)
+        if (!dist)
             std::cout << "INFINITY\n";
         else
             std::cout << *dist << '\n';
     }
-    return EXIT_SUCCESS;
 }
