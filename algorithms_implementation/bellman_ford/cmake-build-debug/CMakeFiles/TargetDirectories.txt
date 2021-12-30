@@ -1,3 +1,0 @@
-/Users/wiktor/Desktop/OI/algorithms_implementation/bellman_ford/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/wiktor/Desktop/OI/algorithms_implementation/bellman_ford/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/wiktor/Desktop/OI/algorithms_implementation/bellman_ford/cmake-build-debug/CMakeFiles/bellman_ford.dir
