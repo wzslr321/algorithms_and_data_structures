@@ -1,0 +1,75 @@
+#include <cstdlib>
+#include <functional>
+#include <iostream>
+#include <optional>
+#include <vector>
+
+template <typename T> class BellmanFord {
+ private:
+  struct Edge {
+    T cost, from;
+    std::optional<T> to;
+    Edge(T c, T f, std::optional<T> t) : cost(c), from(f), to(t) {}
+  };
+  std::vector<std::vector<Edge>> graph;
+  auto parse_distance(std::optional<T> dist) -> T {
+    return static_cast<T>(dist->get());
+  }
+
+ public:
+  auto check_node(T n) -> std::optional<T> { std::cout << n; }
+
+  auto create_graph(const size_t N) -> void { graph.resize(N); };
+
+  auto add_edge(T from, T to, T cost) -> void {
+    graph[static_cast<size_t>(from)].push_back(Edge(from, to, cost));
+  }
+
+  auto get_distances(size_t start) -> std::vector<std::optional<T>> {
+    auto V = graph.size();
+    std::vector<std::optional<T>> dist(V);
+    fill(dist.begin(), dist.end(), std::reference_wrapper<T>{std::nullopt});
+    dist[start] = 0;
+
+    for (size_t i = 0; i < V - 1; ++i) {
+      for (const auto &edges : graph) {
+        for (const auto &edge : edges) {
+          auto to = edge.to->get();
+          if (to != std::nullopt) to = parse_distance(to);
+          if (dist[to] == std::nullopt || dist[edge.from] + edge.cost < to)
+            dist[edge.to] = dist[to] + edge.cost;
+        }
+      }
+    }
+
+    /*
+    for (size_t i = 0; i < V - 1; ++i) {
+      for (const auto &edges : graph) {
+        for (const auto &edge : edges) {
+          if (dist[edge.from] + edge.cost < dist[edge.to])
+            dist[edge.to]->get() = std::nullopt;
+        }
+      }
+    }
+    */
+    return dist;
+  }
+};
+
+// Checks if node is in negative cycle
+
+auto main() -> int {
+  BellmanFord<int> bellman_ford;
+  bellman_ford.create_graph(10);
+  bellman_ford.add_edge(0, 1, 4);
+  bellman_ford.add_edge(0, 6, 2);
+  bellman_ford.add_edge(1, 1, -1);
+  bellman_ford.add_edge(1, 2, 3);
+  bellman_ford.add_edge(6, 4, 2);
+  bellman_ford.add_edge(2, 3, 3);
+  bellman_ford.add_edge(2, 4, 1);
+  bellman_ford.add_edge(3, 5, -2);
+  bellman_ford.add_edge(4, 5, 2);
+  auto distances = bellman_ford.get_distances(0);
+  return EXIT_SUCCESS;
+}
