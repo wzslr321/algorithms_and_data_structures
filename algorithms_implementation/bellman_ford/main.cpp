@@ -1,71 +1,94 @@
 #include <cstdlib>
-#include <functional>
 #include <iostream>
 #include <optional>
 #include <vector>
-#include <limits>
-
-struct Edge {
-    int from, to;
-    double cost;
-
-    Edge(int f, int t, double c) : from(f), to(t), cost(c) {}
-};
-
-auto create_graph(const size_t N) -> std::vector<std::vector<Edge>> {
-    auto graph = std::vector<std::vector<Edge>>{};
-    graph.resize(N);
-    return graph;
-};
+#include <tuple>
 
 
-auto add_edge(std::vector<std::vector<Edge>> &graph, int from, int to, int cost) -> void {
-    graph[static_cast<size_t>(from)].push_back(Edge(from, to, cost));
-};
+template<typename U>
+class BellmanFord {
+private:
+    struct Edge {
+        size_t from, to;
+        U cost;
 
-auto get_distances(std::vector<std::vector<Edge>> &graph, int V, int start) -> std::vector<std::optional<int>> {
-    std::vector<std::optional<int>> dist;
-    dist.resize(V);
-    fill(dist.begin(), dist.end(), std::optional<int>{std::nullopt});
-    dist[start] = 0.;
+        Edge(size_t f, size_t t, U c) : from(f), to(t), cost(c) {}
+    };
 
-    for (auto i = 0; i < V - 1; i++) {
-        for (const auto &edges : graph) {
-            for (const auto &edge : edges) {
-                if (!dist[edge.to].has_value() || *dist[edge.from] + edge.cost < dist[edge.to]) {
-                    dist[edge.to] = *dist[edge.from] + edge.cost;
+    std::vector<std::vector<Edge>> graph;
+    std::vector<std::optional<U>> distances;
+
+    auto find_shortest_paths(size_t start) -> void {
+        auto vertices_size = graph.size();
+        distances.resize(vertices_size);
+        fill(distances.begin(), distances.end(), std::optional<int>{std::nullopt});
+        distances[start] = 0.;
+
+        for (auto i = 0; i < vertices_size - 1; i++) {
+            for (const auto &edges : graph) {
+                for (const auto &edge : edges) {
+                    if (!distances[edge.to].has_value() || *distances[edge.from] + edge.cost < distances[edge.to]) {
+                        distances[edge.to] = *distances[edge.from] + edge.cost;
+                    }
+                }
+            }
+        }
+
+        for (auto i = 0; i < vertices_size - 1; i++) {
+            for (const auto &edges : graph) {
+                for (const auto &edge : edges) {
+                    if (distances[edge.from] == std::nullopt || *distances[edge.from] + edge.cost < distances[edge.to])
+                        distances[edge.to] = std::optional<int>{std::nullopt};
                 }
             }
         }
     }
 
-    for (auto i = 0; i < V - 1; i++) {
-        for (const auto &edges : graph) {
-            for (const auto &edge : edges) {
-                if (dist[edge.from] == std::nullopt || *dist[edge.from] + edge.cost < dist[edge.to])
-                    dist[edge.to] = std::optional<int>{std::nullopt};
-            }
+public:
+    auto create_graph(const size_t vertices_count) -> void {
+        graph.resize(vertices_count);
+    };
+
+    auto add_edge(const size_t from, const size_t to, const size_t cost) -> void {
+        graph[from].push_back(Edge(from, to, cost));
+    };
+
+    auto add_edges(const std::vector<std::tuple<size_t, size_t, U>> &edges) -> void {
+        for (const auto &edge : edges) {
+            auto[from, to, cost] = edge;
+            add_edge(from, to, cost);
         }
     }
 
-    return dist;
-}
 
-// Checks if node is in negative cycle
+    auto run(const size_t start) -> std::vector<std::optional<int>> {
+        find_shortest_paths(start);
+        return distances;
+    }
+
+};
 
 auto main() -> int {
-    auto graph = create_graph(9);
-    add_edge(graph, 0, 1, 1.);
-    add_edge(graph, 1, 2, 1.);
-    add_edge(graph, 2, 4, 1.);
-    add_edge(graph, 4, 3, -3.);
-    add_edge(graph, 3, 2, 1.);
-    add_edge(graph, 1, 5, 4.);
-    add_edge(graph, 1, 6, 4.);
-    add_edge(graph, 5, 6, 5.);
-    add_edge(graph, 6, 7, 4.);
-    add_edge(graph, 5, 7, 3.);
-    auto distances = get_distances(graph, 9, 0);
+    BellmanFord<int> bellman_ford{};
+    size_t graph_size = 9;
+    bellman_ford.create_graph(graph_size);
+    std::vector<std::tuple<size_t, size_t, int>> edges{
+            std::make_tuple(0, 1, 1),
+            std::make_tuple(1, 2, 1),
+            std::make_tuple(2, 4, 1),
+            std::make_tuple(4, 3, -3),
+            std::make_tuple(3, 2, 1),
+            std::make_tuple(1, 5, 4),
+            std::make_tuple(1, 6, 4),
+            std::make_tuple(5, 6, 5),
+            std::make_tuple(6, 7, 4),
+            std::make_tuple(5, 7, 3),
+    };
+    bellman_ford.add_edges(edges);
+
+    size_t start = 0;
+    auto distances = bellman_ford.run(start);
+
     for (const auto &dist : distances) {
         if (dist == std::nullopt)
             std::cout << "INFINITY\n";
