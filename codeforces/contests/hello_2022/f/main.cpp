@@ -15,57 +15,138 @@ using VI = vector<int>;
 using VS = vector<string>;
 using PI = pair<int, int>;
 
-std::vector<int> z;
-std::vector<int> o;
-std::vector<int> d;
-
-size_t iz = 0, io = 0, id = 0;
-int curri = -1;
-
 int n, a, b, c;
+string s;
+/*
+  if (z_count == 0 && o_count == 0 && d_count == 0) {
+    wyrzuc_zero();
+    licz();
+  }
+  if (z_count == 0 && o_count > 0 && d_count == 0 && curr == 2) {
+    wyrzuc_zero();
+    licz();
+  }
+  if (z_count > 0 && o_count == 0 && d_count == 0 && curr == 1) {
+    wyrzuc_zero();
+    licz();
+  }
+  */
+
+const int N = 10e5 + 7;
+vector<bool> visited(N);
+
+int z_count = 0;
+int o_count = 0;
+int d_count = 0;
+
+int curr = -1;
 
 ll ans = 0ll;
 
-auto licz() -> int {
-  if (z.size() > 0 && iz < z.size() && curri != 1) {
-    curri = 1;
-    ++iz;
-    cout << "WITAM a " << a << '\n';
-    ans += a;
-    return a;
-  } else {
-    if (o.size() > 0 && curri != 2 && io < o.size()) {
-      curri = 2;
-      ++io;
-      cout << "WITAM b " << b << '\n';
-      ans += b;
-      return b;
-    } else {
-      if (d.size() > 0 && curri != 3 && id < d.size()) {
-        curri = 3;
-        ++id;
-        cout << "WITAM c " << c << '\n';
-        ans -= c;
-        return c;
+void wyrzuc_zero() {
+  for (int i = 0; i < n; ++i) {
+    if (visited[i]) continue;
+    int j = i;
+    if (s[i] == '0') {
+      while (visited[j])
+        --j;
+      if (s[j] == '0') {
+        cout << "KURWA";
+        visited[j] = true, ++d_count;
       }
     }
   }
-
-  return -1;
 }
 
-auto solve() -> void {
-  cin >> n >> a >> b >> c;
-  string s;
-  cin >> s;
-  LPI(i, 0, s.size() - 1, 1) {
-    if (s[i] == '1' && s[i + 1] == '1') o.PB(i), ++i;
-    if (s[i] == '0' && s[i + 1] == '0') z.PB(i), ++i;
-    if (s[i] == '0' && s[i + 1] == '1') d.PB(i);
+auto szukaj() -> void {
+  LPI(i, 0, n, 1) {
+    if (visited[i]) continue;
+    if (s[i] == '0' && curr != 1) {
+      int j = i + 1;
+      while (j < n - 1 && visited[j])
+        ++j;
+      if (s[j] == '0') {
+        visited[i] = true, ++z_count;
+        break;
+      }
+    }
+    if (s[i] == '1' && curr != 2) {
+      int j = i + 1;
+      while (j < n - 1 && visited[j])
+        ++j;
+      if (s[j] == '1') {
+        visited[i] = true, ++o_count;
+        break;
+      }
+    }
   }
-  while (licz() != -1)
+}
+
+auto licz() -> bool {
+  if (z_count > 0 && curr != 1) {
+    curr = 1, ans += a, --z_count;
+    cout << "Zastąp zera\n";
+    cout << "Nowy string: ";
+    LPI(i, 0, n, 1) {
+      if (visited[i]) continue;
+      cout << s[i];
+    }
+    cout << '\n';
+    return true;
+  }
+  if (o_count > 0 && curr != 2) {
+    curr = 2, ans += b, --o_count;
+    cout << "Zastąp jedynki\n";
+    cout << "Nowy string: ";
+    LPI(i, 0, n, 1) {
+      if (visited[i]) continue;
+      cout << s[i];
+    }
+    cout << '\n';
+    return true;
+  }
+  if (curr != 3 && d_count > 0) {
+    if (z_count <= 0 && o_count <= 0) return false;
+    curr = 3, ans -= c, --d_count;
+    cout << "Wyrzuc zero\n";
+    return true;
+  }
+  int xd = z_count, xdd = o_count, xddd = d_count;
+  szukaj();
+  if (xd == z_count && xdd == o_count && xddd == d_count) {
+    wyrzuc_zero();
+    szukaj();
+  }
+
+  return false;
+}
+
+void zeruj() {
+  z_count = 0;
+  o_count = 0;
+  d_count = 0;
+  fill(visited.begin(), visited.end(), false);
+  curr = -1;
+  ans = 0;
+}
+
+auto solve(int opt) -> void {
+  zeruj();
+  LPI(i, 0, s.size() - 1, 1) {
+    if (opt == 1) {
+      if (s[i] == '1' && s[i + 1] == '1') {
+        ++o_count, ++i, visited[i] = true;
+        break;
+      }
+    } else {
+      if (s[i] == '0' && s[i + 1] == '0') {
+        ++z_count, ++i, visited[i] = true;
+        break;
+      }
+    }
+  }
+  while (licz())
     licz();
-  cout << ans << '\n';
 }
 
 auto main() -> int {
@@ -74,8 +155,15 @@ auto main() -> int {
 
   int _ = 1;
   cin >> _;
-  while (_--)
-    solve();
+  while (_--) {
+    cin >> n >> a >> b >> c >> s;
+    solve(1);
+    ll lans = ans;
+    cout << "=============\n";
+    solve(2);
+    cout << "First option: " << lans << " second option: " << ans << '\n';
+    cout << "Answer " << max(lans, ans) << '\n';
+  }
 
   return 0;
 }
