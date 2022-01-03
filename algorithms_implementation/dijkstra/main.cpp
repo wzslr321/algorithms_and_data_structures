@@ -24,7 +24,7 @@ private:
 
 
 public:
-    auto create_graph(size_t nodes_size) -> void {
+    auto create_graph(const size_t nodes_size) -> void {
         graph.resize(nodes_size);
         previous.resize(nodes_size);
     }
@@ -42,7 +42,7 @@ public:
     }
 
 
-    auto run(size_t start, size_t end) -> std::optional<int64_t> {
+    auto run(const size_t start, const size_t end) -> std::optional<int64_t> {
         auto N = graph.size();
         distances.resize(N);
         fill(distances.begin(), distances.end(), std::optional<int64_t>{});
@@ -79,7 +79,7 @@ public:
         return std::nullopt;
     }
 
-    auto reconstruct_path(size_t start, size_t end) -> std::vector<size_t> {
+    auto reconstruct_path(const size_t start, const size_t end) -> std::vector<size_t> {
         std::vector<size_t> path{};
         auto dist = run(start, end);
         if (!dist.has_value()) return path;
