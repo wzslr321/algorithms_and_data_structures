@@ -17,13 +17,18 @@ public:
     };
 private:
     std::vector<std::optional<int64_t>> distances;
-    std::vector<T> previous;
+    std::vector<size_t> previous;
     std::vector<std::vector<Edge>> graph;
 
-    static const int EPS = 1e6;
+    static const int EPS = static_cast<const int>(1e-6);
 
 
 public:
+    auto create_graph(size_t nodes_size) -> void {
+        graph.resize(nodes_size);
+        previous.resize(nodes_size);
+    }
+
     auto add_edge(const size_t from, const size_t to, const T cost) -> void {
         graph[from].emplace_back(Edge{from, to, cost});
     };
@@ -36,18 +41,11 @@ public:
         }
     }
 
-    auto reconstruct_path(size_t start, size_t end) -> std::vector<size_t> {
-        std::vector<size_t> path{};
-        auto distance = run(start, end);
-        if (distance == std::nullopt) return path;
-        for (size_t i = end; i >= start; i = previous[i]) path.push_back(i);
-        reverse(path.begin(), path.end());
-        return path;
-    }
 
     auto run(size_t start, size_t end) -> std::optional<int64_t> {
         auto N = graph.size();
         distances.resize(N);
+        fill(distances.begin(), distances.end(), std::optional<int64_t>{});
         distances[start] = 0;
 
         auto compare = [](Node left, Node right) {
@@ -58,7 +56,7 @@ public:
         std::priority_queue<Node, std::vector<Node>, decltype(compare)> pq(compare);
         pq.push(Node{start, 0});
 
-        std::vector<bool> visited(N);
+        bool visited[N];
         while (!pq.empty()) {
             auto node = pq.top();
             pq.pop();
@@ -70,7 +68,7 @@ public:
                 if (visited[edge.to]) continue;
 
                 auto new_distance = *distances[edge.from] + edge.cost;
-                if (new_distance < distances[edge.to]) {
+                if (!distances[edge.to] || new_distance < distances[edge.to]) {
                     previous[edge.to] = edge.from;
                     distances[edge.to] = new_distance;
                     pq.push(Node{edge.to, *distances[edge.to]});
@@ -81,15 +79,29 @@ public:
         return std::nullopt;
     }
 
+    auto reconstruct_path(size_t start, size_t end) -> std::vector<size_t> {
+        std::vector<size_t> path{};
+        auto dist = run(start, end);
+        if (!dist.has_value()) return path;
+        for (size_t i = end; i >= start; i = previous[i]) {
+            path.push_back(i);
+            if (i == start || i < 0 || i > graph.size()) break;
+        }
+        reverse(path.begin(), path.end());
+        return path;
+    }
+
 };
 
 auto main() -> int {
     Dijkstra<int> dijkstra{};
+    dijkstra.create_graph(9);
+
     std::vector<decltype(dijkstra)::Edge> edges{
             {0, 1, 1},
             {1, 2, 1},
             {2, 4, 1},
-            {4, 3, -3},
+            {4, 3, 3},
             {3, 2, 1},
             {1, 5, 4},
             {1, 6, 4},
@@ -98,10 +110,11 @@ auto main() -> int {
             {5, 7, 3},
     };
     dijkstra.add_edges(edges);
-    auto distance = dijkstra.run(0, 6);
-    !distance ? std::cout << "Unreachable\n" : std::cout << *distance << '\n';
-    auto path = dijkstra.reconstruct_path(0, 6);
+    auto distance = dijkstra.run(0, 3);
+    !distance ? std::cout << "Unreachable\n" : std::cout << "Distance: " << *distance << '\n';
+    auto path = dijkstra.reconstruct_path(0, 3);
+    std::cout << "Path:";
     for (auto edge : path)
-        std::cout << edge << " -> ";
+        std::cout << " -> " << edge;
     std::cout << '\n';
 }
