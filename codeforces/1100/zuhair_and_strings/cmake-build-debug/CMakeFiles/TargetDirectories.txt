@@ -1,0 +1,3 @@
+/Users/wiktor/Desktop/OI/codeforces/1100/zuhair_and_strings/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/wiktor/Desktop/OI/codeforces/1100/zuhair_and_strings/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/wiktor/Desktop/OI/codeforces/1100/zuhair_and_strings/cmake-build-debug/CMakeFiles/zuhair_and_strings.dir
