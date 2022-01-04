@@ -1,6 +1,7 @@
 .DS_Store
 **/**/bin/*
 **/**/cmake-build-debug/*
+**/**/idea/*
 learncpp/
 advent_of_code_2021/
 datastructures_implementations/
