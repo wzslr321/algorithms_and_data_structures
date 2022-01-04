@@ -24,6 +24,7 @@
   * <a href="https://github.com/wzslr321/Algorithms/tree/main/algorithms_implementation/bellman_ford"> Bellman-Ford</a>
   * <a href="https://github.com/wzslr321/Algorithms/tree/main/algorithms_implementation/dijkstra"> Dijkstra </a>
   * <a href="https://github.com/wzslr321/Algorithms/tree/main/algorithms_implementation/knapsack"> Knapsack </a>
+  * <a href="https://github.com/wzslr321/Algorithms/tree/main/algorithms_implementation/topological_sort"> Topoligcal Sort and DAG shortest path</a>
 
 
 <br>
