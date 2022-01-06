@@ -125,25 +125,15 @@ auto wielkosc_poddrzewka(int index) -> int {
   }
   return wielkosc;
 }
-auto penetruj_drzewo() -> void {
-  for (auto i = maks_wysokosc; i >= 0; --i) {
+
+auto skanuj() {
+  for (int i = 0; i <= maks_wysokosc; ++i) {
     for (size_t j = 0; j < wysokosci[i].size(); ++j) {
-      if (odwiedzony[wysokosci[i][j]]) continue;
-      auto obecny = pracownicy[wysokosci[i][j]];
-      if (obecny.value != 0) continue;
-      auto stary = pracownicy[obecny.parent];
-      for (int i = stary.value - 1; i > 0; --i) {
-        if (!pensje[i]) mozliwosci[obecny.index].push_back(i);
-      }
-      if (mozliwosci[obecny.index].size() == 1) {
-        pracownicy[obecny.index].value = mozliwosci[obecny.index][0];
-        pensje[mozliwosci[obecny.index][0]] = true;
-      }
-      if (mozliwosci[obecny.index].size() > 1) sprawdz_braci(obecny.index);
-      if (wielkosc_poddrzewka(stary.index) ==
-          static_cast<int>(mozliwosci[obecny.index].size())) {
-        pracownicy[obecny.index].value = pracownicy[stary.index].value - 1;
-        pensje[pracownicy[stary.index].value - 1] = true;
+      auto node = pracownicy[wysokosci[i][j]];
+      if (node.value != 0) continue;
+      if (wielkosc_poddrzewka(node.index) == pracownicy[node.parent].value) {
+        node.value = pracownicy[node.parent].value - 1;
+        pensje[node.value] = true;
       }
     }
   }
@@ -158,7 +148,7 @@ auto main() -> int {
   aktualizuj_wysokosc();
   znajdz_listki();
   penetruj_listki();
-  penetruj_drzewo();
+  skanuj();
 
   LPI(i, 1, n + 1, 1) { cout << pracownicy[i].value << '\n'; }
 
