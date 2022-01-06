@@ -117,7 +117,14 @@ auto penetruj_listki() -> void {
   }
 }
 
-auto wielkosc_poddrzewka(int index) {}
+auto wielkosc_poddrzewka(int index) -> int {
+  int wielkosc = 0;
+  for (auto dziecko : pracownicy[index].children) {
+    ++wielkosc;
+    wielkosc += wielkosc_poddrzewka(dziecko.index);
+  }
+  return wielkosc;
+}
 auto penetruj_drzewo() -> void {
   for (auto i = maks_wysokosc; i >= 0; --i) {
     for (size_t j = 0; j < wysokosci[i].size(); ++j) {
@@ -133,6 +140,11 @@ auto penetruj_drzewo() -> void {
         pensje[mozliwosci[obecny.index][0]] = true;
       }
       if (mozliwosci[obecny.index].size() > 1) sprawdz_braci(obecny.index);
+      if (wielkosc_poddrzewka(stary.index) ==
+          static_cast<int>(mozliwosci[obecny.index].size())) {
+        pracownicy[obecny.index].value = pracownicy[stary.index].value - 1;
+        pensje[pracownicy[stary.index].value - 1] = true;
+      }
     }
   }
 }
