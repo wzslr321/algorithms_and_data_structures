@@ -40,29 +40,23 @@ auto solve() -> void {
     cin >> a >> b >> c >> d >> h;
     graph[{a, b}].PB({{c, d}, h});
   }
-  // get edges on first floor
-  LPI(i, 2, m + 1, 1) {
-    auto current = graph[{1, i}];
-    if (!current.empty()) {
-      graph[{1, 1}].PB({{1, i}, abs(1 - i) * hx[1]});
-    }
-  }
 
   pq.push({1, 1});
   while (!pq.empty()) {
     curr = pq.top();
     pq.pop();
-    if (graph[curr].empty()) {
-      LPI(i, 1, m + 1, 1) {
-        auto current = graph[{curr.first, i}];
-        if (!current.empty() || (curr.first == n && i == m)) {
+
+    LPI(i, 1, m + 1, 1) {
+      auto current = graph[{curr.first, i}];
+      if ((!current.empty() || (curr.first == n && i == m))) {
+        if (i != curr.second) {
           graph[curr].PB(
               {{curr.first, i}, abs(curr.second - i) * hx[curr.first]});
         }
       }
     }
+
     LPI(i, 0, graph[curr].size(), 1) {
-      // print(curr, i, graph);
       curr_el = graph[curr][i].first;
       curr_w = graph[curr][i].second;
       if (!dist[curr_el] || dist[curr] + curr_w < dist[curr_el]) {
@@ -90,10 +84,4 @@ auto main() -> int {
     solve();
 
   return 0;
-}
-
-void print(PI p, int i, unordered_map<PI, vector<pair<PI, int>>> &graph) {
-  cout << "From: (" << p.first << ',' << p.second << ") to: ("
-       << graph[p][i].first.first << ',' << graph[p][i].first.second
-       << ") with cost of: " << graph[p][i].second << '\n';
 }
