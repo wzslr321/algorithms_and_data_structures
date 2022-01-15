@@ -24,30 +24,20 @@ namespace std {
     };
 } // namespace std
 
-
-auto dist = unordered_map<PI, ll>();
-auto graph = unordered_map<PI, vector<pair<PI, int>>>();
-int n, m, k, a, b, c, d, h;
-vector<int> hx(n + 1);
-priority_queue<PI> pq;
-PI curr, curr_el;
-int curr_w;
-
-void print(PI p, int i) {
-    cout << "From: (" << p.first << ',' << p.second << ") to: (" << graph[p][i].first.first << ','
-         << graph[p][i].first.second
-         << ") with cost of: " << graph[p][i].second << '\n';
-}
+void print(PI p, int i, unordered_map<PI, vector<pair<PI, int>>> &graph);
 
 auto solve() -> void {
+    auto dist = unordered_map<PI, ll>();
+    auto graph = unordered_map<PI, vector<pair<PI, int>>>();
+    int n, m, k, a, b, c, d, h;
+    priority_queue<PI> pq;
+    PI curr, curr_el;
+    int curr_w;
     cin >> n >> m >> k;
-    LPI(i, 1, n + 1, 1)cin >> hx[i];
+    vector<int> hx(n + 1);
+    LPI(i, 1, n + 1, 1) cin >> hx[i];
 
-    cin >> a >> b >> c >> d >> h;
-    graph[{1, 1}].PB({{a, b}, abs(1 - d) * hx[1]});
-    graph[{a, b}].PB({{c, d}, h});
-
-    LPI(i, 1, k, 1) {
+    LPI(i, 0, k, 1) {
         cin >> a >> b >> c >> d >> h;
         graph[{a, b}].PB({{c, d}, h});
     }
@@ -65,7 +55,7 @@ auto solve() -> void {
             }
         }
         LPI(i, 0, graph[curr].size(), 1) {
-            // print(curr, i);
+            // print(curr, i, graph);
             curr_el = graph[curr][i].first;
             curr_w = graph[curr][i].second;
             if (!dist[curr_el] || dist[curr] + curr_w < dist[curr_el]) {
@@ -93,4 +83,10 @@ auto main() -> int {
         solve();
 
     return 0;
+}
+
+void print(PI p, int i, unordered_map<PI, vector<pair<PI, int>>> &graph) {
+    cout << "From: (" << p.first << ',' << p.second << ") to: (" << graph[p][i].first.first << ','
+         << graph[p][i].first.second
+         << ") with cost of: " << graph[p][i].second << '\n';
 }
