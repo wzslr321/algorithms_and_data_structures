@@ -30,15 +30,14 @@ auto solve() -> void {
   }
   LPI(i, 1, n, 1) {
     int j = i;
-    while (j > 0 && monsters[i] - monsters[j - 1] + 1 <= health[i])
+    while (monsters[i] - monsters[j] + 1 < health[i])
       --j;
 
     int a1, nc, sn = 0, an;
     if (j == i) {
       a1 = 1, nc = health[i], an = health[i];
     } else {
-      a1 = health[j], nc = monsters[i] - monsters[j] + 1, an = a1 + (nc - 1);
-      LPI(xd, j, i, 1) { sn -= health[xd]; }
+      a1 = health[j], nc = monsters[i] - monsters[j] + 1, an = mana[i];
     }
 
     sn += ((a1 + an) / 2.) * nc;
