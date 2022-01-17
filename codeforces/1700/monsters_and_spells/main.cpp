@@ -1,4 +1,4 @@
-#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC optimize("Ofast,unroll-loops")
 
 #include <bits/stdc++.h>
 
@@ -7,55 +7,63 @@ using namespace std;
 #define ll long long
 
 #define PB push_back
-#define MP make_pair
 
 #define LPI(i, a, b, d) for (int i = a; i < (int)b; i += d)
+#define CZYT(n, arr)                                                           \
+  for (int i = 0; i < n; ++i)                                                  \
+  cin >> arr[i]
 
 using VI = vector<int>;
-using VS = vector<string>;
 using PI = pair<int, int>;
 
-const int N = 105;
-int n;
-int monsters[N];
-int health[N];
+// holds info about its sequence length (how long it have to cast, to kill
+// monster) So, when we get to the point, where
+// charging spell from previous monster is not enough, we have to extend
+// previous sequences from proper monster.
+
+// Sn = ((a1 + an) / 2) * n;
+// n = health[i]
+// an = monsters[i];
+// Sn = ?
+// an = a1 + (n - 1) * r;
+// a1 = monsters[i] - (n - 1) * r => a1 = monsters[i] - (health[i] - 1) * 1;
+// Sn = ((a1 + an) / 2) * n;
+// well, that's kidna right, but when we have to keep casting spell to have
+// enough damage to kill monster, our a1 and n will change.
 
 auto solve() -> void {
-  int ans = 0;
-  unordered_map<int, int> mtr;
+  int n;
   cin >> n;
-  LPI(i, 0, n, 1) cin >> monsters[i];
-  LPI(i, 0, n, 1) cin >> health[i];
-  LPI(i, 0, n, 1) {
-    int sum = 1;
-    int curr = 1;
-    int in = 1;
-    int j = monsters[i] - 1;
-    while (curr < health[i]) {
-      ++in;
-      --j, ++curr;
-      sum += curr;
-    }
-    j = monsters[i] - 1;
-    int do_wymiany = 0;
-    bool zawrotka = false;
-    int y;
-    LPI(i, 0, in, 1) {
-      if (mtr[j - i] && mtr[j - i] > curr) {
-        zawrotka = true;
-        y = i;
-        break;
-      }
-      ++do_wymiany;
-      mtr[j - i] = curr;
-      --curr;
-    }
-    if (zawrotka) {
-      LPI(i, 1, do_wymiany + 1, 1) { mtr[j - y + i] = mtr[j - y + i - 1] + 1; }
-    }
+  int monsters[n];
+  int health[n];
+  int mana[n];
+  // First monster spawns at e.g. 4th sec, so subsequence length will surely
+  // also be 4.
+  CZYT(n, monsters);
+  CZYT(n, health);
+  {
+    auto a1 = 1, n = health[0], an = health[0];
+    auto sn = ((a1 + an) / 2.) * n;
+    mana[0] = sn;
   }
-  for (const auto [key, value] : mtr)
-    ans += value;
+  LPI(i, 1, n, 1) {
+    int j = i;
+    while (monsters[i] - monsters[j - 1] + 1 < health[i])
+      --j;
+
+    int a1, nc;
+    if (j == i)
+      a1 = 1, nc = health[i];
+    else
+      a1 = health[j], nc = health[i] - health[j];
+
+    auto an = health[i];
+    auto sn = ((a1 + an) / 2.) * nc;
+    mana[i] = sn;
+  }
+
+  int ans = 0;
+  LPI(i, 0, n, 1) ans += mana[i];
   cout << ans << '\n';
 }
 
