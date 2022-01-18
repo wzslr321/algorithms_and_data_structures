@@ -16,37 +16,27 @@ using namespace std;
 using VI = vector<int>;
 using PI = pair<int, int>;
 
+ll n;
+const int N = 105;
+ll monsters[N], health[N];
+
 auto solve() -> void {
-  int n;
   cin >> n;
-  int monsters[n], health[n], mana[n];
+  LPI(i, 1, n + 1, 1) cin >> monsters[i];
+  LPI(i, 1, n + 1, 1) cin >> health[i];
 
-  CZYT(n, monsters);
-  CZYT(n, health);
-  {
-    auto a1 = 1, n = health[0], an = health[0];
-    auto sn = ((a1 + an) / 2.) * n;
-    mana[0] = sn;
-  }
-  LPI(i, 1, n, 1) {
-    int j = i;
-    while (j > 0 && monsters[i] - monsters[j - 1] + 1 <= health[i])
-      --j;
-
-    int a1, nc, sn = 0, an;
-    if (j == i) {
-      a1 = 1, nc = health[i], an = health[i];
+  ll ans = 0LL, prev = n;
+  for (int i = n; i >= 1; --i) {
+    if (monsters[i] - monsters[i - 1] >= health[i]) {
+      int indep_needed = monsters[i] - health[i];
+      ans += (monsters[prev] - indep_needed + 1) *
+             (monsters[prev] - indep_needed) / 2;
+      prev = i - 1;
     } else {
-      a1 = health[j], nc = monsters[i] - monsters[j] + 1, an = a1 + (nc - 1);
-      LPI(xd, j, i, 1) { sn -= health[xd]; }
+      health[i - 1] =
+          max(health[i - 1], health[i] - (monsters[i] - monsters[i - 1]));
     }
-
-    sn += ((a1 + an) / 2.) * nc;
-    mana[i] = sn;
   }
-
-  int ans = 0;
-  LPI(i, 0, n, 1) { ans += mana[i]; }
   cout << ans << '\n';
 }
 
