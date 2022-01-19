@@ -16,38 +16,44 @@ using namespace std;
 using VI = vector<int>;
 using PI = pair<int, int>;
 
-const int N = (1 << 17) + 7;
-int seq[2 * N];
+// const int N = (1 << 17) + 7;
 int n, m;
 int p, b;
 int seq_size;
 
-auto query() -> void { cin >> p >> b; }
-
-auto build_ors() -> void {
-  for (int i = seq_size - 1; i >= seq_size / 2; --i) {
-    seq[i] = seq[i << 1] | seq[i << 1 | 1];
-    cout << "OR: " << seq[i] << ' ' << i << '\n';
-  }
-}
-
-auto build_xors() -> void {
-  for (int i = (seq_size / 2) - 1; i >= 1; --i) {
-    seq[i] = seq[i << 1] ^ seq[i << 1 | 1];
-  }
-}
-
 auto solve() -> void {
   cin >> n >> m;
   seq_size = 1 << n;
+  vector<int> seq(2 * seq_size);
 
+  // seed the bottom
   for (int i = (1 << n); i < 2 * (1 << n); ++i)
     cin >> seq[i];
-  build_ors();
-  build_xors();
+  // build ors
+  for (int i = seq_size - 1; i >= seq_size / 2; --i) {
+    seq[i] = seq[i << 1] | seq[i << 1 | 1];
+  }
+  // build xors
+  for (int i = (seq_size / 2) - 1; i >= 1; --i) {
+    seq[i] = seq[i << 1] ^ seq[i << 1 | 1];
+  }
 
-  while (m--)
-    query();
+  while (m--) {
+    cin >> p >> b;
+    auto bot = 1 << n;
+    int in = bot + p - 1;
+    seq[in] = b;
+    in -= in & 1;
+    seq[in >> 1] = seq[in] | seq[in | 1];
+    for (int i = (seq_size / 2) - 1; i >= 1; --i) {
+      in >>= 1;
+      {
+        in -= in & 1;
+        seq[in >> 1] = seq[in] ^ seq[in + 1];
+      }
+    }
+    cout << seq[1] << '\n';
+  }
 }
 
 auto main() -> int {
