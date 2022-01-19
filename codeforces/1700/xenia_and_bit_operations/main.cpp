@@ -17,41 +17,36 @@ using VI = vector<int>;
 using PI = pair<int, int>;
 
 // const int N = (1 << 17) + 7;
-int n, m;
-int p, b;
 int seq_size;
+vector<int> seq(1 << 18);
+
+auto modify(int p, int b) -> void {
+  seq[p += seq_size - 1] = b;
+  seq[p >> 1] = seq[p] | seq[p ^ 1];
+  p >>= 1;
+  for (; p > 1; p >>= 1) {
+    seq[p >> 1] = seq[p] ^ seq[p ^ 1];
+  }
+}
 
 auto solve() -> void {
+  int n, m;
   cin >> n >> m;
   seq_size = 1 << n;
-  vector<int> seq(2 * seq_size);
 
-  // seed the bottom
-  for (int i = (1 << n); i < 2 * (1 << n); ++i)
+  for (int i = seq_size; i < (seq_size << 1); ++i)
     cin >> seq[i];
-  // build ors
   for (int i = seq_size - 1; i >= seq_size / 2; --i) {
     seq[i] = seq[i << 1] | seq[i << 1 | 1];
   }
-  // build xors
   for (int i = (seq_size / 2) - 1; i >= 1; --i) {
     seq[i] = seq[i << 1] ^ seq[i << 1 | 1];
   }
 
   while (m--) {
+    int p, b;
     cin >> p >> b;
-    auto bot = 1 << n;
-    int in = bot + p - 1;
-    seq[in] = b;
-    in -= in & 1;
-    seq[in >> 1] = seq[in] | seq[in | 1];
-    for (int i = (seq_size / 2) - 1; i >= 1; --i) {
-      in >>= 1;
-      {
-        in -= in & 1;
-        seq[in >> 1] = seq[in] ^ seq[in + 1];
-      }
-    }
+    modify(p, b);
     cout << seq[1] << '\n';
   }
 }
