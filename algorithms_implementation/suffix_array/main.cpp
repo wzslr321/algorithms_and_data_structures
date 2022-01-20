@@ -2,14 +2,18 @@
 #include <utility>
 #include <vector>
 
-auto main() -> int {
-  std::string s;
-  std::cin >> s;
-  s += '$';
-  size_t N = s.size();
+// to make algorithm more clear, there are no conflicts anyway
+using namespace std;
 
-  std::vector<int> positions(N), classes(N);
-  std::vector<std::pair<char, int>> arr(N);
+string s;
+size_t N;
+
+auto main() -> int {
+  cin >> s;
+  s += '$', N = s.size();
+
+  vector<int> positions(N), classes(N);
+  vector<pair<char, int>> arr(N);
 
   for (size_t i = 0; i < N; ++i)
     arr[i] = {s[i], i};
@@ -30,7 +34,7 @@ auto main() -> int {
   int k = 0;
   while ((1 << k) < N) {
 
-    std::vector<std::pair<std::pair<int, int>, int>> parts(N);
+    vector<pair<pair<int, int>, int>> parts(N);
 
     for (size_t i = 0; i < N; ++i) {
       parts[i] = {{classes[i], classes[i + (1 << k) % N]}, i};
@@ -52,7 +56,7 @@ auto main() -> int {
   }
 
   for (size_t i = 0; i < N; ++i) {
-    std::cout << positions[i] << ' ' << s.substr(positions[i], N - positions[i])
-              << '\n';
+    cout << positions[i] << ' ' << s.substr(positions[i], N - positions[i])
+         << '\n';
   }
 }
