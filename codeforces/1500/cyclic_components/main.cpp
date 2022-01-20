@@ -30,15 +30,11 @@ auto dfs(int s) -> void {
   while (!st.empty()) {
     auto curr = st.top();
     st.pop();
-    if (!visited[curr]) ++v_count;
-    visited[curr] = true;
-    if (ver[curr].size() != 2) {
-      bad = true;
-    }
+    if (visited[curr] == true) continue;
+    ++v_count, visited[curr] = true;
+    if (ver[curr].size() != 2) bad = true;
     for (auto e : ver[curr]) {
-      if (visited[e] != true) {
-        st.push(e);
-      }
+      if (!visited[e]) st.push(e);
     }
   }
   if (!bad) ++ans;
