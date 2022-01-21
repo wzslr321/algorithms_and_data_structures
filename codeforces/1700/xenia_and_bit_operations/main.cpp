@@ -22,10 +22,15 @@ vector<int> seq(1 << 18);
 
 auto modify(int p, int b) -> void {
   seq[p += seq_size - 1] = b;
-  seq[p >> 1] = seq[p] | seq[p ^ 1];
-  p >>= 1;
+  bool isor = true;
   for (; p > 1; p >>= 1) {
-    seq[p >> 1] = seq[p] ^ seq[p ^ 1];
+    if (isor) {
+      seq[p >> 1] = seq[p] | seq[p ^ 1];
+      isor = false;
+    } else {
+      seq[p >> 1] = seq[p] ^ seq[p ^ 1];
+      isor = true;
+    }
   }
 }
 
@@ -34,13 +39,21 @@ auto solve() -> void {
   cin >> n >> m;
   seq_size = 1 << n;
 
-  for (int i = seq_size; i < (seq_size << 1); ++i)
-    cin >> seq[i];
-  for (int i = seq_size - 1; i >= seq_size / 2; --i) {
-    seq[i] = seq[i << 1] | seq[i << 1 | 1];
-  }
-  for (int i = (seq_size / 2) - 1; i >= 1; --i) {
-    seq[i] = seq[i << 1] ^ seq[i << 1 | 1];
+  for (int i = 0; i < seq_size; ++i)
+    cin >> seq[seq_size + i];
+
+  bool isor = true;
+  int curr = seq_size;
+  while (curr > 1) {
+    for (int i = curr - 1; i >= curr / 2; --i) {
+      if (isor) {
+        seq[i] = seq[i << 1] | seq[i << 1 | 1];
+      } else {
+        seq[i] = seq[i << 1] ^ seq[i << 1 | 1];
+      }
+    }
+    isor = !isor;
+    curr >>= 1;
   }
 
   while (m--) {
