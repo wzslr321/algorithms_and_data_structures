@@ -13,7 +13,7 @@ int n, m, k;
 
 const int N = 1e5 + 9;
 vector<vector<TUP>> paths(N);
-vector<pair<int64_t, bool>> dist(N, {1e9 + 7, false});
+vector<pair<int64_t, bool>> dist(N, {LLONG_MAX, false});
 priority_queue<int> pq;
 VI trains(N, 0);
 
@@ -40,14 +40,14 @@ auto solve() -> void {
     auto curr = pq.top();
     pq.pop();
     for (size_t i = 0; i < paths[curr].size(); ++i) {
-      auto [dest, weight, is_t] = paths[curr][i];
-      auto curr_dist = dist[curr].first;
-      auto dest_dist = dist[dest].first;
+      auto [dest, weight, is_train] = paths[curr][i];
 
-      bool c1 = curr_dist + weight < dest_dist;
-      bool c2 = curr_dist + weight == dest_dist && !is_t && dist[dest].second;
+      bool c1 = dist[curr].first + weight < dist[dest].first;
+      bool c2 = dist[curr].first + weight == dist[dest].first && !is_train &&
+                dist[dest].second;
+
       if (c1 || c2) {
-        dest_dist = curr_dist + weight;
+        dist[dest].first = dist[curr].first + weight;
         dist[dest].second = is_train;
         pq.push(dest);
       }
