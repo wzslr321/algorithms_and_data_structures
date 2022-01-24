@@ -26,11 +26,11 @@ auto solve() -> void {
   LPI(i, 1, n + 1, 1) cin >> health[i];
 
   ll ans = 0LL, prev = n;
-  for (int i = n; i >= 1; --i) {
+  for (int i = n; i >= 1; i--) {
     if (monsters[i] - monsters[i - 1] >= health[i]) {
-      int indep_needed = monsters[i] - health[i];
-      ans += (monsters[prev] - indep_needed + 1) *
-             (monsters[prev] - indep_needed) / 2;
+      int indp_need = monsters[i] - health[i];
+      ans +=
+          (monsters[prev] - indp_need + 1) * (monsters[prev] - indp_need) / 2;
       prev = i - 1;
     } else {
       health[i - 1] =

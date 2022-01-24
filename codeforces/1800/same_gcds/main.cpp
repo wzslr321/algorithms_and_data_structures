@@ -7,7 +7,13 @@ using namespace std;
 using VI = vector<int>;
 using PI = pair<int, int>;
 
-auto solve() -> void {}
+constexpr int N = 1e5 + 9;
+int arr[N];
+
+auto solve() -> void {
+  int64_t a, m;
+  cin >> a >> m;
+}
 
 auto main() -> int {
   ios::sync_with_stdio(false);
