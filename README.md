@@ -71,6 +71,8 @@ for **Algorithms & Data Structures**. <br><br>
 - [1828. Queries on Number of Points Inside a Circle]()
 - [2130. Maximum Twin Sum of a Linked List]()
 - [2181. Merge Nodes in Between Zeros]()
+- [2134. Minimum Swaps to Group All 1's Together II]()
+- [2428. Maximum Sum of an Hourglass]()
 - [2616. Minimze the Maximum Difference on Pairs]()
 
 > Hard
