@@ -1,6 +1,0 @@
-cmake_minimum_required(VERSION 3.19)
-project(1255_maximum_score_words_formed_by_letters)
-
-set(CMAKE_CXX_STANDARD 20)
-
-add_executable(1255_maximum_score_words_formed_by_letters main.cpp)
