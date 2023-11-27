@@ -10,3 +10,6 @@ playground/
 mistrz_programowania/
 importantes/
 Elaborated/
+
+**/**/target/
+**/cargo.lock
