@@ -13,3 +13,4 @@ Elaborated/
 
 **/**/target/
 **/cargo.lock
+**/out/
