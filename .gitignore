@@ -1,7 +1,6 @@
 .DS_Store
 **/**/bin/*
 **/**/cmake-build-debug/*
-**/**/idea/*
 learncpp/
 advent_of_code_2021/
 datastructures_implementations/
@@ -14,3 +13,9 @@ Elaborated/
 **/**/target/
 **/cargo.lock
 **/out/
+**/too_easy/
+contests/
+random/
+not_rated_yet/
+**/.idea/
+**/not_rated_yet/

@@ -1,12 +1,24 @@
 ## Overview
 
-This repository contains C++ (and a little bit of Golang) code responsible 
+This repository contains code (mostly C++) responsible 
 for **Algorithms & Data Structures**. <br><br>
-`Algorithms` directory contains implementation of popular algorithms - like *Dijkstra* - along with the explanation in corresponding *README* file. <br><br>
-`Data Structures` directory contains implementation of popular data structures - like *Red-Black-Tree* - along with the explanation in corresponding *Readme* file. <br><br>
-`Problems` directory contains my solutions for **Leetcode** problems - medium or hard. I didn't want to slam the repository with easy ones nor the obfuscated from *Codeforces*. Although these can be found on my profiles, linked in the very bottom of this readme.
+`Algorithms` directory contains implementations of popular algorithms, and possibly its explanations in corresponding *Readme* file. <br><br>
+`Data Structures` directory contains implementation of data structures - like *Red-Black-Tree* - and possibly its explanations in corresponding *Readme* file. <br><br>
+`Problems` directory contains my solutions for **Leetcode** & **Codeforces** problems. <br><br>
+`Library` directory contains code for competitive programming related patterns, which is my *cheatsheet*. <br><br>
+`Cpp` directory contains notes & code related to C++ itself, not any specific algorithm.
 
 ---
+
+## Table of contents
+- Algorithms
+- Data Structures
+- Problems
+  - Leetcode Medium
+  - Leetcode Hard
+  - Codeforces >= 1200, sorted descending
+- Library
+- Cpp
 
 ### Algorithms
 - [Bellman-Ford](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/algorithms/bellman_ford)
@@ -24,7 +36,7 @@ for **Algorithms & Data Structures**. <br><br>
 
 ### Problems
 
->  Medium 
+>  Leetcode Medium 
 
 - [3. Longest Substring Without Repeating Characters](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-3) 
 - [6. Zigzag Conversion](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-6) 
@@ -73,9 +85,17 @@ for **Algorithms & Data Structures**. <br><br>
 - [2428. Maximum Sum of an Hourglass](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-2428)
 - [2616. Minimze the Maximum Difference on Pairs](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-2616)
 
-> Hard
+> Leetcode Hard
 - [42. Trapping Rain Water](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-42)
 - [239. Sliding Window Maximum](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-239)
+
+> Codeforces, ranked >= 1200, sorted descending
+- [1623C Balanced Stone Heaps { 1600 | binary search | greedy }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1623c)
+- [165B Burning Midnight Oil { 1500 | binary search | implementation }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-165b/) 
+- [279B Books { 1400 | binary search | brute force | implementation | two pointers }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-279b)
+- [1612C Chat Ban { 1300 | binary search | math}](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1612c)
+- [474B Worms { 1200 | binary search | implementation }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-474b)
+- [1221C Perfect Team { 1200 | binary search | math}](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1221c)
 
 ---
 
