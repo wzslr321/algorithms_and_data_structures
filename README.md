@@ -11,14 +11,14 @@ for **Algorithms & Data Structures**. <br><br>
 ---
 
 ## Table of contents
-- [Algorithms](https://github.com/wzslr321/algorithms_and_data_structures/edit/main/README.md#algorithms)
-- [Data Structures](https://github.com/wzslr321/algorithms_and_data_structures/edit/main/README.md#data-structures)
-- [Problems](https://github.com/wzslr321/algorithms_and_data_structures/edit/main/README.md#problems)
-  - [Leetcode Medium](https://github.com/wzslr321/algorithms_and_data_structures/edit/main/README.md#leetcode-medium)
-  - [Leetcode Hard](https://github.com/wzslr321/algorithms_and_data_structures/edit/main/README.md#leetcode-hard)
-  - [Codeforces](https://github.com/wzslr321/algorithms_and_data_structures/edit/main/README.md#codeforces) 
-- [Library](https://github.com/wzslr321/algorithms_and_data_structures/edit/main/README.md#library)
-- [Cpp](https://github.com/wzslr321/algorithms_and_data_structures/edit/main/README.md#cpp)
+- [Algorithms](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#algorithms)
+- [Data Structures](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#data-structures)
+- [Problems](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#problems)
+  - [Leetcode Medium](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#leetcode-medium)
+  - [Leetcode Hard](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#leetcode-hard)
+  - [Codeforces](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#codeforces) 
+- [Library](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#library)
+- [Cpp](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#cpp)
 
 
 ---
