@@ -106,6 +106,7 @@ ranked >= 1200, sorted descending
 
 
 - [1623C Balanced Stone Heaps { 1600 | binary search | greedy }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1623c)
+- [982C Cut 'em All{ 1500 | dfs and similar | dp | graphs | greedy | trees }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-982c)
 - [165B Burning Midnight Oil { 1500 | binary search | implementation }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-165b/) 
 - [279B Books { 1400 | binary search | brute force | implementation | two pointers }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-279b)
 - [1612C Chat Ban { 1300 | binary search | math}](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1612c)
