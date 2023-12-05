@@ -11,20 +11,25 @@ for **Algorithms & Data Structures**. <br><br>
 ---
 
 ## Table of contents
-- Algorithms
-- Data Structures
-- Problems
-  - Leetcode Medium
-  - Leetcode Hard
-  - Codeforces >= 1200, sorted descending
-- Library
-- Cpp
+- [Algorithms](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#algorithms)
+- [Data Structures](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#data-structures)
+- [Problems](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#problems)
+  - [Leetcode Medium](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#leetcode-medium)
+  - [Leetcode Hard](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#leetcode-hard)
+  - [Codeforces](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#codeforces) 
+- [Library](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#library)
+- [Cpp](https://github.com/wzslr321/algorithms_and_data_structures/tree/main#cpp)
+
+
+---
 
 ### Algorithms
 - [Bellman-Ford](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/algorithms/bellman_ford)
 - [Dijkstra](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/algorithms/dijkstra)
 - [Knapsack](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/algorithms/knapsack)
 - [Topological Sort](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/algorithms/topological_sort)
+
+---
 
 ### Data Structures
 - [Doubly Linked List](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/data_structures/doubly_linked_list)
@@ -34,9 +39,11 @@ for **Algorithms & Data Structures**. <br><br>
 - [AVL Tree](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/data_structures/avl_tree)
 - [Red-Black Tree](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/data_structures/red_black_tree)
 
+---
+
 ### Problems
 
->  Leetcode Medium 
+####  Leetcode Medium 
 
 - [3. Longest Substring Without Repeating Characters](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-3) 
 - [6. Zigzag Conversion](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-6) 
@@ -85,11 +92,19 @@ for **Algorithms & Data Structures**. <br><br>
 - [2428. Maximum Sum of an Hourglass](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-2428)
 - [2616. Minimze the Maximum Difference on Pairs](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-2616)
 
-> Leetcode Hard
+---
+
+#### Leetcode Hard
+
 - [42. Trapping Rain Water](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-42)
 - [239. Sliding Window Maximum](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/leetcode-239)
 
-> Codeforces, ranked >= 1200, sorted descending
+---
+
+#### Codeforces
+ranked >= 1200, sorted descending
+
+
 - [1623C Balanced Stone Heaps { 1600 | binary search | greedy }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1623c)
 - [165B Burning Midnight Oil { 1500 | binary search | implementation }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-165b/) 
 - [279B Books { 1400 | binary search | brute force | implementation | two pointers }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-279b)
@@ -98,6 +113,12 @@ for **Algorithms & Data Structures**. <br><br>
 - [1221C Perfect Team { 1200 | binary search | math}](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1221c)
 
 ---
+
+### Library
+
+### Cpp
+
+
 
 My profiles on algorithmic sites:
 
