@@ -10,15 +10,14 @@ using namespace std;
 void solve() {
   int n, x;
   cin >> n >> x;
-  vector<int> arr(n);
-  rep(i, 0, n) cin >> arr[i];
+  vector<int> arr(n + 2);
+  rep(i, 1, n + 1) cin >> arr[i];
+  arr[n + 1] = x;
   int ans = -1;
-  bool sx = false;
-  for(int i = 1; i < n; i++) {
-      if(i + 1 == x) sx = true;
-      ans = max(ans, arr[i + (sx && i < n - 1)] - arr[i - 1]);
-  }
-  ans = max(ans, arr[0]);
+  for (int i = 1; i <= n + 1; i++)
+    ans = max(ans, arr[i] - arr[i - 1]);
+  ans = max((arr[n + 1] - arr[n]) * 2, ans);
+
   cout << ans << '\n';
 }
 
