@@ -2,11 +2,11 @@
 
 This repository contains code (mostly C++) responsible 
 for **Algorithms & Data Structures**. <br><br>
-`Algorithms` directory contains implementations of popular algorithms, and possibly its explanations in corresponding *Readme* file. <br><br>
-`Data Structures` directory contains implementation of data structures - like *Red-Black-Tree* - and possibly its explanations in corresponding *Readme* file. <br><br>
-`Problems` directory contains my solutions for **Leetcode** & **Codeforces** problems. <br><br>
-`Library` directory contains code for competitive programming related patterns, which is my *cheatsheet*. <br><br>
-`Cpp` directory contains notes & code related to C++ itself, not any specific algorithm.
+`Algorithms` implementations of popular algorithms. <br><br>
+`Data Structures` directory contains implementation of data structures. <br><br>
+`Problems` solutions for **Leetcode** & **Codeforces** problems. <br><br>
+`Library` code for competitive programming related patterns, which is my *cheatsheet*. <br><br>
+`Cpp` notes & code related to C++ itself, not any specific algorithm.
 
 ---
 
@@ -106,19 +106,28 @@ ranked >= 1200, sorted descending
 
 
 - [1623C Balanced Stone Heaps { 1600 | binary search | greedy }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1623c)
+- [1886C Decreasing String { 1600 | implementation | strings}](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1886c)
+- [1851E Nastya And Potions { 1500 | dfs and similar | dp | graphs | sortings}](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/problems/codeforces-1851e/main.cpp)
+- [1898B Milena and Admirer {1500 | greedy | math} ](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/problems/codeforces-1898b/main.cpp)
 - [982C Cut 'em All{ 1500 | dfs and similar | dp | graphs | greedy | trees }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-982c)
+- [1891C Smilo and Monsters {1500 | binary search | constructive algorithms | greedy | sortings | two pointers}](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/problems/codeforces-1891c/main.cpp)
 - [165B Burning Midnight Oil { 1500 | binary search | implementation }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-165b/) 
 - [279B Books { 1400 | binary search | brute force | implementation | two pointers }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-279b)
 - [1612C Chat Ban { 1300 | binary search | math}](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1612c)
+- [1902C Insert and Equalize {1300 | brute force | constructive algorithms | greedy | math | number theory}](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/problems/codeforces-1902c/main.cpp)
+- [1900C Anji's Binary Tree {1300 | dfs and similar | dp | trees}](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/problems/codeforces-1900c/main.cpp)
 - [474B Worms { 1200 | binary search | implementation }](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-474b)
 - [1221C Perfect Team { 1200 | binary search | math}](https://github.com/wzslr321/algorithms_and_data_structures/tree/main/problems/codeforces-1221c)
+- [1886B - Fear of the Dark { 1200 | binary search | geometry | math} ](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/problems/codeforces-1886b/main.cpp)
 
 ---
 
 ### Library
 
-- [Binary Exponentation]()
-- [Depth First Search]()
+- [Binary Exponentation](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/library/algebra/binary_exponentation.cpp)
+- [Euclidian Algorithm](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/library/algebra/euclidian_algorithm.cpp)
+- [Linear Diophantine Equations](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/library/algebra/linear_diophantine_equations.cpp)
+- [Depth First Search](https://github.com/wzslr321/algorithms_and_data_structures/blob/main/library/depth_first_search.cpp)
 
 ### Cpp
 
