@@ -117,6 +117,9 @@ ranked >= 1200, sorted descending
 
 ### Library
 
+- [Binary Exponentation]()
+- [Depth First Search]()
+
 ### Cpp
 
 

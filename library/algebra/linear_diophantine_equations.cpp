@@ -80,4 +80,9 @@ bool find_any_solution(int a, int b, int c, int &x0, int &y0, int &g) {
 
 // problem with intervals
 // x is in [min_x; max_x], y is in [min_y, max_y]
-
+// so we need to find any x,y and then shifts its value properly
+//
+// problem with min val  of x + y
+// if(a < b) we need to select smallest possible value of k, 
+// the other way around when a > b, in a == b, all will have the same val 
+// so it does not matter
